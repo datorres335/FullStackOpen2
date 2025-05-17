@@ -9,10 +9,18 @@ const Content = (props) => {
     <div>
       {props.parts.map((part, i) => (
         <p key={i}> {/* the key prop seems redundant but its necessary when iterating thru indexes in an array */}
-          {part} {props.exercises[i]}
+          <Part part={part} exercises={props.exercises[i]}/>
         </p>
       ))}
     </div>
+  )
+}
+
+const Part = (props) => {
+  return (
+    <>
+      {props.part} {props.exercises}
+    </>
   )
 }
 
