@@ -22,14 +22,16 @@ const Statistics = (props) => {
   }
   
   return (
-    <>
-      good {good} <br/>
-      neutral {neutral} <br/>
-      bad {bad} <br/>
-      all {good + neutral + bad} <br/>
-      average {((good - bad) / (good + neutral + bad))} <br/>
-      positive {((good) / (good + neutral + bad)) * 100}% <br/>
-    </>
+    <table>
+      <tbody>
+        <tr><td>good</td><td>{good}</td></tr>
+        <tr><td>neutral</td><td>{neutral}</td></tr>
+        <tr><td>bad</td><td>{bad}</td></tr>
+        <tr><td>all</td><td>{good + neutral + bad}</td></tr>
+        <tr><td>average</td><td>{((good - bad) / (good + neutral + bad))}</td></tr>
+        <tr><td>positive</td><td>{((good) / (good + neutral + bad)) * 100}%</td></tr>
+      </tbody>
+    </table>
   )
 }
 
