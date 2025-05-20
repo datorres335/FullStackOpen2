@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import Filter from './components/Filter.jsx'
-import PersonForm from './components/PersonForm.jsx'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -18,7 +19,7 @@ const App = () => {
     event.preventDefault()
     const personObject = {
       name: newName,
-      phone: newNumber,
+      number: newNumber,
     }
 
     setPersons(persons.concat(personObject))
@@ -45,7 +46,10 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <Filter searchName={searchName} handleSearchChange={handleSearchChange} />
+      <Filter 
+        searchName={searchName} 
+        handleSearchChange={handleSearchChange} 
+      />
       <h2>Add a new</h2>
       <PersonForm
         addPerson={addPerson}
@@ -55,19 +59,11 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      { 
-        searchName === '' ?
-        persons.map((person, index) => 
-          <div key={index}>
-            {person.name} {person.phone}
-          </div>
-        ) :
-        filteredPersons.map((person, index) => 
-          <div key={index}>
-            {person.name} {person.phone}
-          </div>
-        )
-      }
+      <Persons 
+        searchName={searchName}
+        persons={persons}
+        filteredPersons={filteredPersons}
+      />
     </div>
   )
 }
