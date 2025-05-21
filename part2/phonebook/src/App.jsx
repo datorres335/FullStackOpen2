@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import Notification from './components/Notification'
 import personServices from './services/persons'
 
 const App = () => {
@@ -10,6 +11,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
   const [filteredPersons, setFilteredPersons] = useState([])
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     console.log('effect used')
@@ -24,7 +26,10 @@ const App = () => {
     event.preventDefault()
 
     if (persons.some(person => person.name === newName && person.number === newNumber)) {
-      alert(`${newName} is already added to phonebook`)
+      setNotification(`${newName} is already added to phonebook`)
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
       setNewName('')
       setNewNumber('')
     } else if (persons.some(person => person.name === newName && person.number !== newNumber)) {
@@ -38,7 +43,21 @@ const App = () => {
             setPersons(persons.map(person => person.id !== personToUpdate.id ? person : response))
             setNewName('')
             setNewNumber('')
+            setNotification(`${newName}'s number was updated`)
+            setTimeout(() => {
+              setNotification(null)
+            }, 5000)
           })
+          .catch(() => {
+            setNotification(`${newName} was already deleted from server`)
+            setTimeout(() => {
+              setNotification(null)
+            }, 5000)
+            setPersons(persons.filter(person => person.id !== personToUpdate.id))
+            setNewName('')
+            setNewNumber('')
+          })
+        
       }
     }
     else {
@@ -54,6 +73,11 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         })
+
+      setNotification(`Added ${newName}`)
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
     } 
   }
 
@@ -81,11 +105,17 @@ const App = () => {
       .catch(error => {
         console.log('Error removing person:', error)
       })
+    
+      setNotification(`Deleted ${persons.find(person => person.id === id).name}`)
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
   }
 
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={notification} />
       <Filter 
         searchName={searchName} 
         handleSearchChange={handleSearchChange} 

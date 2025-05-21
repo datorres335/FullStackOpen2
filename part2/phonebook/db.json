@@ -79,26 +79,6 @@
       "name": "Jack Purple",
       "number": "555-6543",
       "id": "16"
-    },
-    {
-      "id": "3cbc",
-      "name": "test",
-      "number": "555"
-    },
-    {
-      "id": "4d7b",
-      "name": "test2",
-      "number": "456"
-    },
-    {
-      "id": "3537",
-      "name": "test3",
-      "number": "156"
-    },
-    {
-      "id": "c8fe",
-      "name": "test4",
-      "number": "111"
     }
   ]
 }
