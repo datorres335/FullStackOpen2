@@ -59,6 +59,17 @@ const App = () => {
     console.log(input);
   }
 
+  const handleRemovePerson = (id) => {
+    personServices
+      .remove(id)
+      .then(() => {
+        setPersons(persons.filter(person => person.id !== id))
+      })
+      .catch(error => {
+        console.log('Error removing person:', error)
+      })
+  }
+
   return (
     <div>
       <h1>Phonebook</h1>
@@ -79,6 +90,7 @@ const App = () => {
         searchName={searchName}
         persons={persons}
         filteredPersons={filteredPersons}
+        handleRemovePerson={handleRemovePerson}
       />
     </div>
   )
