@@ -79,10 +79,14 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 const generateId = () => {
-  const maxId = persons.length > 0
-    ? Math.max(...persons.map(n => Number(n.id)))
-    : 0
-  return String(maxId + 1)
+  const randomId = Math.floor(Math.random() * 1000000000)
+
+  return String(randomId)
+
+  // const maxId = persons.length > 0
+  //   ? Math.max(...persons.map(n => Number(n.id)))
+  //   : 0
+  // return String(maxId + 1)
 }
 
 app.post('/api/persons', (request, response) => {
@@ -90,7 +94,13 @@ app.post('/api/persons', (request, response) => {
 
   if (!body.name && !body.number) {
     return response.status(400).json({
-      error: 'content missing'
+      error: 'Name or Number is missing'
+    })
+  }
+
+  if (persons.some(person => person.name === body.name)) {
+    return response.status(400).json({
+      error: 'Name must be unique'
     })
   }
 
