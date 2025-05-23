@@ -8,6 +8,15 @@ const app = express() // this creates an Express application. The app variable i
 app.use(express.json()) // this middleware parses (converts) incoming requests with JSON payloads. It is used to parse the JSON data in the request body and make it available as a javascript object in req.body. This is useful for handling POST requests where the client sends JSON data to the server.
 // The express.json() middleware is built into Express and is used to parse JSON data in incoming requests. It is equivalent to the body-parser middleware that was commonly used in older versions of Express.
 
+
+//const morgan = require('morgan') // this is a middleware for logging HTTP requests. It provides a simple way to log incoming requests and their details, such as the request method, URL, status code, and response time.
+//app.use(morgan('tiny')) // this is a built-in middleware function in Express that logs HTTP requests in a concise format. The 'tiny' format includes the HTTP method, URL, status code, and response time. This middleware is useful for debugging and monitoring incoming requests to the server.
+const morgan = require('morgan')
+// Custom token to log request body
+morgan.token('body', (req) => JSON.stringify(req.body))
+// Use morgan with custom format to include request body for POST requests
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+
 let persons = [
     { 
       "id": "1",
@@ -57,7 +66,8 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  console.log(request.params) // this will log the parameters in the URL;
+  // console.log(request.params) // this will log the parameters in the URL;
+  // console.log(request); // this will log the entire request object;
   
   const id = request.params.id
   const person = persons.find(person => person.id === id)
@@ -119,3 +129,10 @@ const PORT = 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`) //this only prints on the VScode terminal and not on the browser
 })
+
+// Unknown endpoint middleware should be after all routes
+const unkownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+app.use(unkownEndpoint) // this middleware handles requests to unknown endpoints. If a request is made to an endpoint that is not defined in the application, this middleware will send a 404 status code and a JSON response with an error message.
+// The app.use() method is used to mount middleware functions at a specific path. In this case, the unkownEndpoint function is mounted as middleware for all requests that do not match any defined routes.
