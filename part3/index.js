@@ -50,9 +50,9 @@ let persons = [
 //   response.end(JSON.stringify(notes)) // this is the response that will be sent to the browser. The notes array gets transformed into JSON formatted string with the JSON.stringify method. This is necessary because the response.end() method expects a string or a buffer to send as the response body.
 // })
 
-app.get('/', (request, response) => {
-  response.send('<h1>Hello World!</h1')
-})
+// app.get('/', (request, response) => {
+//   response.send('<h1>Hello World!</h1')
+// })
 
 app.get('/info', (request, response) => {
   const date = new Date()
