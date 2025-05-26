@@ -1,5 +1,7 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001/api/persons'
+//const baseUrl = 'http://localhost:3001/api/persons'
+const baseUrl = '/api/persons' // Use relative URL for deployment compatibility
+// This allows the app to work both in development and production environments
 
 const getAll = () => {
   return axios.get(baseUrl).then(response => response.data)

@@ -19,6 +19,8 @@ morgan.token('body', (req) => JSON.stringify(req.body))
 // Use morgan with custom format to include request body for POST requests
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
+app.use(express.static('dist')) // this middleware serves static files from the 'dist' directory (built from the frontend repo). It allows the server to serve static assets such as HTML, CSS, JavaScript, and images directly from the specified directory. When a request is made for a file that exists in the 'dist' directory, Express will serve that file directly without needing to define a specific route for it.
+
 let persons = [
     { 
       "id": "1",
