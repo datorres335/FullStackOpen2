@@ -1,0 +1,71 @@
+PART 1 -----------------------------------------------------------------------------------------------------------------------------------------------
+//If you clone a project, run the "npm install" command before starting the application with "npm start" or "npm run dev"
+
+npm create vite@latest folder-name -- --template react
+
+PART 2 -----------------------------------------------------------------------------------------------------------------------------------------------
+npx json-server --port 3001 db.json //need to create "db.json" in root dir before running this command
+		//NOTE: it is a "NPX" command not "NPM"
+npm install axios // always run npm commands in the project root directory (where the package.json file is found); 
+		// axios = promises = asynchronous operations //often used with useEffects -> useEffect(execute this, when this changes)
+npm install json-server --save-dev //must make a small addition to the scripts part in the package.json file-> "server": "json-server -p 3001 db.json"
+		// --save-dev means to install as a devDependency
+npm run server //starts the json server. Note: all custom scripts must include "run" (exceptions are the start and test scripts)
+
+PART 3 -----------------------------------------------------------------------------------------------------------------------------------------------
+npm init //initializes a new Node.js project by creating a package.json file. No other files are created
+npm index.js or npm start // create a .js file in the root of the project and add this code to the "script" section in the package.json file as 		//"start": node index.js". You can replace "start" and "index" with what ever words you like. This is to start the Node server
+		// npm start  is a custom script that we defined in index.js
+npm install express //express is used to help facilitate Node's code to create backend servers
+npm update //updates the dependencies of the project
+npm install //used when working on the same project but on another computer in order to install up-to-date dependencies. Must be ran in the project's 		root directory
+		//running this command will create the "node_modules" directory. Make sure to add this directory to your .gitignore file. You include 		in your file by simply writing "node_modules" in the file (without the quotation marks). You only have to worry about doing when 		creating backend servers with "npm init" and not the front end server with "npm create vite@latest..."
+node --watch index.js /* used to automatically restart the backend server when the code changes (must still refresh the browser manually tho). Add this 		code to the "script" section in the package.json file as "dev": "node --watch index.js" */
+npm run dev //to start your project server in development mode (once you add the above script in the package.json file)
+		//Note: that this "npm run dev" in this project is different to "npm run dev" in Parts 1 and 2 where we created the project with
+		//"npm create vite@latest"
+		//Note: all custom scripts must include "run"
+
+Postman plugin or https://www.postman.com/downloads/  /*you can install Postman VSCode plug-in or download locally, useful for testing backend code*/
+		//to make POST requests, you must click on the Body tab > "raw" radio button > set dropdown box to JSON
+			> provide a js object in the text box below
+		//Note: keys in the js object must be strings (in double quotes)
+REST Client VSCode plugin //alternative tool to postman plugin, visit https://fullstackopen.com/en/part3/node_js_and_express for instructions
+		//create "requests" directory at root of app > create "get_all_<NAME>.rest" > define request: GET http://localhost:3001/api/notes
+			> click on "Send Request"
+		//creating a POST request file is a bit more complicated than a GET request file, look up on how to define a POST request file
+		//benefit of using REST Client over Postman is that everyone in the development team has access to these file
+		//you can also define multiple requests by separating them with "###"
+		//NOTE: empty lines in .rest files are NOT ignored when you send the request. As such they can create problems and should avoid using 
+			unnecessary empty lines 
+
+npm install morgan //The morgan middleware is a popular HTTP request logger for Node.js and Express applications. When you install it with npm install 		morgan, you can use it to automatically log details about every HTTP request your server receives. It’s especially useful during 		development, debugging, and troubleshooting.
+		//NOTE: DON'T USE MORGAN ON YOUR DEPLOYED PROJECT! Logging data can contain sensitive info and can violate privacy law
+
+npm install cors /* install this in your backend repository. This allows your server to accept requests from web pages that are hosted on a different 		domain, protocol, or port than your backend. Implement the cors middleware near the top of index.js */
+npm remove cors //used when you don't need cors middleware anymore
+		//you can remove the cors middleware after you set up a proxy in the front end in the vite.config.js file
+
+npm run build /* vite command used to create a production build optimized for production, run the command at the root of the FRONTEND directory, then 		you need to copy the newly generated directory "dist" into the root of your BACKEND directory (you can use the command "cp -r 			dist ../../part3" for quick copying) */
+//in the backend package.json file include these custom scripts to quickly update the frontend code in dist located in the backend
+"build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend",
+"deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+		// modify script relative paths as needed
+		// npm run build:ui
+		// npm run deploy:full
+		// On Windows, npm scripts are executed in cmd.exe as the default shell which does not support bash commands. For the above bash 		commands to work, you can change the default shell to Bash (in the default Git for Windows installation) as follows:
+			npm config set script-shell "C:\\Program Files\\git\\bin\\bash.exe"
+
+npm install mongoose //using mongoose API instead of MongoDB directly, install this in the backend directory
+node mongo.js yourPassword //used to test the temporary MongoDB file created to test our database, replace "yourPassword" with the password you created 		for the database USER you created (not the MongoDB Atlas account password you created). Refer to your mongo.js file to see how this 		file works when you run it in the terminal
+
+npm install dotenv //needed to define environment variables. Need to create a ".env" file at the root of the project to create these environment vars
+
+npm run build:ui // custom script, must be inside of the working directory where the package.json file is located, MUST RUN IN GIT BASH TERMINAL
+npm run deploy:full // custom script, must be inside of the working directory where the package.json file is located, MUST RUN IN GIT BASH TERMINAL
+
+npm install eslint @eslint/js --save-dev // tool used to check for errors in javascript while in development mode
+npx eslint --init // needed to initialize the eslint tool, choose these answers: syntax, commonjs, none, javascript, node, yes, npm. Configuration will 	then be saved at eslint.config.mjs. Refer to part3/eslint.config.mjs on how to reformat the file
+npm install --save-dev @stylistic/eslint-plugin-js // a plugin that defines a set of code style-related rules
+npx eslint index.js // inspects and validates a file like index.js
+npm run lint // custom script, refer to part3/package.json for implementation details

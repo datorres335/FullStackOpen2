@@ -5,8 +5,8 @@
 const express = require('express') // same syntax as "import express from 'express'"
 const app = express() // this creates an Express application. The app variable is now an instance of the Express application, which can be used to define routes and middleware.
 
-const cors = require('cors') // this is a middleware that enables Cross-Origin Resource Sharing (CORS) in the Express application. CORS is a security feature implemented by web browsers to restrict web pages from making requests to a different domain than the one that served the web page. The cors() middleware allows the server to accept requests from different origins, which is useful when the frontend and backend are hosted on different domains or ports.
-app.use(cors())
+//const cors = require('cors') // this is a middleware that enables Cross-Origin Resource Sharing (CORS) in the Express application. CORS is a security feature implemented by web browsers to restrict web pages from making requests to a different domain than the one that served the web page. The cors() middleware allows the server to accept requests from different origins, which is useful when the frontend and backend are hosted on different domains or ports.
+//app.use(cors()) // can remove cors if you are using a proxy in your frontend development server configuration (in vite.config.js) to forward requests to the backend server. Refer to vite.config.js for the proxy setup.
 
 app.use(express.json()) // this middleware parses (converts) incoming requests with JSON payloads. It is used to parse the JSON data in the request body and make it available as a javascript object in req.body. This is useful for handling POST requests where the client sends JSON data to the server.
 // The express.json() middleware is built into Express and is used to parse JSON data in incoming requests. It is equivalent to the body-parser middleware that was commonly used in older versions of Express.
