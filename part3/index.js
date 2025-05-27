@@ -48,12 +48,6 @@ let persons = [
     }
 ]
 
-//NODE CODE BELOW
-// const app = http.createServer((request, response) => {
-//   response.writeHead(200, { 'Content-Type': 'application/json' }) //The application/json value in the Content-Type header informs the receiver that the data is in the JSON format.
-//   response.end(JSON.stringify(notes)) // this is the response that will be sent to the browser. The notes array gets transformed into JSON formatted string with the JSON.stringify method. This is necessary because the response.end() method expects a string or a buffer to send as the response body.
-// })
-
 // app.get('/', (request, response) => {
 //   response.send('<h1>Hello World!</h1')
 // })
@@ -79,14 +73,13 @@ app.get('/api/persons/:id', (request, response) => {
   // console.log(request.params) // this will log the parameters in the URL;
   // console.log(request); // this will log the entire request object;
   
-  const id = request.params.id
-  const person = persons.find(person => person.id === id)
-
-  if (person) {
-    response.json(person)
-  } else {
-    response.status(404).end() // 404 means not found
-  }
+  Person.findById(request.params.id).then(person => {
+    if (person) {
+      response.json(person)
+    } else {
+      response.status(404).end() // 404 means not found
+    }
+  })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -97,17 +90,6 @@ app.delete('/api/persons/:id', (request, response) => {
   // The server successfully processed the request, but is not returning any content.
   // This is typically used for DELETE requests, where the server doesn't need to return any data after deleting a resource.
 })
-
-const generateId = () => {
-  const randomId = Math.floor(Math.random() * 1000000000)
-
-  return String(randomId)
-
-  // const maxId = persons.length > 0
-  //   ? Math.max(...persons.map(n => Number(n.id)))
-  //   : 0
-  // return String(maxId + 1)
-}
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
@@ -124,15 +106,14 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
-  const person = {
-    id: generateId(),
-    name: body.name, 
+  const person = new Person({
+    name: body.name,
     number: body.number,
-  }
+  })
 
-  persons = persons.concat(person)
-
-  response.json(person)
+  person.save().then(savedPerson => {
+    response.json(savedPerson)
+  })
 })
 
 const PORT = process.env.PORT
