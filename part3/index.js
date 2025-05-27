@@ -2,6 +2,8 @@
 
 //NODE CODE BELOW
 //const http = require('http') // node's built-in web server module. Same syntax as "import http from 'http'"
+
+require('dotenv').config() // this loads environment variables from a .env file into process.env
 const express = require('express') // same syntax as "import express from 'express'"
 const app = express() // this creates an Express application. The app variable is now an instance of the Express application, which can be used to define routes and middleware.
 
@@ -21,21 +23,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 
 app.use(express.static('dist')) // this middleware serves static files from the 'dist' directory (built from the frontend repo). It allows the server to serve static assets such as HTML, CSS, JavaScript, and images directly from the specified directory. When a request is made for a file that exists in the 'dist' directory, Express will serve that file directly without needing to define a specific route for it.
 
-const mongoose = require('mongoose')
-
-// DO NOT SAVE YOUR PASSWORD TO GITHUB!!
-const password = process.argv[2]
-const url = `mongodb+srv://datorres335:${password}@cluster0.uiaciun.mongodb.net/phonebookApp2?retryWrites=true&w=majority&appName=Cluster0`
-
-mongoose.set('strictQuery',false)
-mongoose.connect(url)
-
-const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
-})
-
-const Person = mongoose.model('Person', personSchema)
+const Person = require('./models/person')
 
 let persons = [
     { 
@@ -82,7 +70,9 @@ app.get('/info', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  Person.find({}).then(persons => {
+    response.json(persons) // this will return all persons in the database as a JSON array
+  })
 })
 
 app.get('/api/persons/:id', (request, response) => {
@@ -145,7 +135,7 @@ app.post('/api/persons', (request, response) => {
   response.json(person)
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`) //this only prints on the VScode terminal and not on the browser
 })
