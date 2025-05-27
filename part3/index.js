@@ -21,6 +21,22 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 
 app.use(express.static('dist')) // this middleware serves static files from the 'dist' directory (built from the frontend repo). It allows the server to serve static assets such as HTML, CSS, JavaScript, and images directly from the specified directory. When a request is made for a file that exists in the 'dist' directory, Express will serve that file directly without needing to define a specific route for it.
 
+const mongoose = require('mongoose')
+
+// DO NOT SAVE YOUR PASSWORD TO GITHUB!!
+const password = process.argv[2]
+const url = `mongodb+srv://datorres335:${password}@cluster0.uiaciun.mongodb.net/phonebookApp2?retryWrites=true&w=majority&appName=Cluster0`
+
+mongoose.set('strictQuery',false)
+mongoose.connect(url)
+
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String,
+})
+
+const Person = mongoose.model('Person', personSchema)
+
 let persons = [
     { 
       "id": "1",

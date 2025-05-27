@@ -56,6 +56,8 @@ npm run build /* vite command used to create a production build optimized for pr
 		// On Windows, npm scripts are executed in cmd.exe as the default shell which does not support bash commands. For the above bash 		commands to work, you can change the default shell to Bash (in the default Git for Windows installation) as follows:
 			npm config set script-shell "C:\\Program Files\\git\\bin\\bash.exe"
 
+node --inspect index.js //used to debug your code in the Chrome dev console, you'll need to click on the green node logo that appears in the console
+
 npm install mongoose //using mongoose API instead of MongoDB directly, install this in the backend directory
 node mongo.js yourPassword //used to test the temporary MongoDB file created to test our database, replace "yourPassword" with the password you created 		for the database USER you created (not the MongoDB Atlas account password you created). Refer to your mongo.js file to see how this 		file works when you run it in the terminal
 
