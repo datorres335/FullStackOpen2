@@ -24,7 +24,12 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
 
-    if (persons.some(person => person.name === newName && person.number === newNumber)) {
+    if (newName === '' || newNumber === '') {
+      setNotification('Name or Number is missing')
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
+    } else if (persons.some(person => person.name === newName && person.number === newNumber)) {
       setNotification(`${newName} is already added to phonebook`)
       setTimeout(() => {
         setNotification(null)
