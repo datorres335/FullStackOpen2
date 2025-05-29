@@ -14,7 +14,6 @@ const App = () => {
   const [notification, setNotification] = useState(null)
 
   useEffect(() => {
-    console.log('effect used')
     personServices
       .getAll()
       .then(response => {
