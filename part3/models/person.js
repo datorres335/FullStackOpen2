@@ -17,9 +17,18 @@ mongoose.connect(url)
   })
 
 const personSchema = new mongoose.Schema({
-  name: String,
-  number: String,
+  // name: String,
+  // number: String,
+  name: { //the stuff inside the braces are the validation rules before saving the data to the database
+    type: String,
+    required: true
+  },
+  number: {
+    type: String,
+    required: true
+  }
 })
+
 personSchema.set('toJSON', { // this method is used to customize the JSON representation of the document when it is converted to JSON format. It allows us to modify the output of the document when it is sent as a response to a client request.
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString()
