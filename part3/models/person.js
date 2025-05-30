@@ -21,11 +21,19 @@ const personSchema = new mongoose.Schema({
   // number: String,
   name: { //the stuff inside the braces are the validation rules before saving the data to the database
     type: String,
-    required: true
+    required: true,
+    minLength: 3
   },
   number: {
     type: String,
-    required: true
+    required: true,
+    minLength: 8,
+    validate: {
+      validator: function(v) {
+        return /\d{2,3}-\d+/.test(v) // this regex checks if the number is in the format of 2 or 3 digits followed by a hyphen and then one or more digits
+      },
+      message: props => `{props.value} is not a valide phone number!`
+    }
   }
 })
 

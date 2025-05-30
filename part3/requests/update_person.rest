@@ -1,7 +1,0 @@
-PUT http://localhost:3001/api/persons/683522051b57fc3ff5cf6ad2
-Content-Type: application/json
-
-{
-  "name": "Updated Name from VScode REST Client",
-  "number": "123-456-7890"
-}
