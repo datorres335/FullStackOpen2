@@ -76,13 +76,13 @@ app.get('/api/persons/:id', (request, response, next) => {
     })
     .catch(error => { // this else block gets executed if the given id is NOT of a valid format
       next(error) // this will pass the error to the error handling middleware
-        // next(error) is a function provided by Express that allows you to pass an error to the next middleware in the stack.
+      // next(error) is a function provided by Express that allows you to pass an error to the next middleware in the stack.
     })
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
-    .then(result => {
+    .then(() => {
       response.status(204).end() // 204 means no content
       // The server successfully processed the request, but is not returning any content.
       // 204 is typically used for DELETE requests, where the server doesn't need to return any data after deleting a resource.
