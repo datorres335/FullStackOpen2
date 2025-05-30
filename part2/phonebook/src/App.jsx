@@ -77,12 +77,19 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         })
+        .catch(error => {
+          console.error('Error adding person:', error)
+          setNotification(`Person validation failed ${newName}: ${error.response.data.error}`)
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
+        })
 
       setNotification(`Added ${newName}`)
       setTimeout(() => {
         setNotification(null)
       }, 5000)
-    } 
+    }
   }
 
   const handleNameChange = (event) => {
