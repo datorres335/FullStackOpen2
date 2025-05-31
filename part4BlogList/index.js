@@ -1,6 +1,4 @@
-//this file only imports the actual application from app.js and then starts the application
-
-const app = require('./app') // the actual Express application
+const app = require('./app')
 const config = require('./utils/config')
 const logger = require('./utils/logger')
 

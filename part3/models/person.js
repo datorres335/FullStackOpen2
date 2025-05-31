@@ -1,20 +1,4 @@
 const mongoose = require('mongoose')
-mongoose.set('strictQuery', false) // this is to avoid deprecation warnings in Mongoose 7.x
-
-// DO NOT SAVE YOUR PASSWORD TO GITHUB!!
-//const password = process.argv[2]
-//const url = `mongodb+srv://datorres335:${password}@cluster0.uiaciun.mongodb.net/phonebookApp2?retryWrites=true&w=majority&appName=Cluster0`
-const url = process.env.MONGODB_URI
-
-console.log(`connecting to ${url}`)
-
-mongoose.connect(url)
-  .then(() => {
-    console.log('connected to MongoDB')
-  })
-  .catch(error => {
-    console.log('error connecting to MongoDB:', error.message)
-  })
 
 const personSchema = new mongoose.Schema({
   // name: String,

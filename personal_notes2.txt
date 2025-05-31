@@ -14,13 +14,14 @@ npm run server //starts the json server. Note: all custom scripts must include "
 
 PART 3 -----------------------------------------------------------------------------------------------------------------------------------------------
 npm init //initializes a new Node.js project by creating a package.json file. No other files are created
-npm index.js or npm start // create a .js file in the root of the project and add this code to the "script" section in the package.json file as 		//"start": node index.js". You can replace "start" and "index" with what ever words you like. This is to start the Node server
-		// npm start  is a custom script that we defined in index.js
+npm index.js or npm start // create a .js file in the root of the project and add this code to the "script" section in the package.json file as 		//"start": "node index.js". You can replace "start" and "index" with what ever words you like. This is to start the Node server
+		// npm start is a custom script that we defined in index.js
 npm install express //express is used to help facilitate Node's code to create backend servers
 npm update //updates the dependencies of the project
 npm install //used when working on the same project but on another computer in order to install up-to-date dependencies. Must be ran in the project's 		root directory
 		//running this command will create the "node_modules" directory. Make sure to add this directory to your .gitignore file. You include 		in your file by simply writing "node_modules" in the file (without the quotation marks). You only have to worry about doing when 		creating backend servers with "npm init" and not the front end server with "npm create vite@latest..."
-node --watch index.js /* used to automatically restart the backend server when the code changes (must still refresh the browser manually tho). Add this 		code to the "script" section in the package.json file as "dev": "node --watch index.js" */
+node --watch index.js /* used to automatically restart the backend server when the code changes (must still refresh the browser manually tho). 
+		//Add this code to the "script" section in the package.json file as "dev": "node --watch index.js" */
 npm run dev //to start your project server in development mode (once you add the above script in the package.json file)
 		//Note: that this "npm run dev" in this project is different to "npm run dev" in Parts 1 and 2 where we created the project with
 		//"npm create vite@latest"
@@ -63,11 +64,20 @@ node mongo.js yourPassword //used to test the temporary MongoDB file created to 
 
 npm install dotenv //a more sophisticated way to define environment variables. Need to create a ".env" file at the root of the project to create these 		environment vars
 
-npm run build:ui // custom script, must be inside of the working directory where the package.json file is located, MUST RUN IN GIT BASH TERMINAL
-npm run deploy:full // custom script, must be inside of the working directory where the package.json file is located, MUST RUN IN GIT BASH TERMINAL
+npm run build:ui // custom script, must be inside of the working directory where the package.json file is located, MUST RUN IN GIT BASH TERMINAL?
+npm run deploy:full // custom script, must be inside of the working directory where the package.json file is located, MUST RUN IN GIT BASH TERMINAL?
 
 npm install eslint @eslint/js --save-dev // tool used to check for errors in javascript while in development mode
-npx eslint --init // needed to initialize the eslint tool, choose these answers: syntax, commonjs, none, javascript, node, yes, npm. Configuration will 	then be saved at eslint.config.mjs. Refer to part3/eslint.config.mjs on how to reformat the file
+		//install this in the backend
+npx eslint --init // needed to initialize the eslint tool, choose these answers: 
+		//How would you like to use ESLint? syntax 
+		//What type of modules does your project use? commonjs 
+		//Which framework does your project use? none 
+		//Does your project use TypeScript? javascript
+		//Where does your code run? node
+		//Would you like to install them now? yes 
+		//Which package manager do you want to use? npm 
+			//Configuration will then be saved at "eslint.config.mjs". Refer to part3/eslint.config.mjs on how to reformat the file
 npm install --save-dev @stylistic/eslint-plugin-js // a plugin that defines a set of code style-related rules
 npx eslint index.js // inspects and validates a file like index.js
 npm run lint // custom script, refer to part3/package.json for implementation details
