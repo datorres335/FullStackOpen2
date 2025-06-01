@@ -4,13 +4,14 @@ const dummy = (blogs) => {
   return 1
 }
 
+// this function calculates the total number of likes across all blogs
 const totalLikes = (blogs) => {
   return blogs.length === 0
     ? 0
     : blogs.reduce((sum, blog) => sum + blog.likes, 0)
 }
 
-//when comparing objects, the deepStrictEqual method is probably what you want to use, it ensures that the objects have the same attributes. 
+// this function finds the blog with the most likes
 const favoriteBlog = (blogs) => {
   if (blogs.length === 0) {
     return null
@@ -21,6 +22,7 @@ const favoriteBlog = (blogs) => {
   }, blogs[0])
 }
 
+// this function finds the author with the most blogs written
 const mostBlogs = (blogs) => {
   if (blogs.length === 0) return null
 
@@ -35,9 +37,30 @@ const mostBlogs = (blogs) => {
   }
 }
 
+// this function finds the author with the most likes across all their blogs
+const mostLikes = (blog) => {
+  if (blog.length === 0) return null
+
+  const likesCount = _.groupBy(blog, 'author') // groups blogs by author
+    // example output: { 'Robert C. Martin': [blog1, blog2, blog3], 'Edsger W. Dijkstra': [blog4, blog5] }
+  
+  const likesPerAuthor = _.mapValues(likesCount, blogs => _.sumBy(blogs, 'likes')) // sums likes for each author
+    // example output: { 'Robert C. Martin': 30, 'Edsger W. Dijkstra': 12 }
+  
+  const topAuthor = _.maxBy(Object.keys(likesPerAuthor), author => likesPerAuthor[author]) // finds the author with the maximum likes
+    // general usage of maxBy: _.maxBy(array, iteratee)
+    // iteratee: A function that returns the value to compare for each element.
+  
+  return {
+    author: topAuthor,
+    likes: likesPerAuthor[topAuthor]
+  }
+}
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
