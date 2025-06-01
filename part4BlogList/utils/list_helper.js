@@ -30,7 +30,7 @@ const mostBlogs = (blogs) => {
     // example output: { 'Robert C. Martin': 3, 'Edsger W. Dijkstra': 2 }
   const topAuthor = _.maxBy(Object.keys(counts), author => counts[author]) // finds the author with the maximum count
     // general usage of maxBy: _.maxBy(array, iteratee)
-    // iteratee: A function that returns the value to compare for each element.
+    // iteratee: A function that returns the value to compare for each element. (in this case)
   return {
     author: topAuthor,
     blogs: counts[topAuthor] // bracket notation is needed here because topAuthor can be a string with spaces
@@ -45,11 +45,14 @@ const mostLikes = (blog) => {
     // example output: { 'Robert C. Martin': [blog1, blog2, blog3], 'Edsger W. Dijkstra': [blog4, blog5] }
   
   const likesPerAuthor = _.mapValues(likesCount, blogs => _.sumBy(blogs, 'likes')) // sums likes for each author
+    // general usage of mapValues: _.mapValues(object, iteratee)
+    // iteratee: The function to apply to each value.
+    // general useage of sumBy: _.sumBy(array, object_property)
     // example output: { 'Robert C. Martin': 30, 'Edsger W. Dijkstra': 12 }
   
   const topAuthor = _.maxBy(Object.keys(likesPerAuthor), author => likesPerAuthor[author]) // finds the author with the maximum likes
     // general usage of maxBy: _.maxBy(array, iteratee)
-    // iteratee: A function that returns the value to compare for each element.
+    // iteratee: A function that returns the value to compare for each element. (in this case)
   
   return {
     author: topAuthor,

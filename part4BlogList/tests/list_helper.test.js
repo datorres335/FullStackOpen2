@@ -123,6 +123,8 @@ describe('blog with most likes', () => {
 })
 
 describe('author with most blogs', () => {
+  // deepStrictEqual is used to compare objects, it checks if the objects have the same attributes and values.
+  // if strictEqual is used, it will only check if the two objects are the same object in memory, not if they have the same attributes.
   test('of empty list is null', () => {
     assert.deepStrictEqual(listHelper.mostBlogs([]), null)
   })
