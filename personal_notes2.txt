@@ -92,6 +92,15 @@ npm test // Custom script to test your code (don't need to include "run" as in "
 		// must have a file named <file_name>.test.js ready (placed inside of a "tests" directory) before you execute command
 		// node:test testing library automatically executes test files that end with .test.js 
 
+npm install lodash // The Lodash library is a popular JavaScript utility library that provides a wide range of helpful functions for working with 		arrays, objects, strings, numbers, and more. It simplifies common programming tasks such as:
+			// Deep cloning and merging objects
+			// Manipulating and searching arrays (e.g., map, filter, find, groupBy, uniq)
+			// Debouncing and throttling functions
+			// Working with collections and iterables
+			// Generating random values
+			// String manipulation (e.g., camelCase, kebabCase)
+			// Checking data types and values
+
 
 
 
