@@ -1,9 +1,11 @@
 PART 1 -----------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
 //If you clone a project, run the "npm install" command before starting the application with "npm start" or "npm run dev"
 
 npm create vite@latest folder-name -- --template react
 
 PART 2 -----------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
 npx json-server --port 3001 db.json //need to create "db.json" in root dir before running this command
 		//NOTE: it is a "NPX" command not "NPM"
 npm install axios // always run npm commands in the project root directory (where the package.json file is found); 
@@ -13,6 +15,7 @@ npm install json-server --save-dev //must make a small addition to the scripts p
 npm run server //starts the json server. Note: all custom scripts must include "run" (exceptions are the start and test scripts)
 
 PART 3 -----------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
 npm init //initializes a new Node.js project by creating a package.json file. No other files are created
 npm index.js or npm start // create a .js file in the root of the project and add this code to the "script" section in the package.json file as 		//"start": "node index.js". You can replace "start" and "index" with what ever words you like. This is to start the Node server
 		// npm start is a custom script that we defined in index.js
@@ -81,3 +84,24 @@ npx eslint --init // needed to initialize the eslint tool, choose these answers:
 npm install --save-dev @stylistic/eslint-plugin-js // a plugin that defines a set of code style-related rules
 npx eslint index.js // inspects and validates a file like index.js
 npm run lint // custom script, refer to part3/package.json for implementation details
+
+PART 4 -----------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
+npm test // Custom script to test your code (don't need to include "run" as in "npm run test" for this custom script)
+		//Custom script is: "test": "node --test"
+		// must have a file named <file_name>.test.js ready (placed inside of a "tests" directory) before you execute command
+		// node:test testing library automatically executes test files that end with .test.js 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
