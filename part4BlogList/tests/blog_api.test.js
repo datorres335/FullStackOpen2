@@ -1,6 +1,7 @@
 //NOTE: you don't need to have the backend server running to run this test file, it will connect to the database directly
 
-const { test, after } = require('node:test') // What does "after" do? It runs after all tests in the file have completed
+const { test, after, beforeEach } = require('node:test') // What does "after" do? It runs after all tests in the file have completed
+  // What does "beforeEach" do? It runs before each test in the file, allowing you to set up the environment for each test
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -8,7 +9,22 @@ const app = require('../app')
 const api = supertest(app) // supertest is a library that allows you to test HTTP servers by making requests and checking responses
   // app becomes a "superagent" object
   // supertest allows you to test your HTTP requests without having to worry about ports
+const Blog = require('../models/blog')
+const helper = require('./test_helper')
 
+beforeEach(async () => {
+  await Blog.deleteMany({}) // delete all blogs in the database before each test
+  // this is important to ensure that each test starts with a clean slate
+  // otherwise, the tests would interfere with each other and give false results
+
+  let blogObject = new Blog(helper.initialBlogs[0])
+  await blogObject.save() // save the first blog to the database
+  blogObject = new Blog(helper.initialBlogs[1])
+  await blogObject.save() // save the second blog to the database
+  // this way, we have two blogs in the database before each test
+})
+
+// using test.only will run only this test and skip all other tests in the file
 test('blogs are returned as json', async () => { // why use async here? Because we are using "await" inside the function, which is an asynchronous operation
     // what does "async" do? It allows us to use "await" inside the function, which makes the function return a promise
     // what does await do? It pauses the execution of the function until the promise is resolved, allowing us to write asynchronous code in a synchronous style
@@ -26,7 +42,7 @@ test('all blogs are returned', async () => {
 
   // execution gets here only after the HTTP request is complete
   // the result of HTTP request is saved in variable response
-  assert.strictEqual(response.body.length, 2)
+  assert.strictEqual(response.body.length, helper.initialBlogs.length)
 })
 
 test('a specific blog is within the returned blogs', async () => {
@@ -37,6 +53,80 @@ test('a specific blog is within the returned blogs', async () => {
   assert.strictEqual(title.includes('TestTitle'), true)
 })
 
+test('a valid blog can be added', async () => {
+  const newBlog = {
+    title: 'New Test Blog',
+    author: 'New Test Author',
+    url: 'http://newtesturl.com',
+    likes: 15
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201) // what does 201 mean? It means that the request was successful and a new resource was created
+    .expect('Content-Type', /application\/json/) // what does this do? It checks that the response is in JSON format
+
+  const blogsAtEnd = await helper.blogsInDb()
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
+
+  const titles = blogsAtEnd.map(n => n.title)
+  assert(titles.includes('New Test Blog')) //this checks that the new blog is in the response by checking if the title is included in the array of titles
+    // The plain assert() function just checks if the given expression is truthy
+})
+
+test('blog without title is not added', async () => {
+  const noTitleBlog = {
+    title: '',
+    author: 'Blog without Title',
+    url: 'http://blogwithouttitle.com',
+    likes: 5
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(noTitleBlog)
+    .expect(400) //status code 400 means that the request was invalid
+
+  const blogsAtEnd = await helper.blogsInDb()
+
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+})
+
+test('a specific blog can be viewed', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToView = blogsAtStart[0]
+  console.log('DEBUG CODE blogToView.id:', blogToView.id);
+  
+  const resultBlog = await api
+    .get(`/api/blogs/${blogToView.id}`)
+    .expect(200) // status code 200 means that the request was successful
+    .expect('Content-Type', /application\/json/)
+  console.log('DEBUG CODE resultBlog.body:', resultBlog.body);
+  
+  assert.deepStrictEqual(resultBlog.body, blogToView)
+})
+
+test('a blog can be deleted', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToDelete = blogsAtStart[0]
+
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204) // status code 204 means that the request was successful and there is no content to return
+
+  const blogsAtEnd = await helper.blogsInDb()
+  const titles = blogsAtEnd.map(n => {n.title})
+
+  assert(!titles.includes(blogToDelete.title))
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+})
+
 after(async () => {
-  await mongoose.connection.close() // we must close the connection to the database after all tests are done or else the test program will not terminate
+  try {
+    await mongoose.connection.close()
+    await mongoose.disconnect()
+  } catch (error) {
+    console.error('Error closing mongoose connection:', error)
+  }
 })

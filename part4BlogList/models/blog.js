@@ -1,8 +1,16 @@
+const { min } = require('lodash')
 const mongoose = require('mongoose')
 
 const blogSchema = mongoose.Schema({
-  title: String,
-  author: String,
+  title: {
+    type: String,
+    required: true,
+    minlength: 1
+  },
+  author: {
+    type: String,
+    required: true
+  },
   url: String,
   likes: Number,
 })
