@@ -106,9 +106,6 @@ describe('blog with most likes', () => {
 
   test('blog with most likes is returned', () => {
     const result = listHelper.favoriteBlog(listWithManyBlogs)
-    console.log(`favoriteBlog:**********************************************************\n 
-    ${JSON.stringify(result)}
-    `);
 
     assert.deepStrictEqual(result, 
     {

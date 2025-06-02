@@ -4,7 +4,8 @@ PART 1 -------------------------------------------------------------------------
 
 npm create vite@latest folder-name -- --template react
 
-PART 2 -----------------------------------------------------------------------------------------------------------------------------------------------
+
+PART 2 - Communicating with server -------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 npx json-server --port 3001 db.json //need to create "db.json" in root dir before running this command
 		//NOTE: it is a "NPX" command not "NPM"
@@ -14,7 +15,8 @@ npm install json-server --save-dev //must make a small addition to the scripts p
 		// --save-dev means to install as a devDependency
 npm run server //starts the json server. Note: all custom scripts must include "run" (exceptions are the start and test scripts)
 
-PART 3 -----------------------------------------------------------------------------------------------------------------------------------------------
+
+PART 3 - Programming a server with NodeJS and Express ------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 npm init //initializes a new Node.js project by creating a package.json file. No other files are created
 npm index.js or npm start // create a .js file in the root of the project and add this code to the "script" section in the package.json file as 		//"start": "node index.js". You can replace "start" and "index" with what ever words you like. This is to start the Node server
@@ -85,10 +87,11 @@ npm install --save-dev @stylistic/eslint-plugin-js // a plugin that defines a se
 npx eslint index.js // inspects and validates a file like index.js
 npm run lint // custom script, refer to part3/package.json for implementation details
 
-PART 4 -----------------------------------------------------------------------------------------------------------------------------------------------
+
+PART 4 - TESTING THE BACKEND -------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 npm test // Custom script to test your code (don't need to include "run" as in "npm run test" for this custom script)
-		//Custom script is: "test": "node --test"
+		//Custom script is: "test": "node --test" //NOTE: script is updated on Part4b, see code below
 		// must have a file named <file_name>.test.js ready (placed inside of a "tests" directory) before you execute command
 		// node:test testing library automatically executes test files that end with .test.js 
 
@@ -100,7 +103,16 @@ npm install lodash // The Lodash library is a popular JavaScript utility library
 			// Generating random values
 			// String manipulation (e.g., camelCase, kebabCase)
 			// Checking data types and values
+//on Part4b, changed the scripts on package.json to:
+	"start": "cross-env NODE_ENV=production node index.js",
+    	"dev": "cross-env NODE_ENV=development node --watch index.js",
+    	"test": "cross-env  NODE_ENV=test node --test",
 
+npm install cross-env // this is so the custom scripts we have define above work on Windows computers
+
+npm install --save-dev supertest // enables easy and automated testing of Node.js HTTP servers 
+	// It allows you to write tests that make HTTP requests to your server endpoints directly in your test files.
+	// It is commonly used with test runners (like Jest, Mocha, or Node’s built-in test module) to verify that your API behaves as expected.
 
 
 
