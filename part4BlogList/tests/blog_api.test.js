@@ -177,6 +177,25 @@ describe('When there is initially some blogs saved', () => {
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
     })
   })
+
+  describe('updating a blog', () => {
+    test('succeeds with valid data', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToUpdate = blogsAtStart[0]
+      const updatedBlog = {
+        title: blogToUpdate.title,
+        author: blogToUpdate.author,
+        url: blogToUpdate.url,
+        likes: blogToUpdate.likes + 100
+      }
+
+      await api
+        .put(`/api/blogs/${blogToUpdate.id}`)
+        .send(updatedBlog)
+        .expect(200) // status code 200 means that the request was successful and the server is returning the updated resource
+        .expect('Content-Type', /application\/json/)
+    })
+  })
 })
 
 after(async () => {

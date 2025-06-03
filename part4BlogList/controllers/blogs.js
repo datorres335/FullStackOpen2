@@ -39,4 +39,18 @@ blogsRouter.delete('/:id', async (request, response) => {
   }
 })
 
+blogsRouter.put('/:id', async (request, response) => {
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    request.params.id,
+    request.body,
+    { new: true, runValidators: true, context: 'query' }) // new: true returns the updated document, 
+    // runValidators: true ensures that the update respects the schema validation rules
+    // context: 'query' is used to ensure that the validation context is set correctly for the update operation
+  if (updatedBlog) {
+    response.status(200).json(updatedBlog) // 200 OK status code indicates that the request has succeeded and the server is returning the updated resource
+  } else {
+    response.status(404).end() // 404 Not Found status code indicates that the requested resource could not be found on the server
+  }
+})
+
 module.exports = blogsRouter
