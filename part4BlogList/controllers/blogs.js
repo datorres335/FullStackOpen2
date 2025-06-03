@@ -15,9 +15,9 @@ blogsRouter.post('/', async (request, response) => {
   const savedBlog = await blog.save()
   
   if (savedBlog) {
-    response.status(201).json(savedBlog)
+    response.status(201).json(savedBlog) // 201 Created status code indicates that the request has been fulfilled and a new resource has been created and returned
   } else {
-    response.status(400).json({ error: 'Blog could not be created' })
+    response.status(400).json({ error: 'Blog could not be created' }) // 400 Bad Request status code indicates that the server could not understand the request due to invalid syntax
   }
 })
 
@@ -26,14 +26,14 @@ blogsRouter.get('/:id', async (request, response) => {
   if (blog) {
     response.json(blog)
   } else {
-    response.status(404).end()
+    response.status(404).end() // 404 Not Found status code indicates that the requested resource could not be found on the server
   }
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
   const result = await Blog.findByIdAndDelete(request.params.id)
   if (result) {
-    response.status(204).end()
+    response.status(204).end() // 204 No Content status code indicates that the request was successful but there is no content to return
   } else {
     response.status(404).end()
   }

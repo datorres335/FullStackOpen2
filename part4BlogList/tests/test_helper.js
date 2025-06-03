@@ -22,7 +22,7 @@ const nonExistingId = async () => {
     url: 'http://blogtoberemoved.com',
     likes: 25
   })
-  await blog.save()
+  await blog.save() // does saving a blog return the saved blog? Yes, it returns the saved blog object with its _id field populated
   await blog.deleteOne()
 
   return blog._id.toString()

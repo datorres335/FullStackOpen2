@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const blogSchema = mongoose.Schema({
   title: {
     type: String,
-    required: true,
+    required: true, // 400 Bad Request is returned if any required field is missing
     minlength: 1
   },
   author: {
