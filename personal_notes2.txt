@@ -114,12 +114,17 @@ npm install --save-dev supertest // enables easy and automated testing of Node.j
 	// It allows you to write tests that make HTTP requests to your server endpoints directly in your test files.
 	// It is commonly used with test runners (like Jest, Mocha, or Node’s built-in test module) to verify that your API behaves as expected.
 
-npm test -- --test-only // this only runs the "test.only" functions in your test files (**COMMAND NOT WORKING AS INTENDED FOR SOME REASON**)
 npm test -- tests/<file-name>.test.js // this runs the tests in the specified file
+npm test -- --test-only // this only runs the "test.only" functions in your test files (**COMMAND NOT WORKING AS INTENDED FOR SOME REASON**)
 npm test -- --test-name-pattern="a specific note is within the returned notes" // used for running tests with a specific name or describe block
 	// it can also contain just a part of the name	
+	// (**COMMAND NOT WORKING AS INTENDED FOR SOME REASON**)
 
-
+//DON'T USE THE COMMAND BELOW
+npm install express-async-errors // removes the need for having catch statements when working with async methods
+	// THE COMMAND ABOVE ONLY WORKS WITH EXPRESS VERSION 4.X. YOU ARE CURRENTLY RUNNING EXPRESS VERSION 5.X
+	// You do NOT need express-async-errors because Express 5 has native support for async/await error handling.
+	// if you're using Express 5.x, you can safely remove explicit try/catch blocks in your async route handlers, as long as you have a proper 		error-handling middleware in place.
 
 
 

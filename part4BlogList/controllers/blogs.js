@@ -3,6 +3,7 @@ const Blog = require('../models/blog')
 
 // No catch block needed – Express 5 handles errors in async handlers
 // if you're using Express 5.x, you can safely remove explicit try/catch blocks in your async route handlers, as long as you have a proper error-handling middleware in place.
+// we don't need the next parameter in the route handlers or use the next function to pass errors to the error-handling middleware either
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({})

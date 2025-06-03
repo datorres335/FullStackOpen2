@@ -14,14 +14,7 @@ const helper = require('./test_helper')
 
 beforeEach(async () => {
   await Blog.deleteMany({}) // delete all blogs in the database before each test
-  // this is important to ensure that each test starts with a clean slate
-  // otherwise, the tests would interfere with each other and give false results
-
-  let blogObject = new Blog(helper.initialBlogs[0])
-  await blogObject.save() // save the first blog to the database
-  blogObject = new Blog(helper.initialBlogs[1])
-  await blogObject.save() // save the second blog to the database
-  // this way, we have two blogs in the database before each test
+  await Blog.insertMany(helper.initialBlogs) // insert initial blogs into the database before each test
 })
 
 // using test.only will run only this test and skip all other tests in the file
