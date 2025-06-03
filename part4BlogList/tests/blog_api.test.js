@@ -23,7 +23,8 @@ test('blogs are returned as json', async () => { // why use async here? Because 
     // what does await do? It pauses the execution of the function until the promise is resolved, allowing us to write asynchronous code in a synchronous style
   await api
     .get('/api/blogs')
-    .expect(200)
+    .expect(200) // test will fail if the response status code is not 200
+      // what does 200 mean? It means that the request was successful and the server returned the requested resource
     .expect('Content-Type', /application\/json/) // The desired value is now defined as regular expression or in short regex. 
       // The regex starts and ends with a slash /, and because the desired string application/json also contains the same slash, 
       // it is preceded by a \ so that it is not interpreted as a regex termination character.
@@ -68,21 +69,31 @@ test('a valid blog can be added', async () => {
     // The plain assert() function just checks if the given expression is truthy
 })
 
-test('blog without title is not added', async () => {
+test('blog without title or url is not added', async () => {
   const noTitleBlog = {
     title: '',
     author: 'Blog without Title',
     url: 'http://blogwithouttitle.com',
     likes: 5
   }
-
   await api
     .post('/api/blogs')
     .send(noTitleBlog)
     .expect(400) //status code 400 means that the request was invalid
+      // does anything get returned with 400? Yes, the response body will contain an error message indicating what went wrong
+
+  const noUrlBlog = {
+    title: 'Blog without URL',
+    author: 'Author of Blog without URL',
+    url: '',
+    likes: 3
+  }
+  await api
+    .post('/api/blogs')
+    .send(noUrlBlog)
+    .expect(400)
 
   const blogsAtEnd = await helper.blogsInDb()
-
   assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
 })
 
@@ -101,7 +112,6 @@ test('a specific blog can be viewed', async () => {
 test('a blog can be deleted', async () => {
   const blogsAtStart = await helper.blogsInDb()
   const blogToDelete = blogsAtStart[0]
-  console.log(`Deleting blog with title: ${blogToDelete.title}`);
 
   await api
     .delete(`/api/blogs/${blogToDelete.id}`)

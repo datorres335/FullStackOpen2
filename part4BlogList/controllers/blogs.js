@@ -13,7 +13,12 @@ blogsRouter.get('/', async (request, response) => {
 blogsRouter.post('/', async (request, response) => {
   const blog = new Blog(request.body)
   const savedBlog = await blog.save()
-  response.status(201).json(savedBlog)
+  
+  if (savedBlog) {
+    response.status(201).json(savedBlog)
+  } else {
+    response.status(400).json({ error: 'Blog could not be created' })
+  }
 })
 
 blogsRouter.get('/:id', async (request, response) => {
