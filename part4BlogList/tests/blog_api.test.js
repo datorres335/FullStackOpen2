@@ -96,13 +96,11 @@ test('blog without title is not added', async () => {
 test('a specific blog can be viewed', async () => {
   const blogsAtStart = await helper.blogsInDb()
   const blogToView = blogsAtStart[0]
-  console.log('DEBUG CODE blogToView.id:', blogToView.id);
   
   const resultBlog = await api
     .get(`/api/blogs/${blogToView.id}`)
     .expect(200) // status code 200 means that the request was successful
     .expect('Content-Type', /application\/json/)
-  console.log('DEBUG CODE resultBlog.body:', resultBlog.body);
   
   assert.deepStrictEqual(resultBlog.body, blogToView)
 })

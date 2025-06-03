@@ -1,3 +1,6 @@
+//require('express-async-errors') UNABLE TO USE THIS LIBRARY AS IT IS NOT COMPATIBLE WITH EXPRESS 5.X
+  // You do NOT need express-async-errors because Express 5 has native support for async/await error handling.
+  // if you're using Express 5.x, you can safely remove explicit try/catch blocks in your async route handlers, as long as you have a proper error-handling middleware in place.
 const express = require('express')
 const mongoose = require('mongoose')
 const config = require('./utils/config')
