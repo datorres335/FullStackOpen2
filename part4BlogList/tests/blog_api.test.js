@@ -101,6 +101,7 @@ test('a specific blog can be viewed', async () => {
 test('a blog can be deleted', async () => {
   const blogsAtStart = await helper.blogsInDb()
   const blogToDelete = blogsAtStart[0]
+  console.log(`Deleting blog with title: ${blogToDelete.title}`);
 
   await api
     .delete(`/api/blogs/${blogToDelete.id}`)
@@ -111,6 +112,21 @@ test('a blog can be deleted', async () => {
 
   assert(!titles.includes(blogToDelete.title))
   assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+})
+
+test('default likes are set to 0 if not provided', async () => {
+  const newBlog = {
+    title: 'Blog without Likes!!!',
+    author: 'Author of Blog without Likes',
+    url: 'http://blogwithoutlikes.com'
+  }
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201) // status code 201 means that the request was successful and a new resource was created and the response contains the created resource
+    .expect('Content-Type', /application\/json/)
+  
+  assert.strictEqual(response.body.likes, 0)
 })
 
 after(async () => {
