@@ -127,6 +127,8 @@ npm install express-async-errors // removes the need for having catch statements
 	// if you're using Express 5.x, you can safely remove explicit try/catch blocks in your async route handlers, as long as you have a proper 		error-handling middleware in place.
 
 npm install bcrypt // used to generate password hashes (aka encrypting) before saving passwords to the database
+npm install bcryptjs // ONLY USE THIS COMMAND IF bcrypt IS GIVING YOU PROBLEMS ON A WINDOWS COMPUTER
+	// you can uninstall bcrypt with the command: npm uninstall bcrypt
 
 npm install jsonwebtoken //used to implement user login functionality
 	// If the application has multiple interfaces requiring identification, JWT's validation should be separated into its own middleware. An 		existing library like express-jwt could also be used.

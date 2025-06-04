@@ -1,3 +1,5 @@
+// PLEASE NOTE, IT IS COMMON FOR TESTS TO FAIL THE MORE YOU CHANGE AND EXPAND YOUR APPLICATION
+
 const { test, beforeEach, after, describe } = require('node:test')
 const assert = require('assert')
 const mongoose = require('mongoose')

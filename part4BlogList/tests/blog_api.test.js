@@ -1,4 +1,5 @@
 //NOTE: you don't need to have the backend server running to run this test file, it will connect to the database directly
+// PLEASE NOTE, IT IS COMMON FOR TESTS TO FAIL THE MORE YOU CHANGE AND EXPAND YOUR APPLICATION
 
 const { test, after, beforeEach, describe } = require('node:test') // What does "after" do? It runs after all tests in the file have completed
   // What does "beforeEach" do? It runs before each test in the file, allowing you to set up the environment for each test
