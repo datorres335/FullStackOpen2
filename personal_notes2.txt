@@ -126,6 +126,7 @@ npm install express-async-errors // removes the need for having catch statements
 	// You do NOT need express-async-errors because Express 5 has native support for async/await error handling.
 	// if you're using Express 5.x, you can safely remove explicit try/catch blocks in your async route handlers, as long as you have a proper 		error-handling middleware in place.
 
+npm install bcrypt // used to generate password hashes (aka encrypting) before saving passwords to the database
 
 
 
