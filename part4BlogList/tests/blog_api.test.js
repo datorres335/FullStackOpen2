@@ -11,7 +11,6 @@ const api = supertest(app) // supertest is a library that allows you to test HTT
   // supertest allows you to test your HTTP requests without having to worry about ports
 const Blog = require('../models/blog')
 const helper = require('./test_helper')
-const { url } = require('node:inspector')
 
 describe('When there is initially some blogs saved', () => {
   beforeEach(async () => {

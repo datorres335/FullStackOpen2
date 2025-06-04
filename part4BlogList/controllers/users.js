@@ -2,19 +2,25 @@ const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require('../models/user')
 
-usersRouter.post('/', async (request, response) => {
+usersRouter.post('/', async (request, response) => {  
   const { username, name, password } = request.body
+  console.log('User data received:', request.body)
+  
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)
 
   const user = new User({
     username,
     name,
-    passwordHash
+    passwordHash,
   })
+  console.log('Creating new user:', user)
 
   const savedUser = await user.save()
-  response.status(201).json(savedUser) // 201 Created status code indicates that the request has been fulfilled and a new resource has been created and returned
-})
 
+  console.log('User saved:', savedUser)
+  
+  response.status(201).json(savedUser)
+})
+   
 module.exports = usersRouter

@@ -1,12 +1,18 @@
 const mongoose = require('mongoose')
 
 const userSchema = mongoose.Schema({
-  userName: String,
+  username: String,
+  // {
+  //   type: String,
+  //   required: true,
+  //   unique: true // this ensures that the username is unique across all users
+  //     //we want to be careful when using the uniqueness index. If there are already documents in the database that violate the uniqueness condition, no index will be created.
+  // },
   name: String,
   passwordHash: String,
   blogs: [
     { // this block of code is defining what each blog in the blogs array should be
-      type: mongoose.Shchema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'Blog' // this creates a reference to the Blog model
     }
   ]
