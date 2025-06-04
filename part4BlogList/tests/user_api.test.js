@@ -16,7 +16,7 @@ describe('when there is initially one user in db', () => {
     const user = new User({username: 'root', passwordHash})
 
     await user.save()
-    console.log('User created:', user)
+    //console.log('User created:', user)
   })
 
   test('creation succeeds with a fresh username', async () => {
@@ -28,7 +28,7 @@ describe('when there is initially one user in db', () => {
       password: 'secrettest'
     }
 
-    console.log('posting new user:', newUser)
+    //console.log('posting new user:', newUser)
     
     const result = await api
       .post('/api/users')
@@ -36,7 +36,7 @@ describe('when there is initially one user in db', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/)
     
-    console.log('result.body:', result.body);
+    //console.log('result.body:', result.body);
 
     const usersAtEnd = await helper.usersInDb()
     assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1)

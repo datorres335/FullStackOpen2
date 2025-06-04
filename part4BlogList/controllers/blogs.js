@@ -1,18 +1,35 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 // No catch block needed – Express 5 handles errors in async handlers
 // if you're using Express 5.x, you can safely remove explicit try/catch blocks in your async route handlers, as long as you have a proper error-handling middleware in place.
 // we don't need the next parameter in the route handlers or use the next function to pass errors to the error-handling middleware either
 
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({})
-  response.json(blogs)
+  const blogs = await Blog
+    .find({})
+    .populate('userId', { username: 1, name: 1 }) // populate the userId field with the username and name of the user
+  
+    response.json(blogs)
 })
 
 blogsRouter.post('/', async (request, response) => {
-  const blog = new Blog(request.body)
+  const user = await User.findById(request.body.userId) // NOTE: THIS CODE MIGHT BE WRONG???????????
+  if (!user) {
+    return response.status(400).json({ error: 'userId missing or not valid' })
+  }
+
+  const blog = new Blog({
+    title: request.body.title,
+    author: request.body.author,
+    url: request.body.url,
+    likes: request.body.likes || 0,
+    userId: user._id
+  })
   const savedBlog = await blog.save()
+  user.blogs = user.blogs.concat(savedBlog._id)
+  await user.save()
   
   if (savedBlog) {
     response.status(201).json(savedBlog) // 201 Created status code indicates that the request has been fulfilled and a new resource has been created and returned

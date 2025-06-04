@@ -29,5 +29,5 @@ userSchema.set('toJSON', {
   }
 })
 
-const User = mongoose.model('User', userSchema)
+const User = mongoose.model('User', userSchema) // this will also automatically create a collection named 'users' in the database once the app is started
 module.exports = User

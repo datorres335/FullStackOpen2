@@ -19,7 +19,7 @@ const blogSchema = mongoose.Schema({
     type: Number,
     default: 0
   },
-  user: {
+  userId: { // CHANGED THE FIELD NAME FROM user TO userId
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   }
@@ -35,4 +35,4 @@ blogSchema.set('toJSON', {
   }
 })
 
-module.exports = mongoose.model('Blog', blogSchema)
+module.exports = mongoose.model('Blog', blogSchema) // this will also automatically create a collection named 'blogs' in the database once the app is started

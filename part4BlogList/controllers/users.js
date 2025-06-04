@@ -4,7 +4,6 @@ const User = require('../models/user')
 
 usersRouter.post('/', async (request, response) => {  
   const { username, name, password } = request.body
-  console.log('User data received:', request.body)
   
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)
@@ -14,13 +13,19 @@ usersRouter.post('/', async (request, response) => {
     name,
     passwordHash,
   })
-  console.log('Creating new user:', user)
 
   const savedUser = await user.save()
-
-  console.log('User saved:', savedUser)
-  
   response.status(201).json(savedUser)
+})
+
+usersRouter.get('/', async (request, response) => {
+  const users = await User
+    .find({})
+    .populate('blogs', { title: 1, author: 1, url: 1 }) // populate the blogs field with the title, author, and url of each blog
+    // this is similar to joining two tables in SQL
+    // The argument given to the populate method defines that the ids referencing note objects in the notes field of the user document will be replaced by the referenced note documents. 
+  
+    response.json(users)
 })
    
 module.exports = usersRouter
