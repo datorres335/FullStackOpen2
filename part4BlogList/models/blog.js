@@ -1,4 +1,3 @@
-const { min } = require('lodash')
 const mongoose = require('mongoose')
 
 const blogSchema = mongoose.Schema({
@@ -20,8 +19,14 @@ const blogSchema = mongoose.Schema({
     type: Number,
     default: 0
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 })
 
+// The toJSON method is used to customize the JSON representation of the document when it is converted to JSON format. 
+// It allows us to modify the output of the document when it is sent as a response to a client request.
 blogSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString()

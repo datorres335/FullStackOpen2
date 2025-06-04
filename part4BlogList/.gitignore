@@ -1,2 +1,4 @@
+# generate the node_modules directory by running `npm install`
 node_modules
+
 *.env
