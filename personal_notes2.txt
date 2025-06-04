@@ -128,6 +128,25 @@ npm install express-async-errors // removes the need for having catch statements
 
 npm install bcrypt // used to generate password hashes (aka encrypting) before saving passwords to the database
 
+npm install jsonwebtoken //used to implement user login functionality
+	// If the application has multiple interfaces requiring identification, JWT's validation should be separated into its own middleware. An 		existing library like express-jwt could also be used.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
