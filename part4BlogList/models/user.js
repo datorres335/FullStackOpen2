@@ -1,13 +1,13 @@
 const mongoose = require('mongoose')
 
 const userSchema = mongoose.Schema({
-  username: String,
-  // {
-  //   type: String,
-  //   required: true,
-  //   unique: true // this ensures that the username is unique across all users
-  //     //we want to be careful when using the uniqueness index. If there are already documents in the database that violate the uniqueness condition, no index will be created.
-  // },
+  username: //String,
+  {
+    type: String,
+    required: true,
+    unique: true // this ensures that the username is unique across all users
+      //we want to be careful when using the uniqueness index. If there are already documents in the database that violate the uniqueness condition, no index will be created.
+  },
   name: String,
   passwordHash: String,
   blogs: [
