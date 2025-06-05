@@ -6,13 +6,15 @@ const initialBlogs = [
     title: 'TestTitle',
     author: 'TestAuthor',
     url: 'http://testurl.com',
-    likes: 10
+    likes: 10,
+    userId: '684206adfd2278a8bf45f5d8'
   },
   {
     title: 'AnotherTestTitle',
     author: 'AnotherTestAuthor',
     url: 'http://anothertesturl.com',
-    likes: 5
+    likes: 5,
+    userId: '684206adfd2278a8bf45f5d8'
   }
 ]
 
@@ -21,7 +23,8 @@ const nonExistingId = async () => {
     title: 'Blog to be removed',
     author: 'Blog Author',
     url: 'http://blogtoberemoved.com',
-    likes: 25
+    likes: 25,
+    userId: '684206adfd2278a8bf45f5d8'
   })
   await blog.save() // does saving a blog return the saved blog? Yes, it returns the saved blog object with its _id field populated
   await blog.deleteOne()

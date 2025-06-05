@@ -2,8 +2,6 @@ const logger = require('./logger')
 
 const userExtractor = (request, response, next) => {
   const authorization = request.get('authorization')
-  console.log('Authorization header:', authorization);
-  
 
   if (authorization && authorization.startsWith('Bearer ')) {
     request.token = authorization.replace('Bearer ', '')

@@ -11,12 +11,33 @@ const api = supertest(app) // supertest is a library that allows you to test HTT
   // app becomes a "superagent" object
   // supertest allows you to test your HTTP requests without having to worry about ports
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const helper = require('./test_helper')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const { userExtractor } = require('../utils/middleware')
 
 describe('When there is initially some blogs saved', () => {
   beforeEach(async () => {
     await Blog.deleteMany({}) // delete all blogs in the database before each test
-    await Blog.insertMany(helper.initialBlogs) // insert initial blogs into the database before each test
+    //await User.deleteMany({})
+
+    // const user = new User({
+    //   username: 'testuser',
+    //   name: 'Test User',
+    //   passwordHash: await bcrypt.hash('password123', 10),
+    // });
+    // await user.save();
+
+    const user = await User.findOne({})
+    if (!user) {
+      return response.status(400).json({ error: 'userId missing or not valid' })
+    }
+
+    const userForToken = { username: user.username, id: user._id };
+    token = jwt.sign(userForToken, process.env.SECRET);
+
+    await Blog.insertMany(helper.initialBlogs);
   })
 
   // using test.only will run only this test and skip all other tests in the file
@@ -58,6 +79,7 @@ describe('When there is initially some blogs saved', () => {
     }
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(noTitleBlog)
       .expect(400) //status code 400 means that the request was invalid
         // does anything get returned with 400? Yes, the response body will contain an error message indicating what went wrong
@@ -70,6 +92,7 @@ describe('When there is initially some blogs saved', () => {
     }
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(noUrlBlog)
       .expect(400)
 
@@ -87,7 +110,10 @@ describe('When there is initially some blogs saved', () => {
         .expect(200) // status code 200 means that the request was successful
         .expect('Content-Type', /application\/json/)
       
-      assert.deepStrictEqual(resultBlog.body, blogToView)
+      assert.deepStrictEqual(resultBlog.body, {
+        ...blogToView,
+        userId: blogToView.userId.toString(),
+      })
     })
 
     test('fails with statuscode 404 if blog does not exist', async () => {
@@ -113,11 +139,13 @@ describe('When there is initially some blogs saved', () => {
         title: 'New Test Blog',
         author: 'New Test Author',
         url: 'http://newtesturl.com',
-        likes: 15
+        likes: 15,
+        userId: '684206adfd2278a8bf45f5d8'
       }
 
       await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`) 
         .send(newBlog)
         .expect(201) // what does 201 mean? It means that the request was successful and a new resource was created
         .expect('Content-Type', /application\/json/) // what does this do? It checks that the response is in JSON format
@@ -138,6 +166,7 @@ describe('When there is initially some blogs saved', () => {
 
       await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(invalidBlog)
         .expect(400)
 
@@ -153,6 +182,7 @@ describe('When there is initially some blogs saved', () => {
       }
       const response = await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201) // status code 201 means that the request was successful and a new resource was created and the response contains the created resource
         .expect('Content-Type', /application\/json/)
@@ -168,6 +198,7 @@ describe('When there is initially some blogs saved', () => {
 
       await api
         .delete(`/api/blogs/${blogToDelete.id}`)
+        .set('Authorization', `Bearer ${token}`)
         .expect(204) // status code 204 means that the request was successful and there is no content to return
 
       const blogsAtEnd = await helper.blogsInDb()
@@ -194,6 +225,29 @@ describe('When there is initially some blogs saved', () => {
         .send(updatedBlog)
         .expect(200) // status code 200 means that the request was successful and the server is returning the updated resource
         .expect('Content-Type', /application\/json/)
+    })
+  })
+
+  describe('unauthorized user', () => {
+    test('cannot add a new blog without a token', async () => {
+      const newBlog = {
+        title: 'New Test Blog',
+        author: 'New Test Author',
+        url: 'http://newtesturl.com',
+        likes: 15,
+        userId: '684206adfd2278a8bf45f5d8'
+      }
+      
+      token = null
+      await api
+        .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`) 
+        .send(newBlog)
+        .expect(401)
+        .expect('Content-Type', /application\/json/)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
     })
   })
 })
