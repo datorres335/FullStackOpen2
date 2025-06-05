@@ -2,18 +2,16 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
+const { tokenExtractor } = require('../utils/middleware')
 
 // No catch block needed – Express 5 handles errors in async handlers
 // if you're using Express 5.x, you can safely remove explicit try/catch blocks in your async route handlers, as long as you have a proper error-handling middleware in place.
 // we don't need the next parameter in the route handlers or use the next function to pass errors to the error-handling middleware either
 
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.startsWith('Bearer ')) {
-    return authorization.replace('Bearer ', '')
-  }
-  return null
-}
+// const getTokenFrom = request => {
+//   // refactored code into "tokenExtractor" middleware
+//   // delete this function if you have already implemented the "tokenExtractor" middleware
+// }
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
@@ -23,8 +21,8 @@ blogsRouter.get('/', async (request, response) => {
     response.json(blogs)
 })
 
-blogsRouter.post('/', async (request, response) => {
-  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+blogsRouter.post('/', tokenExtractor, async (request, response) => {
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token invalid' })
   }
