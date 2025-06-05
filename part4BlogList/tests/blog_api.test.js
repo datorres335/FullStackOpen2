@@ -20,14 +20,6 @@ const { userExtractor } = require('../utils/middleware')
 describe('When there is initially some blogs saved', () => {
   beforeEach(async () => {
     await Blog.deleteMany({}) // delete all blogs in the database before each test
-    //await User.deleteMany({})
-
-    // const user = new User({
-    //   username: 'testuser',
-    //   name: 'Test User',
-    //   passwordHash: await bcrypt.hash('password123', 10),
-    // });
-    // await user.save();
 
     const user = await User.findOne({})
     if (!user) {

@@ -3,7 +3,6 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 const { userExtractor } = require('../utils/middleware')
-//const blog = require('../models/blog')
 
 // No catch block needed – Express 5 handles errors in async handlers
 // if you're using Express 5.x, you can safely remove explicit try/catch blocks in your async route handlers, as long as you have a proper error-handling middleware in place.
