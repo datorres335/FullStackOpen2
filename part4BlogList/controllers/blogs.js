@@ -2,7 +2,7 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
-const { tokenExtractor } = require('../utils/middleware')
+const { userExtractor } = require('../utils/middleware')
 const blog = require('../models/blog')
 
 // No catch block needed – Express 5 handles errors in async handlers
@@ -22,7 +22,7 @@ blogsRouter.get('/', async (request, response) => {
     response.json(blogs)
 })
 
-blogsRouter.post('/', tokenExtractor, async (request, response) => {
+blogsRouter.post('/', userExtractor, async (request, response) => {
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token invalid' })
@@ -60,7 +60,7 @@ blogsRouter.get('/:id', async (request, response) => {
   }
 })
 
-blogsRouter.delete('/:id', tokenExtractor, async (request, response) => {
+blogsRouter.delete('/:id', userExtractor, async (request, response) => {
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token invalid' })
