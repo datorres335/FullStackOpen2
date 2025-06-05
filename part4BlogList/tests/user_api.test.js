@@ -69,6 +69,82 @@ describe('when there is initially one user in db', () => {
   })
 })
 
+describe('invalid users are not created', () => {
+  test('creation fails if username is too short', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUserShortName = {
+      username: 'Da',
+      name: 'Dave',
+      password: 'secrettest'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUserShortName)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+  })
+
+  test('creation fails if password is too short', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUserShortPassword = {
+      username: 'Dave',
+      name: 'Dave',
+      password: 'se'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUserShortPassword)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+  })
+
+  test('creation fails if username is missing', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUserMissingUsername = {
+      name: 'Dave',
+      password: 'secrettest'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUserMissingUsername)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+  })
+
+  test('creation fails if password is missing', async () => {
+    const usersAtStart = await helper.usersInDb()
+
+    const newUserMissingPassword = {
+      username: 'Dave',
+      name: 'Dave'
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUserMissingPassword)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+  })
+})
+
 after(async () => {
   try {
     await mongoose.connection.close()

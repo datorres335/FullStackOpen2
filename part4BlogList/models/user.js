@@ -5,8 +5,9 @@ const userSchema = mongoose.Schema({
   {
     type: String,
     required: true,
-    unique: true // this ensures that the username is unique across all users
+    unique: true, // this ensures that the username is unique across all users
       //we want to be careful when using the uniqueness index. If there are already documents in the database that violate the uniqueness condition, no index will be created.
+    minlength: 3
   },
   name: String,
   passwordHash: String,
