@@ -3,6 +3,7 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 const { tokenExtractor } = require('../utils/middleware')
+const blog = require('../models/blog')
 
 // No catch block needed – Express 5 handles errors in async handlers
 // if you're using Express 5.x, you can safely remove explicit try/catch blocks in your async route handlers, as long as you have a proper error-handling middleware in place.
@@ -59,12 +60,27 @@ blogsRouter.get('/:id', async (request, response) => {
   }
 })
 
-blogsRouter.delete('/:id', async (request, response) => {
-  const result = await Blog.findByIdAndDelete(request.params.id)
-  if (result) {
+blogsRouter.delete('/:id', tokenExtractor, async (request, response) => {
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token invalid' })
+  }
+
+  const user = await User.findById(decodedToken.id)
+  if (!user) {
+    return response.status(400).json({ error: 'userId missing or not valid' })
+  }
+
+  const blog = await Blog.findById(request.params.id)
+  if (!blog) {
+    return response.status(404).json({ error: 'blog not found' })
+  }
+
+  if (blog.userId.toString() === user._id.toString()) {
+    const result = await Blog.findByIdAndDelete(request.params.id)
     response.status(204).end() // 204 No Content status code indicates that the request was successful but there is no content to return
   } else {
-    response.status(404).end()
+    return response.status(403).json({ error: 'you do not have permission to delete this blog' }) // 403 Forbidden status code indicates that the server understands the request but refuses to authorize it
   }
 })
 
