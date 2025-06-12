@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useState, forwardRef, useImperativeHandle } from 'react'
+// useImperativeHandle is used to customize the instance value that is exposed to parent components when using ref. It allows you to define what properties and methods are accessible from the parent component.
+// forwardRef is used to forward a ref to a child component, allowing the parent component to directly interact with the child's DOM or instance methods.
 
-const Togglable = (props) => {
+const Togglable = forwardRef((props, refs) => { //What is the refs parameter in forwardRef? It is a ref object that will be passed to the child component, allowing the parent component to access the child's instance or DOM node.
   const [visible, setVisible] = useState(false)
   const hideWhenVisible = { display: visible ? 'none' : '' }
   const showWhenVisible = { display: visible ? '' : 'none' }
@@ -8,6 +10,12 @@ const Togglable = (props) => {
   const toggleVisibility = () => {
     setVisible(!visible)
   }
+
+  useImperativeHandle(refs, () => {
+    return {
+      toggleVisibility
+    }
+  })
 
   return (
     <div>
@@ -22,6 +30,6 @@ const Togglable = (props) => {
       </div>
     </div>
   )
-}
+})
 
 export default Togglable

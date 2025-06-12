@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react' //What is useRef used for? It is used to create a mutable object that persists for the full lifetime of the component. It can be used to access a DOM element directly or to store any mutable value that does not cause re-rendering when changed.
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
@@ -10,11 +10,11 @@ import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  // const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '', likes: 0, userId: null })
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState({ message: null, color: 'green' })
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -53,39 +53,6 @@ const App = () => {
     }
   }
 
-  // const addBlog = async (event) => {
-  //   event.preventDefault()
-    
-  //   const blogObject = {
-  //     title: newBlog.title.trim(), // Ensure title is not empty
-  //     author: newBlog.author.trim(), // Ensure author is not empty
-  //     url: newBlog.url.trim(), // Ensure URL is not empty
-  //     likes: 0,
-  //     userId: user.id, // Ensure userId is set from the logged-in user
-  //   }
-
-  //   try {
-  //     const returnedBlog = await blogService.create(blogObject)
-
-  //     setBlogs(blogs.concat(returnedBlog))
-  //     setNewBlog({ title: '', author: '', url: '', likes: 0, userId: null }) // reset the form fields
-  //     setNotification({ message: `A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`, color: 'green' })
-  //     setTimeout(() => {
-  //       setNotification({ message: null, color: 'green' })
-  //     }, 5000)
-  //   } catch (exception) {
-  //     setNotification({ message: 'Failed to add blog', color: 'red' })
-  //     setTimeout(() => {
-  //       setNotification({ message: null, color: 'green' })
-  //     }, 5000)
-  //   }
-  // }
-
-  // const handleBlogChange = (event) => {
-  //   const { name, value } = event.target
-  //   setNewBlog({ ...newBlog, [name]: value }) // update the specific field in the newBlog state
-  // }
-
   return (
     <div>
       <h2>blogs</h2>
@@ -114,13 +81,15 @@ const App = () => {
               }>
               logout
             </button>
-          </p>          <Togglable buttonLabel="new blog">
+          </p>          
+          <Togglable buttonLabel="new blog" ref={blogFormRef}>
             <BlogForm
               setBlogs={setBlogs}
               setNotification={setNotification}
               user={user}
               blogs={blogs}
               blogServiceCreate={blogService.create}
+              toggleVisibility={() => {blogFormRef.current.toggleVisibility()}}
             />
           </Togglable>
         </div>
