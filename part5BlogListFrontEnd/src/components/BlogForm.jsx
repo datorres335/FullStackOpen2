@@ -1,30 +1,79 @@
-const BlogForm = ({addBlog, newTitle, handleTitleChange, newAuthor, handleAuthorChange, newUrl, handleUrlChange, userId, handleUserIdChange}) => {
+import { useState } from 'react'
+
+const BlogForm = ({
+  setBlogs,
+  setNotification,
+  user,
+  blogs,
+  blogServiceCreate
+}) => {
+  const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '', likes: 0, userId: null })
+
+  const addBlog = async (event) => {
+    event.preventDefault()
+    
+    const blogObject = {
+      title: newBlog.title.trim(), // Ensure title is not empty
+      author: newBlog.author.trim(), // Ensure author is not empty
+      url: newBlog.url.trim(), // Ensure URL is not empty
+      likes: 0,
+      userId: user.id, // Ensure userId is set from the logged-in user
+    }
+
+    try {
+      console.log('Adding new blog:', blogObject)      
+      const returnedBlog = await blogServiceCreate(blogObject)
+      console.log('Blog added:', returnedBlog)
+
+      setBlogs(blogs.concat(returnedBlog))
+      setNewBlog({ title: '', author: '', url: '', likes: 0, userId: null }) // reset the form fields
+      setNotification({ message: `A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`, color: 'green' })
+      setTimeout(() => {
+        setNotification({ message: null, color: 'green' })
+      }, 5000)
+    } catch (exception) {
+      setNotification({ message: 'Failed to add blog', color: 'red' })
+      setTimeout(() => {
+        setNotification({ message: null, color: 'green' })
+      }, 5000)
+    }
+  }
+
+  const handleBlogChange = (event) => {
+    const { name, value } = event.target
+    setNewBlog({ ...newBlog, [name]: value }) // update the specific field in the newBlog state
+  }
+
   return (
-    <form onSubmit={addBlog}>
-      <div>
-        title:
-        <input
-          value={newTitle}
-          onChange={handleTitleChange}
-        /> <br />
-        author:
-        <input
-          value={newAuthor}
-          onChange={handleAuthorChange}
-        /> <br />
-        url:
-        <input
-          value={newUrl}
-          onChange={handleUrlChange}
-        /> <br />
-        <input
-          type="hidden"
-          value={userId}
-          onChange={handleUserIdChange}
-        />
-        <button type="submit">create</button>
-      </div>
-    </form>
+    <div>
+      <h2>Create a New Blog</h2>
+
+      <form onSubmit={addBlog}>
+        <div>
+          title:
+          <input
+            value={newBlog.title}
+            onChange={(e) => handleBlogChange({ target: { name: 'title', value: e.target.value } })}
+          /> <br />
+          author:
+          <input
+            value={newBlog.author}
+            onChange={(e) => handleBlogChange({ target: { name: 'author', value: e.target.value } })}
+          /> <br />
+          url:
+          <input
+            value={newBlog.url}
+            onChange={(e) => handleBlogChange({ target: { name: 'url', value: e.target.value } })}
+          /> <br />
+          <input
+            type="hidden"
+            value={user.id}
+            onChange={(e) => handleBlogChange({ target: { name: 'userId', value: user.id } })}
+          />
+          <button type="submit">create</button>
+        </div>
+      </form>
+    </div>
   )
 }
 

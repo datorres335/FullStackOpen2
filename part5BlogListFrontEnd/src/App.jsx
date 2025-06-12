@@ -10,12 +10,11 @@ import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '', likes: 0, userId: null })
+  // const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '', likes: 0, userId: null })
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState({ message: null, color: 'green' })
-  const [loginVisible, setLoginVisible] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -54,62 +53,38 @@ const App = () => {
     }
   }
 
-  // const loginForm = () => {
-  //   const hideWhenVisible = { display: loginVisible ? 'none' : '' } // inline style rule to hide the login form when it is visible
-  //   const showWhenVisible = { display: loginVisible ? '' : 'none' }
+  // const addBlog = async (event) => {
+  //   event.preventDefault()
     
-  //   return (
-  //     <div>
-  //       <div style={hideWhenVisible}>
-  //         <button onClick={() => setLoginVisible(true)}>login</button>
-  //       </div>
-  //       <div style={showWhenVisible}>
-  //       <LoginForm
-  //         username={username}
-  //         password={password}
-  //         handleUsernameChange={({target}) => setUsername(target.value)} //target argument is derived from the input element defined in the LoginForm component
-  //         handlePasswordChange={({target}) => setPassword(target.value)}
-  //         handleSubmit={handleLogin}
-  //       />
-  //       <button onClick={() => setLoginVisible(false)}>cancel</button>
-  //       </div>
-  //     </div>
-  //   )
+  //   const blogObject = {
+  //     title: newBlog.title.trim(), // Ensure title is not empty
+  //     author: newBlog.author.trim(), // Ensure author is not empty
+  //     url: newBlog.url.trim(), // Ensure URL is not empty
+  //     likes: 0,
+  //     userId: user.id, // Ensure userId is set from the logged-in user
+  //   }
+
+  //   try {
+  //     const returnedBlog = await blogService.create(blogObject)
+
+  //     setBlogs(blogs.concat(returnedBlog))
+  //     setNewBlog({ title: '', author: '', url: '', likes: 0, userId: null }) // reset the form fields
+  //     setNotification({ message: `A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`, color: 'green' })
+  //     setTimeout(() => {
+  //       setNotification({ message: null, color: 'green' })
+  //     }, 5000)
+  //   } catch (exception) {
+  //     setNotification({ message: 'Failed to add blog', color: 'red' })
+  //     setTimeout(() => {
+  //       setNotification({ message: null, color: 'green' })
+  //     }, 5000)
+  //   }
   // }
 
-  const addBlog = async (event) => {
-    event.preventDefault()
-    
-    const blogObject = {
-      title: newBlog.title.trim(), // Ensure title is not empty
-      author: newBlog.author.trim(), // Ensure author is not empty
-      url: newBlog.url.trim(), // Ensure URL is not empty
-      likes: 0,
-      userId: user.id, // Ensure userId is set from the logged-in user
-    }
-
-    try {
-      const returnedBlog = await blogService.create(blogObject)
-
-      setBlogs(blogs.concat(returnedBlog))
-      setNewBlog({ title: '', author: '', url: '', likes: 0, userId: null }) // reset the form fields
-      setNotification({ message: `A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`, color: 'green' })
-      setTimeout(() => {
-        setNotification({ message: null, color: 'green' })
-      }, 5000)
-    } catch (exception) {
-      setNotification({ message: 'Failed to add blog', color: 'red' })
-      console.error('Error adding blog:', exception)
-      setTimeout(() => {
-        setNotification({ message: null, color: 'green' })
-      }, 5000)
-    }
-  }
-
-  const handleBlogChange = (event) => {
-    const { name, value } = event.target
-    setNewBlog({ ...newBlog, [name]: value }) // update the specific field in the newBlog state
-  }
+  // const handleBlogChange = (event) => {
+  //   const { name, value } = event.target
+  //   setNewBlog({ ...newBlog, [name]: value }) // update the specific field in the newBlog state
+  // }
 
   return (
     <div>
@@ -139,18 +114,13 @@ const App = () => {
               }>
               logout
             </button>
-          </p>
-          <Togglable buttonLabel="new blog">
+          </p>          <Togglable buttonLabel="new blog">
             <BlogForm
-              addBlog={addBlog}
-              newTitle={newBlog.title}
-              handleTitleChange={(e) => handleBlogChange({ target: { name: 'title', value: e.target.value } })}
-              newAuthor={newBlog.author}
-              handleAuthorChange={(e) => handleBlogChange({ target: { name: 'author', value: e.target.value } })}
-              newUrl={newBlog.url}
-              handleUrlChange={(e) => handleBlogChange({ target: { name: 'url', value: e.target.value } })}
-              userId={user.id}
-              handleUserIdChange={(e) => handleBlogChange({ target: { name: 'userId', value: user.id } })}
+              setBlogs={setBlogs}
+              setNotification={setNotification}
+              user={user}
+              blogs={blogs}
+              blogServiceCreate={blogService.create}
             />
           </Togglable>
         </div>
