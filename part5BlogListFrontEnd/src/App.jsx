@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { logout } from './services/logout'
@@ -8,10 +9,10 @@ import { logout } from './services/logout'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [newBlog, setNewBlog] = useState({ title: '', author: '', url: '', likes: 0, userId: null })
-  const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [notification, setNotification] = useState({ message: null, color: 'green' })
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -45,9 +46,9 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
+      setNotification({ message: 'Wrong username or password', color: 'red' })
       setTimeout(() => {
-        setErrorMessage(null)
+        setNotification({ message: null, color: 'green' })
       }, 5000)
     }
   }
@@ -96,11 +97,15 @@ const App = () => {
 
       setBlogs(blogs.concat(returnedBlog))
       setNewBlog({ title: '', author: '', url: '', likes: 0, userId: null }) // reset the form fields
+      setNotification({ message: `A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`, color: 'green' })
+      setTimeout(() => {
+        setNotification({ message: null, color: 'green' })
+      }, 5000)
     } catch (exception) {
-      setErrorMessage('Failed to add blog')
+      setNotification({ message: 'Failed to add blog', color: 'red' })
       console.error('Error adding blog:', exception)
       setTimeout(() => {
-        setErrorMessage(null)
+        setNotification({ message: null, color: 'green' })
       }, 5000)
     }
   }
@@ -113,7 +118,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-
+      <Notification message={notification.message} color={notification.color} />
       {user === null ?
         <div>
           <h2>Log in to application</h2>
