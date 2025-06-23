@@ -40,8 +40,10 @@ const App = () => {
         username,
         password
       })
+      
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user)) // store the user in localStorage so that it persists across page reloads
       blogService.setToken(user.token)
+
       setUser(user)
       setUsername('')
       setPassword('')
@@ -77,8 +79,8 @@ const App = () => {
               {
                 logout()
                 setUser(null)
-              }
-              }>
+              }}
+            >
               logout
             </button>
           </p>          
