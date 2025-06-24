@@ -15,6 +15,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState({ message: null, color: 'green' })
   const blogFormRef = useRef()
+  const blogViewRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -40,7 +41,7 @@ const App = () => {
         username,
         password
       })
-      
+
       window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user)) // store the user in localStorage so that it persists across page reloads
       blogService.setToken(user.token)
 
@@ -98,7 +99,7 @@ const App = () => {
       }
       
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} user={user} ref={blogViewRef} />
       )}
     </div>
   )

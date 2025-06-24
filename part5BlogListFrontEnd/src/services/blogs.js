@@ -13,11 +13,11 @@ const getAll = () => {
 }
 
 const create = async newObject => {
-  const config = {
+  const config = { // needed when the server requires authentication
     headers: { Authorization: token },
   }
 
-  const response = await axios.post(baseUrl, newObject, config)
+  const response = await axios.post(baseUrl, newObject, config) // the config object is passed as the third argument to the axios.post method
   return response.data
 }
 
