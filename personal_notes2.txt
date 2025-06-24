@@ -88,7 +88,7 @@ npx eslint index.js // inspects and validates a file like index.js
 npm run lint // custom script, refer to part3/package.json for implementation details
 
 
-PART 4 - TESTING THE BACKEND -------------------------------------------------------------------------------------------------------------------------
+PART 4 - Testing Express servers, user administration ------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 npm test // Custom script to test your code (don't need to include "run" as in "npm run test" for this custom script)
 		//Custom script is: "test": "node --test" //NOTE: script is updated on Part4b, see code below
@@ -132,6 +132,39 @@ npm install bcryptjs // ONLY USE THIS COMMAND IF bcrypt IS GIVING YOU PROBLEMS O
 
 npm install jsonwebtoken //used to implement user login functionality
 	// If the application has multiple interfaces requiring identification, JWT's validation should be separated into its own middleware. An 		existing library like express-jwt could also be used.
+
+
+PART 5 - Testing React apps --------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

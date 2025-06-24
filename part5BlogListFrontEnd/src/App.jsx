@@ -76,7 +76,7 @@ const App = () => {
   }
 
   const handleRemove = async id => {
-    if (!window.confirm('Remove blog \"' + blogs.find(b => b.id === id).title + '\"?')) {
+    if (!window.confirm('Remove blog: ' + blogs.find(b => b.id === id).title + '?')) {
       return
     }
     try {

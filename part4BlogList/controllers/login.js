@@ -24,7 +24,7 @@ loginRouter.post('/', async (request, response) => {
   const token = jwt.sign( // once you run the login.rest file, you will see the token 'Bearer' in the response body.
     userForToken, 
     process.env.SECRET,
-    { expiresIn: 60 * 60 } // token will expire in 1 hour, this will force the user to login again, useful for security purposes
+    //{ expiresIn: 60 * 60 } // token will expire in 1 hour, this will force the user to login again, useful for security purposes
     // a better way achieve token security is to implement server-side session
     // its quite common to save the session corresponding to a token to a key-value database such as Redis
   ) 

@@ -12,7 +12,6 @@ const BlogForm = ({
 
   const addBlog = async (event) => {
     event.preventDefault()
-    
     const blogObject = {
       title: newBlog.title.trim(),
       author: newBlog.author.trim(),
@@ -21,7 +20,7 @@ const BlogForm = ({
       userId: user.id, // Ensure userId is set from the logged-in user
     }
 
-    try {    
+    try {
       const returnedBlog = await blogServiceCreate(blogObject)
 
       setBlogs(blogs.concat(returnedBlog))
@@ -29,7 +28,6 @@ const BlogForm = ({
       setNotification({ message: `A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`, color: 'green' })
 
       toggleVisibility() // hide the form after submission
-      
       setTimeout(() => {
         setNotification({ message: null, color: 'green' })
       }, 5000)
