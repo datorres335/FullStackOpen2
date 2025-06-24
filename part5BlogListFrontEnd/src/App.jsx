@@ -66,7 +66,7 @@ const App = () => {
     
     try {      
       const returnedBlog = await blogService.update(id, updatedBlogData)
-      setBlogs(blogs.map(b => b.id === id ? returnedBlog : b))
+      setBlogs(blogs.map(b => b.id === id ? returnedBlog : b).sort((a, b) => b.likes - a.likes))
     } catch (exception) {
       setNotification({ message: 'Error updating blog', color: 'red' })
       setTimeout(() => {
