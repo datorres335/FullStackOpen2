@@ -75,6 +75,21 @@ const App = () => {
     }
   }
 
+  const handleRemove = async id => {
+    if (!window.confirm('Remove blog \"' + blogs.find(b => b.id === id).title + '\"?')) {
+      return
+    }
+    try {
+      await blogService.remove(id)
+      setBlogs(blogs.filter(b => b.id !== id))
+    } catch (exception) {
+      setNotification({ message: 'Error removing blog', color: 'red' })
+      setTimeout(() => {
+        setNotification({ message: null, color: 'green' })
+      }, 5000)
+    }
+  }
+
   return (
     <div>
       <h2>blogs</h2>
@@ -118,7 +133,14 @@ const App = () => {
       }
       
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={user} ref={blogViewRef} onLike={() => handleLike(blog.id)}/>
+        <Blog 
+          key={blog.id} 
+          blog={blog} 
+          user={user} 
+          ref={blogViewRef} 
+          onLike={() => handleLike(blog.id)} 
+          onRemove={() => handleRemove(blog.id)}
+        />
       )}
     </div>
   )
