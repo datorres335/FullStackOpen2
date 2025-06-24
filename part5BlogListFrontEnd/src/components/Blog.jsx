@@ -1,6 +1,6 @@
 import { useState, forwardRef, useImperativeHandle } from 'react' 
 
-const Blog = forwardRef(({blog, user}, refs) => {
+const Blog = forwardRef(({blog, user, onLike}, refs) => {
   const [visible, setVisible] = useState(false)
   const hideWhenVisible = {  display: visible ? 'none' : '' }
   const showWhenVisible = { display: visible ? '' : 'none' }
@@ -32,7 +32,7 @@ const Blog = forwardRef(({blog, user}, refs) => {
       {blog.title} {blog.author} <button onClick={toggleVisibility}>hide</button>
       <div>{blog.url}</div>
       <div>
-        likes {blog.likes} <button onClick={blog.onLike}>like</button>
+        likes {blog.likes} <button onClick={onLike}>like</button>
       </div>
       <div>{user.name}</div>
     </div>

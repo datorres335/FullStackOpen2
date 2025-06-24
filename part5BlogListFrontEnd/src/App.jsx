@@ -55,6 +55,25 @@ const App = () => {
       }, 5000)
     }
   }
+  const handleLike = async (id) => {
+    const blog = blogs.find(b => b.id === id)
+    const updatedBlogData = { 
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1 
+    }
+    
+    try {      
+      const returnedBlog = await blogService.update(id, updatedBlogData)
+      setBlogs(blogs.map(b => b.id === id ? returnedBlog : b))
+    } catch (exception) {
+      setNotification({ message: 'Error updating blog', color: 'red' })
+      setTimeout(() => {
+        setNotification({ message: null, color: 'green' })
+      }, 5000)
+    }
+  }
 
   return (
     <div>
@@ -99,7 +118,7 @@ const App = () => {
       }
       
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} user={user} ref={blogViewRef} />
+        <Blog key={blog.id} blog={blog} user={user} ref={blogViewRef} onLike={() => handleLike(blog.id)}/>
       )}
     </div>
   )
