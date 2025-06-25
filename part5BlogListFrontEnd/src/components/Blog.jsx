@@ -38,10 +38,10 @@ const Blog = forwardRef(({ blog, user, onLike, onRemove }, refs) => {
 
   return (
   <div style={blogStyle} className='blog'>
-    <div style={hideWhenVisible}>
+    <div style={hideWhenVisible} className='hideWhenVisible'>
       {blog.title} {blog.author} <button onClick={toggleVisibility}>view</button>
     </div>
-    <div style={showWhenVisible}>
+    <div style={showWhenVisible} className='showWhenVisible'>
       {blog.title} {blog.author} <button onClick={toggleVisibility}>hide</button>
       <div>{blog.url}</div>
       <div>

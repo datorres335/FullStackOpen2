@@ -11,11 +11,14 @@ test('renders content', () => {
   }
 
   const { container } = render(<Blog blog={blog} user={null} onLike={() => {}} onRemove={() => {}} />)
-  screen.debug() // This will log the rendered output to the console for debugging
+  //screen.debug() // This will log the rendered output to the console for debugging
     // you can also use screen.debug(screen.getByText('Sample Text')) to log a specific element
 
   const div = container.querySelector('.blog')
   expect(div).toHaveTextContent('Test Blog')
+  expect(div).toHaveTextContent('Test Author')
+  expect(div).not.toHaveTextContent('https://testblog.com')
+  expect(div).not.getByText('like')
 })
 
 test('clicking the button calls event handler once', async () => {
@@ -37,3 +40,16 @@ test('clicking the button calls event handler once', async () => {
 
   expect(mockHandler.mock.calls).toHaveLength(1) //The expectation of the test uses toHaveLength to verify that the mock function has been called exactly once
 })
+
+// test('does not render blog URL or number of likes by default', async () => {
+//   const blog = {
+//     title: 'Test Blog 2',
+//     author: 'Test Author 2',
+//     url: 'https://testblog2.com',
+//     likes: 0
+//   }
+
+//   const { container } = render(<Blog blog={blog} user={null} onLike={() => {}} onRemove={() => {}} />)
+
+//   const title = container.querySelector('.blog')
+// })
