@@ -177,6 +177,34 @@ npm test -- --coverage //The first time you run the command, Vitest will ask you
 npx vitest run TestFile.test.jsx
 npx vitest run TestFile.test.jsx --reporter=verbose
 
+npm init playwright@latest // for E2E (end to end) testing
+	//install this project in its own directory separated from the frontend/backend directories
+	//when installing package answer the questions with the following answers:
+		//Do you want to use TypeScript or JavaScript? Javascript
+		//Where to put your end-to-end tests? tests
+		//Add a GitHub Actions workflow? false
+		//Install Playwright browsers (can be done manually via 'npx playwright install')? true
+	// If you see this error when installing package "Playwright Host validation warning:", refer to
+		https://fullstackopen.com/en/part5/end_to_end_testing_playwright > "Initializing tests" for how to fix issue 
+
+npx playwright show-report // command to show detailed test report, report will be opened in the browser
+	// command can be replaced with custom script below
+
+//add these custom scripts in package.json in Playwright directory
+	"scripts": {
+	    "test": "playwright test",
+	    "test:report": "playwright show-report"
+	  }
+npm test // custom script defined above to run playwright test
+npm run test:report // custom script defined above to run and open playwright test in browser
+
+npx playwright test --ui // runs tests via graphical UI (custome script "npm run test -- --ui" only works in bash terminal)
+
+//INCLUDE THIS SCRIPT TO THE BACKEND AND RUN IT TO ENABLE PLAYWRIGHT TESTING
+"start:test": "NODE_ENV=test node index.js"
+
+
+
 
 
 
