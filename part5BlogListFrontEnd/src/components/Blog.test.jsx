@@ -11,7 +11,7 @@ test('renders content', () => {
   }
 
   const { container } = render(<Blog blog={blog} user={null} onLike={() => {}} onRemove={() => {}} />)
-  //screen.debug() // This will log the rendered output to the console for debugging
+  screen.debug() // This will log the rendered output to the console for debugging
     // you can also use screen.debug(screen.getByText('Sample Text')) to log a specific element
 
   const div = container.querySelector('.blog')

@@ -173,7 +173,9 @@ npm test -- --coverage //The first time you run the command, Vitest will ask you
 		Select "Reveal in File Explorer"
 		Double-click index.html to open it in your default browser
 
-
+// to run individual test files
+npx vitest run File.test.jsx
+npx vitest run File.test.jsx --reporter=verbose
 
 
 
