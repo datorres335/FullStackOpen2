@@ -198,11 +198,15 @@ npx playwright show-report // command to show detailed test report, report will 
 npm test // custom script defined above to run playwright test
 npm run test:report // custom script defined above to run and open playwright test in browser
 
-npx playwright test --ui // runs tests via graphical UI (custome script "npm run test -- --ui" only works in bash terminal)
+npx playwright test --ui // runs tests via graphical UI 
+	//CUSTOM SCRIPT "npm test -- --ui" ONLY WORKS IN BASH TERMINAL
 
 //INCLUDE THIS SCRIPT TO THE BACKEND AND RUN IT TO ENABLE PLAYWRIGHT TESTING
 "start:test": "NODE_ENV=test node index.js"
 
+npm test -- --project chromium // this is to run test on a single broswer instead of the default three: chromium, firefox, webkit
+	// running tests on all three browers can significantly slow down testing the more tests you have to run
+	// COMMAND ONLY WORKS IN GIT BASH TERMINAL
 
 
 

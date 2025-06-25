@@ -13,15 +13,16 @@ import { defineConfig, devices } from '@playwright/test';
  * @see https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
+  timeout: 3000, // TUTORIAL HAD THE TIMEOUT SET TO 3 SECONDS, this is the maximum time a test can run before it is considered failed
   testDir: './tests',
   /* Run tests in files in parallel */
-  fullyParallel: true,
+  fullyParallel: false, // TUTORIAL HAD THIS CHANGED TO FALSE FROM TRUE, this runs tests one at a time since our tests use a database, parallel execution can cause problems
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  workers: 1, //process.env.CI ? 1 : undefined, // TUTORIAL HAD THIS VALUE HARDCODED TO 1
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */

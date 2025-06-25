@@ -1,9 +1,23 @@
-const { test, expect } = require('@playwright/test')
+const { test, describe, expect, beforeEach } = require('@playwright/test')
 
-test('front page can be opened', async ({ page }) => {
-  await page.goto('http://localhost:5173')
+describe('Blog app', () => {
+  beforeEach(async ({ page }) => {
+    await page.goto('http://localhost:5173')
+  })
 
-  const locator = await page.getByText('blogs')
-  await expect(locator).toBeVisible()
-  await expect(page.getByText('blogs')).toBeVisible()
+  test('front page can be opened', async ({ page }) => {
+    const locator = await page.getByText('blogs')
+    await expect(locator).toBeVisible()
+    await expect(page.getByText('blogs')).toBeVisible()
+  })
+
+  test('login form can be opened', async ({ page }) => {
+    await page.getByRole('button', { name : 'login' }).click()
+
+    await page.getByTestId('username').fill('userFromRest2')
+    await page.getByTestId('password').fill('password1234')
+    await page.getByRole('button', { name: 'login' }).click()
+    
+    await expect(page.getByText('logged in')).toBeVisible()
+  })
 })
