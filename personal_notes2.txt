@@ -161,6 +161,18 @@ npm install --save-dev eslint-plugin-vitest-globals // used to stop Eslint compl
 
 npm install --save-dev @testing-library/user-event // used to make simulating user input easier
 
+npm test -- --coverage //The first time you run the command, Vitest will ask you if you want to install the required library @vitest/coverage-v8. 	Install it, and run the command again and you should see a coverage report in the bash terminal
+	//NOTE: THIS COMMAND ONLY WORKS ON A BASH TERMINAL
+	//Why this command is useful:
+		Identifies untested components or props (like conditionally rendered elements)
+		Ensures complex logic in hooks/components is exercised
+		Encourages writing more complete unit and integration tests
+		Helps teams meet coverage thresholds (useful in CI pipelines)
+	//When you run this command, a new "coverage" directory (aka HTML report) will be generated which you can view various reports by
+		Right-click index.html found inside of the "coverage" directory
+		Select "Reveal in File Explorer"
+		Double-click index.html to open it in your default browser
+
 
 
 

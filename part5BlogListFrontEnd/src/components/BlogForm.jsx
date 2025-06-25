@@ -56,18 +56,21 @@ const BlogForm = ({
             value={newBlog.title}
             name="title"
             onChange={(e) => handleBlogChange({ target: { name: 'title', value: e.target.value } })}
+            placeholder="Blog title"
           /> <br />
           author:
           <input
             value={newBlog.author}
             name="author"
             onChange={(e) => handleBlogChange({ target: { name: 'author', value: e.target.value } })}
+            placeholder="Blog author"
           /> <br />
           url:
           <input
             value={newBlog.url}
             name="url"
             onChange={(e) => handleBlogChange({ target: { name: 'url', value: e.target.value } })}
+            placeholder="Blog URL"
           /> <br />
           <input
             type="hidden"

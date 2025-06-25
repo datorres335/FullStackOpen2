@@ -15,6 +15,10 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
-    setupFiles: './testSetup.js', 
+    setupFiles: './testSetup.js',
+    coverage: {
+      reporter: ['text', 'html'],
+      // optionally: include/exclude patterns
+    }
   }
 })
