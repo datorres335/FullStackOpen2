@@ -208,6 +208,11 @@ npm test -- --project chromium // this is to run test on a single broswer instea
 	// running tests on all three browers can significantly slow down testing the more tests you have to run
 	// COMMAND ONLY WORKS IN GIT BASH TERMINAL
 
+npm test -- -g "test description" // to test a single test
+	// an alternative way to test a single test is to replace the function "test" with "test.only"
+	// When the test is ready, only can and should be deleted.
+
+
 
 
 

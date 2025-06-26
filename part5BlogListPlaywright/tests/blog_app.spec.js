@@ -1,4 +1,5 @@
 const { test, describe, expect, beforeEach } = require('@playwright/test')
+const { loginWith, createBlog } = require('./helper')
 
 describe('Blog app', () => {
   beforeEach(async ({ page, request }) => {
@@ -11,7 +12,7 @@ describe('Blog app', () => {
       }
     })
 
-    await page.goto('http://localhost:5173')
+    await page.goto('/')
   })
 
   test('front page can be opened', async ({ page }) => {
@@ -21,20 +22,13 @@ describe('Blog app', () => {
   })
 
   test('login form can be opened', async ({ page }) => {
-    await page.getByRole('button', { name : 'login' }).click()
-
-    await page.getByTestId('username').fill('userFromRest3')
-    await page.getByTestId('password').fill('password1234')
-    await page.getByRole('button', { name: 'login' }).click()
+    await loginWith(page, 'userFromRest3', 'password1234')
     
     await expect(page.getByText('logged in')).toBeVisible()
   })
 
   test('login fails with wrong password', async ({ page }) => {
-    await page.getByRole('button', { name: 'login' }).click()
-    await page.getByTestId('username').fill('userFromRest3')
-    await page.getByTestId('password').fill('wrongPassword')
-    await page.getByRole('button', { name: 'login' }).click()
+    await loginWith(page, 'userFromRest3', 'wrongpassword')
 
     const message = page.locator('.message')
     await expect(message).toContainText('Wrong username or password')
@@ -46,35 +40,27 @@ describe('Blog app', () => {
 
   describe('when logged in', () => {
     beforeEach(async ({ page }) => {
-      await page.getByRole('button', { name: 'login' }).click()
-      await page.getByTestId('username').fill('userFromRest3')
-      await page.getByTestId('password').fill('password1234')
-      await page.getByRole('button', { name: 'login' }).click()
+      await loginWith(page, 'userFromRest3', 'password1234')
     })
 
     test('a new blog can be created', async ({ page }) => {
-      await page.getByRole('button', { name: 'new blog' }).click()
-      await page.getByTestId('title').fill("test blog")
-      await page.getByTestId('author').fill('test author')
-      await page.getByTestId('url').fill('https://testblog.com')
-      await page.getByRole('button', { name: 'create' }).click()
+      await createBlog(page, 'test blog', 'test author', 'https://testblog.com')
 
       await expect(page.getByTestId('hideWhenVisible')).toBeVisible()
     })
 
-    describe('and a blog exists', () => {
+    describe('and several blogs exists', () => {
       beforeEach(async ({ page }) => {
-        await page.getByRole('button', { name: 'new blog' }).click()
-        await page.getByTestId('title').fill('another blg exists')
-        await page.getByTestId('author').fill('another author')
-        await page.getByTestId('url').fill('https://anotherblog.com')
-        await page.getByRole('button', { name: 'create' }).click()
+        await createBlog(page, 'another blog exists', 'another test author', 'https://anothertestblog.com')
+        await createBlog(page, 'yet another blog exists', 'yet another test author', 'https://yetanothertestblog.com')
+        await createBlog(page, '3rd blog exists', '3rd test author', 'https://3rdtestblog.com')
       })
 
       test('blog can be liked', async ({ page }) => {
-        await page.getByRole('button', { name: 'view' }).click()
-        await page.getByRole('button', { name: 'like' }).click()
-        await expect(page.getByText('likes 1')).toBeVisible()
+        const blogElement = await page.getByText('yet another blog exists').locator('..')
+        await blogElement.getByRole('button', { name: 'view' }).click()
+        await blogElement.getByRole('button', { name: 'like' }).click()
+        await expect(blogElement.getByText('likes 1')).toBeVisible()
       })
     })
   })
