@@ -30,6 +30,20 @@ describe('Blog app', () => {
     await expect(page.getByText('logged in')).toBeVisible()
   })
 
+  test('login fails with wrong password', async ({ page }) => {
+    await page.getByRole('button', { name: 'login' }).click()
+    await page.getByTestId('username').fill('userFromRest3')
+    await page.getByTestId('password').fill('wrongPassword')
+    await page.getByRole('button', { name: 'login' }).click()
+
+    const message = page.locator('.message')
+    await expect(message).toContainText('Wrong username or password')
+    await expect(message).toHaveCSS('border-style', 'solid')
+    await expect(message).toHaveCSS('color', 'rgb(255, 0, 0)') //Colors must be defined to Playwright as rgb codes.
+
+    await expect(page.getByText(/logged in/)).not.toBeVisible()
+  })
+
   describe('when logged in', () => {
     beforeEach(async ({ page }) => {
       await page.getByRole('button', { name: 'login' }).click()
