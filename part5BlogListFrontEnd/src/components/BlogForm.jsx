@@ -53,6 +53,7 @@ const BlogForm = ({
           title:
           <input
             type='text'
+            data-testid='title'
             value={newBlog.title}
             name="title"
             onChange={(e) => handleBlogChange({ target: { name: 'title', value: e.target.value } })}
@@ -60,6 +61,7 @@ const BlogForm = ({
           /> <br />
           author:
           <input
+            data-testid='author'
             value={newBlog.author}
             name="author"
             onChange={(e) => handleBlogChange({ target: { name: 'author', value: e.target.value } })}
@@ -67,6 +69,7 @@ const BlogForm = ({
           /> <br />
           url:
           <input
+            data-testid='url'
             value={newBlog.url}
             name="url"
             onChange={(e) => handleBlogChange({ target: { name: 'url', value: e.target.value } })}
