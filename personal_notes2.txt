@@ -212,6 +212,23 @@ npm test -- -g "test description" // to test a single test
 	// an alternative way to test a single test is to replace the function "test" with "test.only"
 	// When the test is ready, only can and should be deleted.
 
+npm test -- -g'test description' --debug // If, and when the tests don't pass and you suspect that the fault is in the tests instead of in the code, 	you should run the tests in debug mode.
+
+npm run test -- --trace on // Almost the same as UI mode is use of the Playwright's Trace Viewer. The idea is that a "visual trace" of the tests is 		saved, which can be viewed if necessary after the tests have been completed.
+		//If necessary, Trace can be viewed with the command -> npx playwright show-report
+		//or with the npm script we defined -> npm run test:report
+
+//UI mode and Trace Viewer also offer the possibility of assisted search for locators. This is done by pressing the double circle on the left side of 	the upper bar, and then by clicking on the desired user interface element. 
+
+npx playwright codegen http://localhost:5173/  //Playwright also includes a test generator that makes it possible to "record" a test through the user 	interface.
+	// When the Record mode is on, the test generator "records" the user's interaction in the Playwright inspector, from where it is possible to 	copy the locators and actions to the tests
+
+//Instead of the command line, Playwright can also be used via the VS Code plugin. The plugin offers many convenient features, e.g. use of breakpoints when debugging tests.
+//To avoid problem situations and increase understanding, it is definitely worth browsing Playwright's high-quality documentation. The most important sections are listed below:
+	//the section about locators gives good hints for finding elements in test
+	//section actions tells how it is possible to simulate the interaction with the browser in tests
+	//the section about assertions demonstrates the different expectations Playwright offers for testing
+
 
 
 

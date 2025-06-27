@@ -57,10 +57,26 @@ describe('Blog app', () => {
       })
 
       test('blog can be liked', async ({ page }) => {
-        const blogElement = await page.getByText('yet another blog exists').locator('..')
+        //await page.pause() //Pauses the test execution and opens Playwright Inspector, allowing you to interactively debug and inspect the state of your application at that point in the test.
+        const blogElement = page.locator('.blog').filter({ hasText: 'yet another blog exists' })
         await blogElement.getByRole('button', { name: 'view' }).click()
         await blogElement.getByRole('button', { name: 'like' }).click()
         await expect(blogElement.getByText('likes 1')).toBeVisible()
+      })
+
+      test('blog can be removed by user who created it', async ({ page }) => {
+        const blogElement = page.locator('.blog').filter({ hasText: 'yet another blog exists' })
+        await blogElement.getByRole('button', { name: 'view' }).click()
+
+        page.on('dialog', async dialog => {
+          expect(dialog.type()).toBe('confirm')
+          expect(dialog.message()).toBe('Remove blog: yet another blog exists?')
+          await dialog.accept()
+        })
+
+        await blogElement.getByRole('button', { name: 'remove' }).click()
+        
+        await expect(blogElement).not.toBeVisible()
       })
     })
   })
