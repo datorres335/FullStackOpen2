@@ -232,6 +232,26 @@ npx playwright codegen http://localhost:5173/  //Playwright also includes a test
 
 PART 6 - Advanced state management -------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
+npm install redux // install this inside of a Vite application
+
+npm install --save-dev jest @babel/preset-env @babel/preset-react eslint-plugin-jest
+	// jest -> Test runner -> To write and run your tests
+	// @babel/preset-env -> Transpile modern JS for compatibility -> Ensures testable code across environments
+	// @babel/preset-react -> Transpile JSX syntax -> Required for testing React components
+	// eslint-plugin-jest -> Linting rules for Jest -> Enforces best practices in test files
+		// once you have these packages installed, create a new file named ".babelrc" with the following content:
+			{
+			  "presets": [
+			    "@babel/preset-env",
+			    ["@babel/preset-react", { "runtime": "automatic" }]
+			  ]
+			}
+		// and add the custom script -> "test": "jest"
+		// and in the file .eslintrc.cjs inside of the env field add -> "jest/globals": true
+
+
+
+
 
 
 
