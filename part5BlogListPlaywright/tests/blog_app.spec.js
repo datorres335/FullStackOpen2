@@ -11,6 +11,13 @@ describe('Blog app', () => {
         password: 'password1234'
       }
     })
+    await request.post('http://localhost:3003/api/users', {
+      data: {
+        username: 'userFromRest4',
+        name : 'User From Rest 4',
+        password: 'password1234'
+      }
+    })
 
     await page.goto('/')
   })
@@ -77,6 +84,18 @@ describe('Blog app', () => {
         await blogElement.getByRole('button', { name: 'remove' }).click()
         
         await expect(blogElement).not.toBeVisible()
+      })
+
+      test('other users cannot see remove button', async ({ page }) => {
+        await page.getByRole('button', { name: 'logout' }).click()
+        await page.getByRole('button', { name: 'login' }).click()
+        await page.getByTestId('username').fill('userFromRest4')
+        await page.getByTestId('password').fill('password1234')
+        await page.getByRole('button', { name: 'login' }).click()
+
+        const blogElement = page.locator('.blog').filter({ hasText: 'yet another blog exists' })
+        await blogElement.getByRole('button', { name: 'view' }).click()
+        await expect(blogElement.getByRole('button', { name: 'remove' })).not.toBeVisible()
       })
     })
   })
