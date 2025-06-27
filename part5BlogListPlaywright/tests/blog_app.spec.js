@@ -97,6 +97,36 @@ describe('Blog app', () => {
         await blogElement.getByRole('button', { name: 'view' }).click()
         await expect(blogElement.getByRole('button', { name: 'remove' })).not.toBeVisible()
       })
+
+      test('blogs are ordered according to likes with the blog with the most likes being first', async ({ page }) => {
+        const blog1 = page.locator('.blog').filter({ hasText: /^another blog exists/ }) // ^ means "starts with"
+        const blog2 = page.locator('.blog').filter({ hasText: /^yet another blog exists/ })
+        const blog3 = page.locator('.blog').filter({ hasText: /^3rd blog exists/ })
+
+        await blog1.getByRole('button', { name: 'view' }).click()
+        await blog2.getByRole('button', { name: 'view' }).click()
+        await blog3.getByRole('button', { name: 'view' }).click()
+
+        await blog1.getByRole('button', { name: 'like' }).click()
+        await expect(blog1.getByText('likes 1')).toBeVisible() // must add an await after every click to ensure UI updates before next click
+        await blog1.getByRole('button', { name: 'like' }).click()
+        await expect(blog1.getByText('likes 2')).toBeVisible()
+
+        await blog2.getByRole('button', { name: 'like' }).click()
+        await expect(blog2.getByText('likes 1')).toBeVisible()
+        await blog2.getByRole('button', { name: 'like' }).click()
+        await expect(blog2.getByText('likes 2')).toBeVisible()
+        await blog2.getByRole('button', { name: 'like' }).click()
+        await expect(blog2.getByText('likes 3')).toBeVisible()
+
+        await blog3.getByRole('button', { name: 'like' }).click()
+        await expect(blog3.getByText('likes 1')).toBeVisible()
+
+        const allBlogs = page.locator('.blog')
+        await expect(allBlogs.nth(0)).toContainText('yet another blog exists')
+        await expect(allBlogs.nth(1)).toContainText('another blog exists')
+        await expect(allBlogs.nth(2)).toContainText('3rd blog exists')
+      })
     })
   })
 })
