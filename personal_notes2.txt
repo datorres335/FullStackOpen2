@@ -1,6 +1,8 @@
 PART 1 -----------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 //If you clone a project, run the "npm install" command before starting the application with "npm start" or "npm run dev"
+//IMPORTANT!! When cloning an external project inside of an existing project, make sure to go inside of the newly cloned repo and delete the 	existing .git file with the command:
+		"rm -rf .git" then "npm install"
 
 npm create vite@latest folder-name -- --template react
 
@@ -248,6 +250,8 @@ npm install --save-dev jest @babel/preset-env @babel/preset-react eslint-plugin-
 			}
 		// and add the custom script -> "test": "jest"
 		// and in the file .eslintrc.cjs inside of the env field add -> "jest/globals": true
+
+npm install --save-dev deep-freeze // used to ensure that the reducer has been correctly defined as an immutable function
 
 
 
