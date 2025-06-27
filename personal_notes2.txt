@@ -230,6 +230,9 @@ npx playwright codegen http://localhost:5173/  //Playwright also includes a test
 	//the section about assertions demonstrates the different expectations Playwright offers for testing
 
 
+PART 6 - Advanced state management -------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 
 
