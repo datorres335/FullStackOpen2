@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom/client'
 import { createStore } from 'redux'
-import { Provider } from 'react-redux'
+import { Provider } from 'react-redux' // enables components to access and share the Redux store
 import App from './App'
 import reducer from './reducers/anecdoteReducer'
 

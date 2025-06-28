@@ -253,6 +253,8 @@ npm install --save-dev jest @babel/preset-env @babel/preset-react eslint-plugin-
 
 npm install --save-dev deep-freeze // used to ensure that the reducer has been correctly defined as an immutable function
 
+npm install react-redux // enables components to access and share the Redux store
+
 
 
 
