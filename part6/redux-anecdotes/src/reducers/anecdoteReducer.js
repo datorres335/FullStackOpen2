@@ -1,3 +1,6 @@
+import { createSlice, current } from '@reduxjs/toolkit'
+//current is used to print the current state of the store in a human-readble format. Otherwise you'll get an output that is not very readable, because the state is a Proxy object.                                           
+
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -17,46 +20,71 @@ const asObject = (anecdote) => {
   }
 }
 
-export const createVote = (id) => { // this is a "action creator", aka functions that create actions
-    return {
-      type: 'VOTE',
-      payload: { id }
-    }
-  }
-
-export const createAnecdote = (content) => { // this is a "action creator", aka functions that create actions
-  return {
-    type: 'NEW_ANECDOTE',
-    payload: {
-      content,
-      id: getId(),
-      votes: 0
-    }
-  }
-}
-
 const initialState = anecdotesAtStart.map(asObject)
 
-const anecdoteReducer = (state = initialState, action) => {
-  switch (action.type) {
-    case 'VOTE':{
-      const id = action.payload.id
-      const anecdoteToVote = state.find(a => a.id === id)
+// export const createVote = (id) => { // this is a "action creator", aka functions that create actions
+//     return {
+//       type: 'VOTE',
+//       payload: { id }
+//     }
+//   }
+
+// export const createAnecdote = (content) => { // this is a "action creator", aka functions that create actions
+//   return {
+//     type: 'NEW_ANECDOTE',
+//     payload: {
+//       content,
+//       id: getId(),
+//       votes: 0
+//     }
+//   }
+// }
+
+// const anecdoteReducer = (state = initialState, action) => {
+//   switch (action.type) {
+//     case 'VOTE':{
+//       const id = action.payload.id
+//       const anecdoteToVote = state.find(a => a.id === id)
+//       const votedAnecdote = {
+//         ...anecdoteToVote,
+//         votes: anecdoteToVote.votes + 1
+//       }
+      
+      // return state.map(anecdote =>
+      //   anecdote.id !== id ? anecdote : votedAnecdote
+      // )
+//     }
+//     case 'NEW_ANECDOTE':
+//       return [...state, action.payload]
+
+//     default:
+//       return state
+//   }
+// }
+
+const anecdoteSlice = createSlice({
+  name: 'anecdotes',
+  initialState,
+  reducers: {
+    createAnecdote(state, action) {
+      const anecdote = action.payload
+      state.push(asObject(anecdote))
+    },
+    createVote(state, action) {
+      const id = action.payload
+      const anecdoteToVote = state.find(n => n.id === id)
       const votedAnecdote = {
         ...anecdoteToVote,
         votes: anecdoteToVote.votes + 1
       }
+      console.log('current state:', current(state))
       
       return state.map(anecdote =>
         anecdote.id !== id ? anecdote : votedAnecdote
       )
     }
-    case 'NEW_ANECDOTE':
-      return [...state, action.payload]
-
-    default:
-      return state
   }
-}
+})
 
-export default anecdoteReducer
+export const { createAnecdote, createVote } = anecdoteSlice.actions
+export default anecdoteSlice.reducer
