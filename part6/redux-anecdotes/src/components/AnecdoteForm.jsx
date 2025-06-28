@@ -3,7 +3,7 @@ import { createAnecdote } from '../reducers/anecdoteReducer'
 // the useDispatch hook provides any React component access to the dispatch function of the Redux store defined in main.jsx.
 // components can access the data stored in the store with the useSelector-hook of the react-redux library.
 
-const NewAnecdote = () => {
+const AnecdoteForm = () => {
   const dispatch = useDispatch()
 
   const addAnecdote = (event) => {
@@ -24,4 +24,4 @@ const NewAnecdote = () => {
   )
 }
 
-export default NewAnecdote
+export default AnecdoteForm

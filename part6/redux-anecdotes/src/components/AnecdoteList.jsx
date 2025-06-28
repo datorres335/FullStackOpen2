@@ -17,8 +17,9 @@ const Anecdote = ({ anecdote, handleClick }) => {
   )
 }
 
-const Anecdotes = () => {
+const AnecdoteList = () => {
   const anecdotes = useSelector(state => state) // useSelector receives a function as a parameter. The function either searches for or selects data from the Redux store
+  const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes)
   const dispatch = useDispatch()
 
   const vote = (id) => {
@@ -28,7 +29,7 @@ const Anecdotes = () => {
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote =>
+      {sortedAnecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <Anecdote anecdote={anecdote} handleClick={() => vote(anecdote.id)} />
         </div>
@@ -37,4 +38,4 @@ const Anecdotes = () => {
   )
 }
 
-export default Anecdotes
+export default AnecdoteList
