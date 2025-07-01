@@ -3,7 +3,6 @@ import { Provider } from 'react-redux' // enables components to access and share
 import App from './App'
 import store from './store'
 
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <App />
