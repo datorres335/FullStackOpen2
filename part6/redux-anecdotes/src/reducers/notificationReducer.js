@@ -2,18 +2,34 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const notificationSlice = createSlice({
   name: 'notification',
-  initialState: { message: '', anecdoteId: null },
+  initialState: {
+    vote: { message: '', anecdoteId: null },
+    create: { message: '', anecdoteId: null }
+  },
   reducers: {
-    setNotification(state, action) {
-      state.message = action.payload.message
-      state.anecdoteId = action.payload.anecdoteId
+    setVoteNotification(state, action) {
+      state.vote.message = action.payload.message
+      state.vote.anecdoteId = action.payload.anecdoteId
     },
-    clearNotification(state) {
-      state.message = ''
-      state.anecdoteId = null
+    setCreateNotification(state, action) {
+      state.create.message = action.payload.message
+      state.create.anecdoteId = action.payload.anecdoteId
+    },
+    clearVoteNotification(state) {
+      state.vote.message = ''
+      state.vote.anecdoteId = null
+    },
+    clearCreateNotification(state) {
+      state.create.message = ''
+      state.create.anecdoteId = null
     }
   }
 })
 
-export const { setNotification, clearNotification } = notificationSlice.actions
+export const { 
+  setVoteNotification, 
+  setCreateNotification, 
+  clearVoteNotification, 
+  clearCreateNotification 
+} = notificationSlice.actions
 export default notificationSlice.reducer
