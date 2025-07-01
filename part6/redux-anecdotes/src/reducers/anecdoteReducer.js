@@ -1,4 +1,4 @@
-import { createSlice, current } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 //current is used to print the current state of the store in a human-readble format. Otherwise you'll get an output that is not very readable, because the state is a Proxy object.                                           
 
 const anecdotesAtStart = [
@@ -77,7 +77,7 @@ const anecdoteSlice = createSlice({
         ...anecdoteToVote,
         votes: anecdoteToVote.votes + 1
       }
-      console.log('current state:', current(state))
+      //console.log('current state:', current(state))
       
       return state.map(anecdote =>
         anecdote.id !== id ? anecdote : votedAnecdote

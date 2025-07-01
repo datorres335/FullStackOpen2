@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
 // the useDispatch hook provides any React component access to the dispatch function of the Redux store defined in main.jsx.
 // components can access the data stored in the store with the useSelector-hook of the react-redux library.
-import { setNotification } from '../reducers/notificationReducer'
+import { clearNotification, setNotification } from '../reducers/notificationReducer'
 import Notification from './Notification'
 
 const AnecdoteForm = () => {
@@ -13,9 +13,9 @@ const AnecdoteForm = () => {
     const content = event.target.anecdote.value
     event.target.anecdote.value  = ''
     dispatch(createAnecdote(content))
-    dispatch(setNotification('New Anecdote created: ' + content))
+    dispatch(setNotification({ message: 'New Anecdote created: ' + content, anecdoteId: null }))
     setTimeout(() => {
-      dispatch(setNotification(''))
+      dispatch(clearNotification())
     }, 5000)
   }
 
