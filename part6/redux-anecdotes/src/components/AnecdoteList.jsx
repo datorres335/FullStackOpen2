@@ -21,8 +21,13 @@ const Anecdote = ({ anecdote, handleClick }) => {
 
 const AnecdoteList = () => {
   const anecdotes = useSelector(state => state.anecdotes) // useSelector receives a function as a parameter. The function either searches for or selects data from the Redux store
-  const filter = useSelector(state => state.filter)
-  const filteredSortedAnecdotes = anecdotes.filter(anecdote => anecdote.content.toLowerCase().includes(filter.toLowerCase())).sort((a, b) => b.votes - a.votes)
+
+  const filter = useSelector(state => state.filter) || ''
+  const filteredSortedAnecdotes = anecdotes
+    .filter(anecdote => 
+      anecdote.content && anecdote.content.toLowerCase().includes(filter.toLowerCase())
+    )
+    .sort((a, b) => b.votes - a.votes)
 
   const dispatch = useDispatch()
 

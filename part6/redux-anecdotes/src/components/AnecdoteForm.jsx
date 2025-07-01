@@ -4,7 +4,6 @@ import { createAnecdote } from '../reducers/anecdoteReducer'
 // components can access the data stored in the store with the useSelector-hook of the react-redux library.
 import { clearCreateNotification, setCreateNotification } from '../reducers/notificationReducer'
 import Notification from './Notification'
-import anecdoteService from '../services/anecdotes'
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch()
@@ -14,9 +13,7 @@ const AnecdoteForm = () => {
     const content = event.target.anecdote.value
     event.target.anecdote.value  = ''
 
-    const newAnecdote = await anecdoteService.createNew(content) 
-
-    dispatch(createAnecdote(newAnecdote))
+    dispatch(createAnecdote(content))
     dispatch(setCreateNotification({ message: 'New Anecdote created: ' + content, anecdoteId: null }))
     setTimeout(() => {
       dispatch(clearCreateNotification())
