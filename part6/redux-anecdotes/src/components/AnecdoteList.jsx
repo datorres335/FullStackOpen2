@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { createVote } from '../reducers/anecdoteReducer'
 // the useDispatch hook provides any React component access to the dispatch function of the Redux store defined in main.jsx.
 // components can access the data stored in the store with the useSelector-hook of the react-redux library.
-import { setVoteNotification, clearVoteNotification } from '../reducers/notificationReducer'
+import { voteNotification } from '../reducers/notificationReducer'
 import Notification from './Notification'
 
 const Anecdote = ({ anecdote, handleClick }) => {
@@ -33,10 +33,7 @@ const AnecdoteList = () => {
 
   const vote = (id) => {
     dispatch(createVote(id))
-    dispatch(setVoteNotification({ message: `You voted for: ${anecdotes.find(a => a.id === id).content}`, anecdoteId: id }))
-    setTimeout(() => {
-      dispatch(clearVoteNotification())
-    }, 5000)
+    dispatch(voteNotification( `You voted for: ${anecdotes.find(a => a.id === id).content}`, id, 5))
   }
 
   return (

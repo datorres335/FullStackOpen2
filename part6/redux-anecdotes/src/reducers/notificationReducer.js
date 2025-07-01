@@ -28,8 +28,29 @@ const notificationSlice = createSlice({
 
 export const { 
   setVoteNotification, 
-  setCreateNotification, 
+  setCreateNotification,
   clearVoteNotification, 
   clearCreateNotification 
 } = notificationSlice.actions
+
+export const createNotification = (message, durationInSeconds) => {
+  return async (dispatch) => {
+    dispatch(setCreateNotification({ message, anecdoteId: null }))
+
+    setTimeout(() => {
+      dispatch(clearCreateNotification())
+    }, durationInSeconds * 1000)
+  }
+}
+
+export const voteNotification = (message, anecdoteId, durationInSeconds) => {
+  return async (dispatch) => {
+    dispatch(setVoteNotification({ message, anecdoteId }))
+
+    setTimeout(() => {
+      dispatch(clearVoteNotification())
+    }, durationInSeconds * 1000)
+  }
+}
+
 export default notificationSlice.reducer
