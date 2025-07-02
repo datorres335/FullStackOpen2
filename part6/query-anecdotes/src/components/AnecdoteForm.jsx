@@ -5,7 +5,10 @@ const AnecdoteForm = () => {
   const queryClient = useQueryClient()
   const newAnecdoteMutation = useMutation({ 
     mutationFn: createAnecdote,
-    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['anecdotes'] })}
+    onSuccess: (newAnecdote) => { // newAnecdote is the response from createAnecdote
+      const anecdotes = queryClient.getQueryData(['anecdotes']) // this updates the application data dispayed on screen, more optimized than invalidateQueries
+      queryClient.setQueryData(['anecdotes'], anecdotes.concat(newAnecdote))
+    }
    })
 
   const onCreate = (event) => {
@@ -14,7 +17,7 @@ const AnecdoteForm = () => {
     event.target.anecdote.value = ''
     console.log('new anecdote')
     //const generatedId = (100000 * Math.random()).toFixed(0)
-    newAnecdoteMutation.mutate({ content })
+    newAnecdoteMutation.mutate({ content, votes: 0 })
   }
 
   return (

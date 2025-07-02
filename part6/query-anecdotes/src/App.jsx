@@ -8,8 +8,13 @@ const App = () => {
 
   const updateAnecdoteMutation = useMutation({
     mutationFn: updateAnecdote,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
+    onSuccess: (updatedAnecdote) => {
+      //queryClient.invalidateQueries({ queryKey: ['anecdotes'] }) // this updates the application data dispayed on screen
+      const anecdotes = queryClient.getQueryData(['anecdotes']) // this updates the application data dispayed on screen, more optimized than invalidateQueries
+      const updatedAnecdotes = anecdotes.map(anecdote => 
+        anecdote.id === updatedAnecdote.id ? updatedAnecdote : anecdote
+      )
+      queryClient.setQueryData(['anecdotes'], updatedAnecdotes)
     }
   })
 
@@ -19,7 +24,9 @@ const App = () => {
 
   const result = useQuery({
     queryKey: ['anecdotes'],
-    queryFn: getAnecdotes
+    queryFn: getAnecdotes,
+    refetchOnWindowFocus: false, // this prevents refetching on window focus
+    retry: false // this prevents retrying on failure
   })
   console.log('Anecdotes from db: ', JSON.parse(JSON.stringify(result)))
   
@@ -28,7 +35,7 @@ const App = () => {
   }
   if (result.error) {
     console.error('Error fetching anecdotes:', result.error);
-    return <div>Error loading data</div>;
+    return <div>anecdote service not available due to problems in server</div>;
   }
 
   const anecdotes = result.data
