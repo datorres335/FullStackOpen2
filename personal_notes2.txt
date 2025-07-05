@@ -260,6 +260,14 @@ npm install react-redux // enables components to access and share the Redux stor
 
 npm install @reduxjs/toolkit // This library for example greatly simplifies the configuration of the Redux store and offers a large variety of tools to 	ease state management
 
+npm install @tanstack/react-query // library to store and manage data retrieved from the server
+
+
+PART 7 - React router, custom hooks, styling app with CSS and webpack --------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
+npm install react-router-dom // library for managing navigation in a React application
+
+npm install eslint-plugin-react-hooks --save-dev // an eslint plugin that ensures hooks are used correctly and not inside any conditional statement,	 loops, or nested functions
 
 
 
