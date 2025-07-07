@@ -7,6 +7,7 @@ import blogService from "./services/blogs";
 import loginService from "./services/login";
 import { logout } from "./services/logout";
 import Togglable from "./components/Togglable";
+import { Table } from 'react-bootstrap'
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -15,7 +16,7 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [notification, setNotification] = useState({
     message: null,
-    color: "green",
+    color: "success",
   });
   const blogFormRef = useRef();
   const blogViewRef = useRef();
@@ -51,9 +52,9 @@ const App = () => {
       setUsername("");
       setPassword("");
     } catch (exception) {
-      setNotification({ message: "Wrong username or password", color: "red" });
+      setNotification({ message: "Wrong username or password", color: "danger" });
       setTimeout(() => {
-        setNotification({ message: null, color: "green" });
+        setNotification({ message: null, color: "success" });
       }, 5000);
     }
   };
@@ -74,9 +75,9 @@ const App = () => {
           .sort((a, b) => b.likes - a.likes),
       );
     } catch (exception) {
-      setNotification({ message: "Error updating blog", color: "red" });
+      setNotification({ message: "Error updating blog", color: "danger" });
       setTimeout(() => {
-        setNotification({ message: null, color: "green" });
+        setNotification({ message: null, color: "success" });
       }, 5000);
     }
   };
@@ -93,15 +94,15 @@ const App = () => {
       await blogService.remove(id);
       setBlogs(blogs.filter((b) => b.id !== id));
     } catch (exception) {
-      setNotification({ message: "Error removing blog", color: "red" });
+      setNotification({ message: "Error removing blog", color: "danger" });
       setTimeout(() => {
-        setNotification({ message: null, color: "green" });
+        setNotification({ message: null, color: "success" });
       }, 5000);
     }
   };
 
   return (
-    <div>
+    <div className="container">
       <h2>blogs</h2>
       <Notification message={notification.message} color={notification.color} />
       {user === null ? (
@@ -144,16 +145,25 @@ const App = () => {
         </div>
       )}
 
-      {blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          user={user}
-          ref={blogViewRef}
-          onLike={() => handleLike(blog.id)}
-          onRemove={() => handleRemove(blog.id)}
-        />
-      ))}
+      <Table striped>
+        <tbody>
+          {blogs.map((blog) => (
+            <tr key={blog.id}>
+              <td>
+                <Blog
+                  key={blog.id}
+                  blog={blog}
+                  user={user}
+                  ref={blogViewRef}
+                  onLike={() => handleLike(blog.id)}
+                  onRemove={() => handleRemove(blog.id)}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      
     </div>
   );
 };

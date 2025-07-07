@@ -1,21 +1,15 @@
-const Notification = ({ message, color }) => {
-  const notificationStyle = {
-    color: color || "green",
-    background: "lightgrey",
-    fontSize: 20,
-    borderStyle: "solid",
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-  };
+import { Alert } from 'react-bootstrap'
 
+const Notification = ({ message, color }) => {
   if (message === null) {
     return null;
   }
 
   return (
-    <div className="message" style={notificationStyle}>
-      {message}
+    <div className="message container">
+      <Alert variant={color}>
+        {message}
+      </Alert>
     </div>
   );
 };
