@@ -1,0 +1,11 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJGcm9tUmVzdDIiLCJpZCI6IjY4NDBjMmVlYmEwMWY2YjAwMDE5OTIwNSIsImlhdCI6MTc0OTA4MDAxNH0.2O2gttdT64LSM0lwtPURVqVzubUJtSBlqmw1a-hpzCU
+
+{
+  "title": "Blog Title with JWT Auth middleware2",
+  "author": "Blog Author with JWT Auth middleware2",
+  "url": "http://example.com/blog-post-with-jwt-auth-middleware",
+  "likes": 20,
+  "userId": "6840c2eeba01f6b000199205"
+}

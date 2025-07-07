@@ -268,6 +268,16 @@ PART 7 - React router, custom hooks, styling app with CSS and webpack ----------
 npm install react-router-dom // library for managing navigation in a React application
 
 npm install eslint-plugin-react-hooks --save-dev // an eslint plugin that ensures hooks are used correctly and not inside any conditional statement,	 loops, or nested functions
+	// https://www.npmjs.com/package/eslint-plugin-react-hooks  (follow these steps for configuration)
+
+https://prettier.io/docs/install
+npm install --save-dev --save-exact prettier // install both your frontend and backend directories
+	node --eval "fs.writeFileSync('.prettierrc','{}\n')" // Then create an empty config file to let editors and other tools know you are using 		Prettier
+	node --eval "fs.writeFileSync('.prettierignore','# Ignore artifacts:\nbuild\ncoverage\n')" // Next, create a .prettierignore file to let the 		Prettier CLI and editors know which files to not format. Here’s an example 
+	npx prettier . --write // Now, format all files with Prettier
+	npx prettier . --check // If you have a CI setup, run the following as part of it to make sure that everyone runs Prettier. This avoids merge 		conflicts and other collaboration issues!
+		--check is like --write, but only checks that files are already formatted, rather than overwriting them. prettier --write and 			prettier --check are the most common ways to run Prettier.
+	If you use ESLint, install eslint-config-prettier (https://github.com/prettier/eslint-config-prettier#installation) to make ESLint and Prettier 		play nice with each other. It turns off all ESLint rules that are unnecessary or might conflict with Prettier. 
 
 
 
