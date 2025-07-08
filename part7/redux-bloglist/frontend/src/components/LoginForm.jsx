@@ -1,46 +1,53 @@
 import PropTypes from "prop-types";
 import { Form, Button } from 'react-bootstrap'
+import { useState } from "react";
+import loginService from "../services/login";
+import blogService from "../services/blogs";
 
 const LoginForm = ({
-  handleSubmit,
-  handleUsernameChange,
-  handlePasswordChange,
-  username,
-  password,
+  setUser,
+  setNotification
 }) => {
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleLogin = async (event) => {
+      event.preventDefault();
+
+      try {
+        const user = await loginService.login({
+          username,
+          password,
+        });
+
+        window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user)); // store the user in localStorage so that it persists across page reloads
+        blogService.setToken(user.token);
+
+        setUser(user);
+        setUsername("");
+        setPassword("");
+      } catch (exception) {
+        setNotification({ message: "Wrong username or password", color: "danger" });
+        setTimeout(() => {
+          setNotification({ message: null, color: "success" });
+        }, 5000);
+      }
+    };
+
   return (
     <div>
       <h2>Login</h2>
 
-      <Form onSubmit={handleSubmit}>
-        {/* <div>
-          username
-          <input
-            data-testid="username"
-            value={username}
-            name="Username"
-            onChange={handleUsernameChange}
-          />
-        </div> */}
+      <Form onSubmit={handleLogin}>
         <Form.Group>
           <Form.Label>Username:</Form.Label>
           <Form.Control 
             data-testid="username"
             value={username}
             name="Username"
-            onChange={handleUsernameChange}
+            onChange={({ target }) => setUsername(target.value)}
           />
         </Form.Group>
-        {/* <div>
-          password
-          <input
-            data-testid="password"
-            type="password"
-            value={password}
-            name="Password"
-            onChange={handlePasswordChange}
-          />
-        </div> */}
         <Form.Group>
           <Form.Label>Password:</Form.Label>
           <Form.Control 
@@ -48,7 +55,7 @@ const LoginForm = ({
             type="password"
             value={password}
             name="Password"
-            onChange={handlePasswordChange}
+            onChange={({ target }) => setPassword(target.value)}
           />
         </Form.Group>
         <br />
@@ -60,11 +67,8 @@ const LoginForm = ({
 };
 
 LoginForm.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
-  handleUsernameChange: PropTypes.func.isRequired,
-  handlePasswordChange: PropTypes.func.isRequired,
-  username: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired,
+  setUser: PropTypes.func.isRequired,
+  setNotification: PropTypes.func.isRequired,
 };
 
 export default LoginForm;
