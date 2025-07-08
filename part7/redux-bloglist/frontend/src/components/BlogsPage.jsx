@@ -5,6 +5,7 @@ import Blog from "./Blog";
 import { Table } from "react-bootstrap";
 import { useState, useEffect, useRef } from "react";
 import blogService from "../services/blogs";
+import { Link } from "react-router-dom";
 
 const BlogsPage = ({ notification, user, setNotification }) => {
   const [blogs, setBlogs] = useState([]);
@@ -14,49 +15,6 @@ const BlogsPage = ({ notification, user, setNotification }) => {
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
-  
-  const handleLike = async (id) => {
-    const blog = blogs.find((b) => b.id === id);
-    const updatedBlogData = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-    };
-
-    try {
-      const returnedBlog = await blogService.update(id, updatedBlogData);
-      setBlogs(
-        blogs
-          .map((b) => (b.id === id ? returnedBlog : b))
-          .sort((a, b) => b.likes - a.likes),
-      );
-    } catch (exception) {
-      setNotification({ message: "Error updating blog", color: "danger" });
-      setTimeout(() => {
-        setNotification({ message: null, color: "success" });
-      }, 5000);
-    }
-  };
-
-  const handleRemove = async (id) => {
-    if (
-      !window.confirm(
-        "Remove blog: " + blogs.find((b) => b.id === id).title + "?",
-      )
-    ) {
-      return;
-    }
-    try {
-      await blogService.remove(id);
-      setBlogs(blogs.filter((b) => b.id !== id));
-    } catch (exception) {
-      setNotification({ message: "Error removing blog", color: "danger" });
-      setTimeout(() => {
-        setNotification({ message: null, color: "success" });
-      }, 5000);
-    }
-  };
   
   return (
     <div>
@@ -87,14 +45,15 @@ const BlogsPage = ({ notification, user, setNotification }) => {
           {blogs.map((blog) => (
             <tr key={blog.id}>
               <td>
-                <Blog
+                {/* <Blog
                   key={blog.id}
                   blog={blog}
                   user={user}
                   ref={blogViewRef}
                   onLike={() => handleLike(blog.id)}
                   onRemove={() => handleRemove(blog.id)}
-                />
+                /> */}
+                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
               </td>
             </tr>
           ))}

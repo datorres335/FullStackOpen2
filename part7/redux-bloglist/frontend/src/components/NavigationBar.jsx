@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom'
 import LoginForm from './LoginForm'
 import BlogsPage from './BlogsPage'
+import BlogPage from './BlogPage';
 import { logout } from "../services/logout";
 import UsersPage from './UsersPage';
 import UserPage from './UserPage';
@@ -65,6 +66,11 @@ const NavigationBar = ({
             notification={notification}
             user={user}
             setNotification={setNotification}
+          />
+        } />
+        <Route path="/blogs/:id" element={
+          <BlogPage
+            user={user}
           />
         } />
         <Route path="/users" element={
