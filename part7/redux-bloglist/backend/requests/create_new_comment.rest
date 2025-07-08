@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs/6840c40cddc537df00b4dca2/comments
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJGcm9tUmVzdDIiLCJpZCI6IjY4NDBjMmVlYmEwMWY2YjAwMDE5OTIwNSIsImlhdCI6MTc0OTA4MDAxNH0.2O2gttdT64LSM0lwtPURVqVzubUJtSBlqmw1a-hpzCU
+
+{
+  "content": "TESTING ANOTHER NEW COMMENT",
+  "blogId": "6840c40cddc537df00b4dca2",
+  "userId": "6840c2eeba01f6b000199205"
+}

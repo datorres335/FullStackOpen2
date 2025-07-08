@@ -1,14 +1,20 @@
 import { useState, useEffect } from "react";
 import blogService from "../services/blogs";
+import commentService from "../services/comments";
 import { useParams } from "react-router-dom";
 
 const BlogPage = ({ user }) => {
   const [blog, setBlog] = useState(null)
+  const [comments, setComments] = useState([])
   const { id } = useParams();
 
   useEffect(() => {
     blogService.getById(id).then(blog => setBlog(blog))
   }, [id])
+
+  useEffect(() => {
+    commentService.getAll(id).then(comments => setComments(comments))
+  }, [id]);
 
   const handleLike = async (id) => {
     const updatedBlogData = {
@@ -74,6 +80,14 @@ const BlogPage = ({ user }) => {
           remove
         </button>
       </div>
+      <br />
+      <h3>Comments</h3>
+      
+      <ul>
+        {comments.map((comment) => (
+          <li key={comment.id}>{comment.content}</li>
+        ))}
+      </ul>
     </div>
   )
 }
