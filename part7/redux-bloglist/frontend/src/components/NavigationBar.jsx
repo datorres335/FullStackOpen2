@@ -9,6 +9,8 @@ import {
 import LoginForm from './LoginForm'
 import BlogsPage from './BlogsPage'
 import { logout } from "../services/logout";
+import UsersPage from './UsersPage';
+import UserPage from './UserPage';
 
 const NavigationBar = ({ 
   user,
@@ -21,7 +23,7 @@ const NavigationBar = ({
   const handleLogout = () => {
     logout();
     setUser(null);
-    navigate("/"); // Handle navigation in the component
+    navigate("/");
   };
 
   const padding = {
@@ -65,7 +67,12 @@ const NavigationBar = ({
             setNotification={setNotification}
           />
         } />
-        <Route path="/users" element={<div>Users Page</div>} />
+        <Route path="/users" element={
+          <UsersPage />
+        } />
+        <Route path="/users/:id" element={
+          <UserPage />
+        } />
         <Route path="/login" element={
           <LoginForm
             setUser={setUser}

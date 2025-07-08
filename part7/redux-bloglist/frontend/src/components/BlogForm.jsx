@@ -34,17 +34,17 @@ const BlogForm = ({
       setNewBlog({ title: "", author: "", url: "", likes: 0, userId: null }); // reset the form fields
       setNotification({
         message: `A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`,
-        color: "green",
+        color: "success",
       });
 
       toggleVisibility(); // hide the form after submission
       setTimeout(() => {
-        setNotification({ message: null, color: "green" });
+        setNotification({ message: null, color: "success" });
       }, 5000);
     } catch (exception) {
-      setNotification({ message: "Failed to add blog", color: "red" });
+      setNotification({ message: "Failed to add blog", color: "danger" });
       setTimeout(() => {
-        setNotification({ message: null, color: "green" });
+        setNotification({ message: null, color: "success" });
       }, 5000);
     }
   };
