@@ -3,19 +3,27 @@ import {
   useMatch, 
   Routes, 
   Route, 
-  Link
+  Link,
+  useNavigate
 } from 'react-router-dom'
 import LoginForm from './LoginForm'
-import Togglable from './Togglable'
 import BlogsPage from './BlogsPage'
+import { logout } from "../services/logout";
 
 const NavigationBar = ({ 
-  user, 
-  logout, 
+  user,
   setUser,
   notification, 
   setNotification,
  }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    setUser(null);
+    navigate("/"); // Handle navigation in the component
+  };
+
   const padding = {
     paddingRight: 5
   }
@@ -37,10 +45,7 @@ const NavigationBar = ({
                 ? <span style={padding}>
                     <em>{user.username} logged in</em>
                     <button 
-                      onClick={() => {
-                        logout();
-                        setUser(null);
-                      }}
+                      onClick={handleLogout}
                       style={{ marginLeft: '10px' }}
                     >
                       logout
@@ -67,7 +72,13 @@ const NavigationBar = ({
             setNotification={setNotification}
           />
         } />
-        <Route path="/" element={<div>Blogs Page</div>} />
+        <Route path="/" element={
+          <BlogsPage
+            notification={notification}
+            user={user}
+            setNotification={setNotification}
+          />
+        } />
       </Routes>
     </div>
   )

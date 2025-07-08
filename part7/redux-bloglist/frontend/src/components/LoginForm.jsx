@@ -3,6 +3,7 @@ import { Form, Button } from 'react-bootstrap'
 import { useState } from "react";
 import loginService from "../services/login";
 import blogService from "../services/blogs";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = ({
   setUser,
@@ -10,6 +11,7 @@ const LoginForm = ({
 }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     const handleLogin = async (event) => {
       event.preventDefault();
@@ -26,6 +28,8 @@ const LoginForm = ({
         setUser(user);
         setUsername("");
         setPassword("");
+
+        navigate("/");
       } catch (exception) {
         setNotification({ message: "Wrong username or password", color: "danger" });
         setTimeout(() => {
