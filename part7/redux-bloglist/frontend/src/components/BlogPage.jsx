@@ -83,7 +83,17 @@ const BlogPage = ({ user }) => {
       </div>
       <br />
       <h3>Comments</h3>
-      <CommentForm blogId={blog.id} userId={user.id} setComments={setComments} comments={comments} />
+      {/* <CommentForm blogId={blog.id} userId={user.id} setComments={setComments} comments={comments} /> */}
+      {user ? (
+        <CommentForm 
+          blogId={blog.id} 
+          userId={user.id} 
+          setComments={setComments} 
+          comments={comments} 
+        />
+      ) : (
+        <p>Please log in to add comments.</p>
+      )}
       <br />
       <ul>
         {comments.map((comment) => (

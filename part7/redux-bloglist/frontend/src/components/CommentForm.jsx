@@ -5,6 +5,10 @@ import commentService from "../services/comments";
 const CommentForm = ({blogId, userId, setComments, comments}) => {
   const [newComment, setNewComment] = useState("");
 
+  if (!blogId || !userId) { 
+    return <p>Please log in to add comments.</p>; 
+  }
+
   const addComment = async (event) => {
     event.preventDefault();
     const commentObject = {
