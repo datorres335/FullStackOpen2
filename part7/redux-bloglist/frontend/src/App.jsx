@@ -2,8 +2,10 @@ import { useState, useEffect } from "react"; //What is useRef used for? It is us
 import blogService from "./services/blogs";
 import commentService from "./services/comments"
 import NavigationBar from "./components/NavigationBar";
+import { useDispatch } from "react-redux";
 
 const App = () => {
+  const dispatch = useDispatch();
   const [user, setUser] = useState(null);
   const [notification, setNotification] = useState({
     message: null,

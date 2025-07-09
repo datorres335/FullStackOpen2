@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Form, Button } from 'react-bootstrap'
 
 const BlogForm = ({
   setBlogs,
@@ -33,17 +34,17 @@ const BlogForm = ({
       setNewBlog({ title: "", author: "", url: "", likes: 0, userId: null }); // reset the form fields
       setNotification({
         message: `A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`,
-        color: "green",
+        color: "success",
       });
 
       toggleVisibility(); // hide the form after submission
       setTimeout(() => {
-        setNotification({ message: null, color: "green" });
+        setNotification({ message: null, color: "success" });
       }, 5000);
     } catch (exception) {
-      setNotification({ message: "Failed to add blog", color: "red" });
+      setNotification({ message: "Failed to add blog", color: "danger" });
       setTimeout(() => {
-        setNotification({ message: null, color: "green" });
+        setNotification({ message: null, color: "success" });
       }, 5000);
     }
   };
@@ -57,48 +58,53 @@ const BlogForm = ({
     <div className="blogForm">
       <h2>Create a New Blog</h2>
 
-      <form onSubmit={addBlog}>
+      <Form onSubmit={addBlog}>
         <div>
-          title:
-          <input
-            type="text"
-            data-testid="title"
-            value={newBlog.title}
-            name="title"
-            onChange={(e) =>
-              handleBlogChange({
-                target: { name: "title", value: e.target.value },
-              })
-            }
-            placeholder="Blog title"
-          />{" "}
-          <br />
-          author:
-          <input
-            data-testid="author"
-            value={newBlog.author}
-            name="author"
-            onChange={(e) =>
-              handleBlogChange({
-                target: { name: "author", value: e.target.value },
-              })
-            }
-            placeholder="Blog author"
-          />{" "}
-          <br />
-          url:
-          <input
-            data-testid="url"
-            value={newBlog.url}
-            name="url"
-            onChange={(e) =>
-              handleBlogChange({
-                target: { name: "url", value: e.target.value },
-              })
-            }
-            placeholder="Blog URL"
-          />{" "}
-          <br />
+          <Form.Group>
+            <Form.Label>Title:</Form.Label>
+            <Form.Control 
+              type="text"
+              data-testid="title"
+              value={newBlog.title}
+              name="title"
+              onChange={(e) =>
+                handleBlogChange({
+                  target: { name: "title", value: e.target.value },
+                })
+              }
+              placeholder="Blog title"
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Author:</Form.Label>
+            <Form.Control 
+              type="text"
+              data-testid="author"
+              value={newBlog.author}
+              name="author"
+              onChange={(e) =>
+                handleBlogChange({
+                  target: { name: "author", value: e.target.value },
+                })
+              }
+              placeholder="Blog author"
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>URL:</Form.Label>
+            <Form.Control 
+              type="text"
+              data-testid="url"
+              value={newBlog.url}
+              name="url"
+              onChange={(e) =>
+                handleBlogChange({
+                  target: { name: "url", value: e.target.value },
+                })
+              }
+              placeholder="Blog URL"
+            />
+          </Form.Group>
           <input
             type="hidden"
             value={user.id}
@@ -107,9 +113,11 @@ const BlogForm = ({
               handleBlogChange({ target: { name: "userId", value: user.id } })
             }
           />
-          <button type="submit">create</button>
+          <br />
+          <Button variant="primary" type="submit">create</Button>
+          <br />
         </div>
-      </form>
+      </Form>
     </div>
   );
 };

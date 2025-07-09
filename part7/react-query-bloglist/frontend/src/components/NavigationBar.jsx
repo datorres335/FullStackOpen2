@@ -32,7 +32,7 @@ const NavigationBar = ({
       <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" className="shadow-sm">
         <Container>
           <Navbar.Brand as={Link} to="/" className="fw-bold fs-4">
-            📚🤓🙈 Redux Blog Hub
+            📚🤓🙈 React Query Blog Hub
           </Navbar.Brand>
           
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />

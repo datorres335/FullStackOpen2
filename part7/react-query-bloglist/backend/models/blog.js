@@ -24,6 +24,12 @@ const blogSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment",
+    },
+  ]
 });
 
 // The toJSON method is used to customize the JSON representation of the document when it is converted to JSON format.
