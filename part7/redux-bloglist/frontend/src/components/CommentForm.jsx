@@ -16,20 +16,19 @@ const CommentForm = ({blogId, userId, setComments, comments}) => {
       return;
     }
 
-    const commentObject = {
-      content: newComment.trim(),
-      blogId,
-      userId
-    };
-
     try {
-      const returnedComment = await commentService.create(commentObject.content, commentObject.blogId, commentObject.userId);
+      const returnedComment = await commentService.create(
+        newComment.trim(), 
+        blogId, 
+        userId
+      );
+      
       setComments(comments.concat(returnedComment));
       setNewComment("");
     } catch (exception) {
       console.log("Failed to add comment", exception);
     }
-  }
+  };
 
   const handleCommentChange = (event) => {
     setNewComment(event.target.value);

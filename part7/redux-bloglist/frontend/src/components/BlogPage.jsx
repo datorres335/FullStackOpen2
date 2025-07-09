@@ -18,14 +18,25 @@ import {
 const BlogPage = ({ user }) => {
   const [blog, setBlog] = useState(null)
   const [comments, setComments] = useState([])
+  const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
   useEffect(() => {
-    blogService.getById(id).then(blog => setBlog(blog))
-  }, [id])
+    const fetchBlogAndComments = async () => {
+      try {
+        const blogData = await blogService.getById(id);
+        setBlog(blogData);
+        
+        const commentsData = await commentService.getAll(id);
+        setComments(commentsData);
+      } catch (error) {
+        console.error("Error fetching blog or comments:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  useEffect(() => {
-    commentService.getAll(id).then(comments => setComments(comments))
+    fetchBlogAndComments();
   }, [id]);
 
   const handleLike = async (id) => {

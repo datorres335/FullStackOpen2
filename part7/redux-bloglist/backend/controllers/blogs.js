@@ -3,6 +3,7 @@ const Blog = require("../models/blog");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const { userExtractor } = require("../utils/middleware");
+const commentsRouter = require('./comments');
 
 // No catch block needed – Express 5 handles errors in async handlers
 // if you're using Express 5.x, you can safely remove explicit try/catch blocks in your async route handlers, as long as you have a proper error-handling middleware in place.
@@ -96,5 +97,7 @@ blogsRouter.put("/:id", async (request, response) => {
     response.status(404).end(); // 404 Not Found status code indicates that the requested resource could not be found on the server
   }
 });
+
+blogsRouter.use('/:id/comments', commentsRouter);
 
 module.exports = blogsRouter;
