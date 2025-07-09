@@ -1,4 +1,4 @@
-import { Navbar, Nav } from 'react-bootstrap'
+import { Navbar, Nav, Button, Badge, Container } from 'react-bootstrap'
 import { 
   useMatch, 
   Routes, 
@@ -27,39 +27,52 @@ const NavigationBar = ({
     navigate("/");
   };
 
-  const padding = {
-    paddingRight: 5
-  }
-
   return (
     <div>
-      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="#" as="span">
-              <Link style={padding} to="/blogs">Blogs</Link>
-            </Nav.Link>
-            <Nav.Link href="#" as="span">
-              <Link style={padding} to="/users">Users</Link>
-            </Nav.Link>
-            <Nav.Link href="#" as="span">
-              {user
-                ? <span style={padding}>
-                    <em>{user.username} logged in</em>
-                    <button 
-                      onClick={handleLogout}
-                      style={{ marginLeft: '10px' }}
-                    >
-                      logout
-                    </button>
-                  </span>
-                : <Link style={padding} to="/login">Login</Link>
-              }
-            </Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
+      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" className="shadow-sm">
+        <Container>
+          <Navbar.Brand as={Link} to="/" className="fw-bold fs-4">
+            📚🤓🙈 Dave&apos;s Blog Hub
+          </Navbar.Brand>
+          
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="me-auto">
+              <Nav.Link as={Link} to="/blogs" className="text-light fw-semibold mx-2">
+                📖 Blogs
+              </Nav.Link>
+              <Nav.Link as={Link} to="/users" className="text-light fw-semibold mx-2">
+                👥 Users
+              </Nav.Link>
+            </Nav>
+            
+            <Nav className="align-items-center">
+              {user ? (
+                <div className="d-flex align-items-center">
+                  <Badge bg="info" className="me-3 px-3 py-2">
+                    👋 Welcome, {user.username}!
+                  </Badge>
+                  <Button 
+                    variant="outline-light"
+                    size="sm"
+                    onClick={handleLogout}
+                    className="fw-semibold"
+                  >
+                    🚪 Logout
+                  </Button>
+                </div>
+              ) : (
+                <Nav.Link as={Link} to="/login">
+                  <Button variant="outline-light" size="sm" className="fw-semibold">
+                    🔐 Login
+                  </Button>
+                </Nav.Link>
+              )}
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
       </Navbar>
+      
       <Routes>
         <Route path="/blogs" element={
           <BlogsPage

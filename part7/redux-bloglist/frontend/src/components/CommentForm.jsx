@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, InputGroup } from 'react-bootstrap';
 import commentService from "../services/comments";
 
 const CommentForm = ({blogId, userId, setComments, comments}) => {
@@ -11,6 +11,11 @@ const CommentForm = ({blogId, userId, setComments, comments}) => {
 
   const addComment = async (event) => {
     event.preventDefault();
+    
+    if (newComment.trim() === '') {
+      return;
+    }
+
     const commentObject = {
       content: newComment.trim(),
       blogId,
@@ -32,20 +37,22 @@ const CommentForm = ({blogId, userId, setComments, comments}) => {
 
   return (
     <Form onSubmit={addComment}>
-      <div>
-        <Form.Group>
-          <Form.Control 
-            type="text"
-            value={newComment}
-            name="Comment"
-            placeholder="Write a comment..."
-            onChange={handleCommentChange}
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          Add Comment
+      <InputGroup className="mb-3">
+        <Form.Control 
+          type="text"
+          value={newComment}
+          name="Comment"
+          placeholder="Write a comment..."
+          onChange={handleCommentChange}
+        />
+        <Button 
+          variant="primary" 
+          type="submit"
+          disabled={newComment.trim() === ''}
+        >
+          💬 Add Comment
         </Button>
-      </div>
+      </InputGroup>
     </Form>
   )
 }

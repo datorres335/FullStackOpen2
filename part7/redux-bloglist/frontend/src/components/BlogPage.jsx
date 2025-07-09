@@ -3,6 +3,17 @@ import blogService from "../services/blogs";
 import commentService from "../services/comments";
 import { useParams } from "react-router-dom";
 import CommentForm from "./CommentForm"
+import { 
+  Container, 
+  Card, 
+  Badge, 
+  Button, 
+  Row, 
+  Col, 
+  ListGroup,
+  Alert,
+  Spinner
+} from 'react-bootstrap';
 
 const BlogPage = ({ user }) => {
   const [blog, setBlog] = useState(null)
@@ -61,46 +72,127 @@ const BlogPage = ({ user }) => {
 
   const shouldShowRemoveButton =
     user && blogUserId && user.id === blogUserId.toString();
-  const showRemoveButton = { display: shouldShowRemoveButton ? "" : "none" };
 
   if (!blog) {
-    return <div>Loading...</div>;
+    return (
+      <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
+        <div className="text-center">
+          <Spinner animation="border" role="status" variant="primary">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+          <p className="mt-2">Loading blog...</p>
+        </div>
+      </Container>
+    );
   }
 
   return (
-    <div>
-      {/* <h2>Blog Details</h2> */}
-      <h2>{blog.title}</h2>
-      <div className="url">{blog.url}</div>
-      <div className="likes">
-        {blog.likes} likes <button onClick={() => handleLike(blog.id)}>like</button>
-      </div>
-      <div>added by {blog.author}</div>
-      <div>
-        <button style={showRemoveButton} onClick={() => handleRemove(blog.id)}>
-          remove
-        </button>
-      </div>
-      <br />
-      <h3>Comments</h3>
-      {/* <CommentForm blogId={blog.id} userId={user.id} setComments={setComments} comments={comments} /> */}
-      {user ? (
-        <CommentForm 
-          blogId={blog.id} 
-          userId={user.id} 
-          setComments={setComments} 
-          comments={comments} 
-        />
-      ) : (
-        <p>Please log in to add comments.</p>
-      )}
-      <br />
-      <ul>
-        {comments.map((comment) => (
-          <li key={comment.id}>{comment.content}</li>
-        ))}
-      </ul>
-    </div>
+    <Container className="my-4">
+      <Row>
+        <Col lg={8} className="mx-auto">
+          <Card className="shadow-sm mb-4">
+            <Card.Header className="bg-primary text-white">
+              <h2 className="mb-0">{blog.title}</h2>
+            </Card.Header>
+            <Card.Body>
+              <Row className="mb-3">
+                <Col sm={6}>
+                  <strong>URL:</strong>{' '}
+                  <a 
+                    href={blog.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-decoration-none"
+                  >
+                    {blog.url}
+                  </a>
+                </Col>
+                <Col sm={6}>
+                  <strong>Author:</strong> <Badge bg="secondary">{blog.author}</Badge>
+                </Col>
+              </Row>
+              
+              <Row className="align-items-center">
+                <Col sm={6}>
+                  <div className="d-flex align-items-center">
+                    <Badge bg="success" className="me-2">
+                      {blog.likes} likes
+                    </Badge>
+                    <Button 
+                      variant="outline-success" 
+                      size="sm"
+                      onClick={() => handleLike(blog.id)}
+                    >
+                      👍 Like
+                    </Button>
+                  </div>
+                </Col>
+                <Col sm={6} className="text-end">
+                  {shouldShowRemoveButton && (
+                    <Button 
+                      variant="outline-danger" 
+                      size="sm"
+                      onClick={() => handleRemove(blog.id)}
+                    >
+                      🗑️ Remove
+                    </Button>
+                  )}
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
+
+          <Card className="shadow-sm">
+            <Card.Header className="bg-light">
+              <h4 className="mb-0">
+                💬 Comments ({comments.length})
+              </h4>
+            </Card.Header>
+            <Card.Body>
+              {user ? (
+                <div className="mb-4">
+                  <CommentForm 
+                    blogId={blog.id} 
+                    userId={user.id} 
+                    setComments={setComments} 
+                    comments={comments} 
+                  />
+                </div>
+              ) : (
+                <Alert variant="info" className="mb-4">
+                  <Alert.Heading>Want to comment?</Alert.Heading>
+                  Please log in to add comments to this blog post.
+                </Alert>
+              )}
+
+              {comments.length === 0 ? (
+                <Alert variant="light" className="text-center">
+                  No comments yet. Be the first to comment!
+                </Alert>
+              ) : (
+                <ListGroup variant="flush">
+                  {comments.map((comment, index) => (
+                    <ListGroup.Item 
+                      key={comment.id} 
+                      className={index % 2 === 0 ? 'bg-light' : ''}
+                    >
+                      <div className="d-flex justify-content-between align-items-start">
+                        <div>
+                          <p className="mb-1">{comment.content}</p>
+                          <small className="text-muted">
+                            Comment #{index + 1}
+                          </small>
+                        </div>
+                      </div>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              )}
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   )
 }
 
