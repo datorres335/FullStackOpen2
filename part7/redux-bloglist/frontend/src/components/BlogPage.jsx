@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import blogService from "../services/blogs";
 import commentService from "../services/comments";
 import { useParams } from "react-router-dom";
+import CommentForm from "./CommentForm"
 
 const BlogPage = ({ user }) => {
   const [blog, setBlog] = useState(null)
@@ -82,7 +83,8 @@ const BlogPage = ({ user }) => {
       </div>
       <br />
       <h3>Comments</h3>
-      
+      <CommentForm blogId={blog.id} userId={user.id} setComments={setComments} comments={comments} />
+      <br />
       <ul>
         {comments.map((comment) => (
           <li key={comment.id}>{comment.content}</li>
