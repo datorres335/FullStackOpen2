@@ -1,7 +1,6 @@
 import Notification from "./Notification";
 import Togglable from "./Togglable";
 import BlogForm from "./BlogForm";
-import Blog from "./Blog";
 import { 
   Container,
   Row,
@@ -65,11 +64,7 @@ const BlogsPage = ({ notification, user, setNotification }) => {
               <Card.Body>
                 <Togglable buttonLabel="📝 Create New Blog" ref={blogFormRef}>
                   <BlogForm
-                    setBlogs={setBlogs}
-                    setNotification={setNotification}
                     user={user}
-                    blogs={blogs}
-                    blogServiceCreate={blogService.create}
                     toggleVisibility={() => {
                       blogFormRef.current.toggleVisibility();
                     }}

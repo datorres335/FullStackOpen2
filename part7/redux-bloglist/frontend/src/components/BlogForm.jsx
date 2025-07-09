@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { Form, Button } from 'react-bootstrap'
+import { useDispatch } from "react-redux";
+import { createNotification } from "../reducers/notificationReducer";
+import { createBlog } from "../reducers/blogReducer";
 
 const BlogForm = ({
-  setBlogs,
-  setNotification,
   user,
-  blogs,
-  blogServiceCreate,
   toggleVisibility,
 }) => {
+  const dispatch = useDispatch();
+
   const [newBlog, setNewBlog] = useState({
     title: "",
     author: "",
@@ -28,24 +29,20 @@ const BlogForm = ({
     };
 
     try {
-      const returnedBlog = await blogServiceCreate(blogObject);
-
-      setBlogs(blogs.concat(returnedBlog));
-      setNewBlog({ title: "", author: "", url: "", likes: 0, userId: null }); // reset the form fields
-      setNotification({
-        message: `A new blog "${returnedBlog.title}" by ${returnedBlog.author} added`,
+      await dispatch(createBlog(blogObject));
+      dispatch(createNotification({
+        message: `A new blog "${blogObject.title}" by ${blogObject.author} added`,
         color: "success",
-      });
+      }));
+
+      setNewBlog({ title: "", author: "", url: "", likes: 0, userId: null }); // reset the form fields
 
       toggleVisibility(); // hide the form after submission
-      setTimeout(() => {
-        setNotification({ message: null, color: "success" });
-      }, 5000);
     } catch (exception) {
-      setNotification({ message: "Failed to add blog", color: "danger" });
-      setTimeout(() => {
-        setNotification({ message: null, color: "success" });
-      }, 5000);
+      dispatch(createNotification({
+        message: `A new blog "${blogObject.title}" by ${blogObject.author} added`,
+        color: "danger",
+      }));
     }
   };
 
