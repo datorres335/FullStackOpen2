@@ -145,7 +145,7 @@ const BlogPage = ({ user }) => {
           <Card className="shadow-sm">
             <Card.Header className="bg-light">
               <h4 className="mb-0">
-                💬 Comments ({comments.length})
+                🗣️ Comments ({comments.length})
               </h4>
             </Card.Header>
             <Card.Body>
@@ -160,7 +160,7 @@ const BlogPage = ({ user }) => {
                 </div>
               ) : (
                 <Alert variant="info" className="mb-4">
-                  <Alert.Heading>Want to comment?</Alert.Heading>
+                  <Alert.Heading>🤔 Want to comment?</Alert.Heading>
                   Please log in to add comments to this blog post.
                 </Alert>
               )}
@@ -179,9 +179,6 @@ const BlogPage = ({ user }) => {
                       <div className="d-flex justify-content-between align-items-start">
                         <div>
                           <p className="mb-1">{comment.content}</p>
-                          <small className="text-muted">
-                            Comment #{index + 1}
-                          </small>
                         </div>
                       </div>
                     </ListGroup.Item>
