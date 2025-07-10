@@ -48,7 +48,7 @@ export const deleteBlog = id => {
 
 export const likeBlog = id => {
   return async dispatch => {
-    const blogToLike = await blogService.getBlog(id); //"getBlog" is not a funciton
+    const blogToLike = await blogService.getById(id); //"getBlog" is not a funciton
     const updatedBlog = { ...blogToLike, likes: blogToLike.likes + 1 };
     const savedBlog = await blogService.update(id, updatedBlog);
     
@@ -56,13 +56,37 @@ export const likeBlog = id => {
   }
 }
 
-export const addNewComment = (content, blogId) => {
+// export const addNewComment = (content, blogId) => {
+//   return async dispatch => {
+//     const blogToComment = await blogService.getById(blogId)
+//     const updatedBlog = { ...blogToComment, comments: blogToComment.comments.concat(content)}
+//     const savedBlog = await blogService.update(blogId, updatedBlog)
+//     dispatch(updateBlog(savedBlog))
+//   }
+// }
+export const addNewComment = (content, blogId, userId) => {
   return async dispatch => {
-    const blogToComment = await blogService.getById(blogId)
-    const updatedBlog = { ...blogToComment, comments: blogToComment.comments.concat(content)}
-    const savedBlog = await blogService.update(blogId, updatedBlog)
-    dispatch(updateBlog(savedBlog))
-  }
-}
+    const blogToComment = await blogService.getById(blogId);
+
+    // Add a new comment object with content and userId
+    const newComment = { content, userId };
+
+    const updatedBlog = { 
+      ...blogToComment, 
+      comments: blogToComment.comments.concat(newComment),
+    };
+
+    console.log("Updated Blog Payload:", updatedBlog); // Debug log
+
+    // const savedBlog = await blogService.update(blogId, updatedBlog);
+    // dispatch(updateBlog(savedBlog));
+    try {
+      const savedBlog = await blogService.update(blogId, updatedBlog);
+      dispatch(updateBlog(savedBlog));
+    } catch (error) {
+      console.error("Error in addNewComment:", error.message);
+    }
+  };
+};
 
 export default blogSlice.reducer;
