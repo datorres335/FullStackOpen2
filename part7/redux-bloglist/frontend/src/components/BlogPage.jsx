@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import blogService from "../services/blogs";
-import commentService from "../services/comments";
 import { useParams } from "react-router-dom";
 import CommentForm from "./CommentForm"
 import { 
@@ -23,10 +22,6 @@ const BlogPage = ({ user }) => {
   useEffect(() => {
     blogService.getById(id).then(blog => setBlog(blog))
   }, [id])
-
-  useEffect(() => {
-    commentService.getAll(id).then(comments => setComments(comments))
-  }, [id]);
 
   const handleLike = async (id) => {
     const updatedBlogData = {
@@ -153,9 +148,7 @@ const BlogPage = ({ user }) => {
                 <div className="mb-4">
                   <CommentForm 
                     blogId={blog.id} 
-                    userId={user.id} 
-                    setComments={setComments} 
-                    comments={comments} 
+                    userId={user.id}
                   />
                 </div>
               ) : (

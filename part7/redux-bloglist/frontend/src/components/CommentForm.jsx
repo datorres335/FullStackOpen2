@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Form, Button, InputGroup } from 'react-bootstrap';
-import commentService from "../services/comments";
+import { useDispatch } from "react-redux";
+import { addNewComment } from "../reducers/blogReducer";
 
-const CommentForm = ({blogId, userId, setComments, comments}) => {
+const CommentForm = ({blogId, userId}) => {
   const [newComment, setNewComment] = useState("");
+  const dispatch = useDispatch();
 
   if (!blogId || !userId) { 
     return <p>Please log in to add comments.</p>; 
@@ -23,8 +25,9 @@ const CommentForm = ({blogId, userId, setComments, comments}) => {
     };
 
     try {
-      const returnedComment = await commentService.create(commentObject.content, commentObject.blogId, commentObject.userId);
-      setComments(comments.concat(returnedComment));
+      // const returnedComment = await blogService.update();
+      // setComments(comments.concat(returnedComment));
+      dispatch(addNewComment(newComment.trim(), blogId));
       setNewComment("");
     } catch (exception) {
       console.log("Failed to add comment", exception);
