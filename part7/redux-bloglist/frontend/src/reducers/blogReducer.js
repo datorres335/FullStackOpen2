@@ -56,19 +56,10 @@ export const likeBlog = id => {
   }
 }
 
-// export const addNewComment = (content, blogId) => {
-//   return async dispatch => {
-//     const blogToComment = await blogService.getById(blogId)
-//     const updatedBlog = { ...blogToComment, comments: blogToComment.comments.concat(content)}
-//     const savedBlog = await blogService.update(blogId, updatedBlog)
-//     dispatch(updateBlog(savedBlog))
-//   }
-// }
 export const addNewComment = (content, blogId, userId) => {
   return async dispatch => {
     const blogToComment = await blogService.getById(blogId);
 
-    // Add a new comment object with content and userId
     const newComment = { content, userId };
 
     const updatedBlog = { 
@@ -76,10 +67,6 @@ export const addNewComment = (content, blogId, userId) => {
       comments: blogToComment.comments.concat(newComment),
     };
 
-    console.log("Updated Blog Payload:", updatedBlog); // Debug log
-
-    // const savedBlog = await blogService.update(blogId, updatedBlog);
-    // dispatch(updateBlog(savedBlog));
     try {
       const savedBlog = await blogService.update(blogId, updatedBlog);
       dispatch(updateBlog(savedBlog));

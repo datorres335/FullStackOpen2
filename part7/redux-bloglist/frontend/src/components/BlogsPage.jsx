@@ -8,27 +8,25 @@ import {
   Table,
   Card,
   Badge,
-  Button,
   Alert,
   Spinner
 } from "react-bootstrap";
 import { useState, useEffect, useRef } from "react";
-import blogService from "../services/blogs";
+import { useDispatch, useSelector } from "react-redux";
+import { initializeBlogs } from "../reducers/blogReducer";
 import { Link } from "react-router-dom";
 
 const BlogsPage = ({ notification, user, setNotification }) => {
-  const [blogs, setBlogs] = useState([]);
+  const blogs = useSelector(state => state.blogs)
   const [loading, setLoading] = useState(true);
   const blogFormRef = useRef();
   const blogViewRef = useRef();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => {
-      const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
-      setBlogs(sortedBlogs);
-      setLoading(false);
-    });
-  }, []);
+    dispatch(initializeBlogs());
+    setLoading(false);
+  }, [dispatch, blogs.length]);
 
   if (loading) {
     return (
