@@ -18,16 +18,16 @@ const CommentForm = ({blogId, userId}) => {
       return;
     }
 
-    const commentObject = {
-      content: newComment.trim(),
-      blogId,
-      userId
-    };
+    // const commentObject = {
+    //   content: newComment.trim(),
+    //   blogId,
+    //   userId
+    // };
 
     try {
       // const returnedComment = await blogService.update();
       // setComments(comments.concat(returnedComment));
-      dispatch(addNewComment(newComment.trim(), blogId));
+      dispatch(addNewComment(newComment.trim(), blogId, userId));
       setNewComment("");
     } catch (exception) {
       console.log("Failed to add comment", exception);
