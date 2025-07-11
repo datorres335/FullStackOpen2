@@ -12,7 +12,7 @@ import BlogPage from './BlogPage';
 import { logout } from "../services/logout";
 import UsersPage from './UsersPage';
 import UserPage from './UserPage';
-import { loginUser } from '../reducers/userReducer';
+import { loggedInUser } from '../reducers/userReducer';
 import { useDispatch, useSelector } from 'react-redux';
 
 const NavigationBar = () => {
@@ -23,7 +23,7 @@ const NavigationBar = () => {
   const handleLogout = () => {
     logout();
     //setUser(null);
-    dispatch(loginUser(null));
+    dispatch(loggedInUser(null));
     navigate("/");
   };
 

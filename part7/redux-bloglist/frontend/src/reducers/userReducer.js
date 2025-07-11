@@ -13,7 +13,7 @@ const userSlice = createSlice({
 
 export const {setUser} = userSlice.actions;
 
-export const loginUser = user => {
+export const loggedInUser = user => {
   return async dispatch => {
     dispatch(setUser(user))
   }

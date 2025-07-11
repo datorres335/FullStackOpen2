@@ -13,7 +13,7 @@ import loginService from "../services/login";
 import blogService from "../services/blogs";
 import { useNavigate, Link } from "react-router-dom";
 import { createNotification } from "../reducers/notificationReducer";
-import { loginUser } from "../reducers/userReducer";
+import { loggedInUser } from "../reducers/userReducer";
 import { useDispatch } from "react-redux";
 
 const LoginForm = () => {
@@ -37,7 +37,7 @@ const LoginForm = () => {
       blogService.setToken(user.token);
 
       //setUser(user);
-      dispatch(loginUser(user));
+      dispatch(loggedInUser(user));
       setUsername("");
       setPassword("");
       createNotification(`Welcome back, ${user.username}!`, "success");

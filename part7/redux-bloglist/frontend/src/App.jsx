@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"; //What is useRef used for? It is us
 import blogService from "./services/blogs";
 import NavigationBar from "./components/NavigationBar";
 import { useDispatch } from "react-redux";
-import { loginUser } from "./reducers/userReducer";
+import { loggedInUser } from "./reducers/userReducer";
 
 const App = () => {
   //const [user, setUser] = useState(null);
@@ -15,7 +15,7 @@ const App = () => {
       const user = JSON.parse(loggedUserJSON);
 
       //setUser(user);
-      dispatch(loginUser(user));
+      dispatch(loggedInUser(user));
       blogService.setToken(user.token);
     }
   }, []);
