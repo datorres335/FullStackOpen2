@@ -13,7 +13,7 @@ const blogSchema = mongoose.Schema({
   url: {
     type: String,
     required: true,
-    minlength: 5,
+    minlength: 1,
   },
   likes: {
     type: Number,
@@ -26,8 +26,17 @@ const blogSchema = mongoose.Schema({
   },
   comments: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Comment",
+      content: {
+        type: String,
+        required: true,
+        minlength: 1,
+        maxlength: 500,
+      },
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
     },
   ]
 });

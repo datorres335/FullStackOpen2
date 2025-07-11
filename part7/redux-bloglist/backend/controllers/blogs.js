@@ -48,8 +48,8 @@ blogsRouter.post("/", userExtractor, async (request, response) => {
 });
 
 blogsRouter.get("/:id", async (request, response) => {
-  const blog = await Blog.findById(request.params.id).populate("comments", {
-    content: 1,});
+  const blog = await Blog.findById(request.params.id).populate("comments", { content: 1,});
+    
   if (blog) {
     response.json(blog);
   } else {
@@ -83,7 +83,7 @@ blogsRouter.delete("/:id", userExtractor, async (request, response) => {
   }
 });
 
-blogsRouter.put("/:id", async (request, response) => {
+blogsRouter.put("/:id", userExtractor, async (request, response) => {
   const updatedBlog = await Blog.findByIdAndUpdate(
     request.params.id,
     request.body,

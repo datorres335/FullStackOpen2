@@ -12,18 +12,18 @@ import BlogPage from './BlogPage';
 import { logout } from "../services/logout";
 import UsersPage from './UsersPage';
 import UserPage from './UserPage';
+import { loggedInUser } from '../reducers/userReducer';
+import { useDispatch, useSelector } from 'react-redux';
 
-const NavigationBar = ({ 
-  user,
-  setUser,
-  notification, 
-  setNotification,
- }) => {
+const NavigationBar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
 
   const handleLogout = () => {
     logout();
-    setUser(null);
+    //setUser(null);
+    dispatch(loggedInUser(null));
     navigate("/");
   };
 
@@ -76,9 +76,7 @@ const NavigationBar = ({
       <Routes>
         <Route path="/blogs" element={
           <BlogsPage
-            notification={notification}
             user={user}
-            setNotification={setNotification}
           />
         } />
         <Route path="/blogs/:id" element={
@@ -94,15 +92,12 @@ const NavigationBar = ({
         } />
         <Route path="/login" element={
           <LoginForm
-            setUser={setUser}
-            setNotification={setNotification}
+            // setUser={setUser}
           />
         } />
         <Route path="/" element={
           <BlogsPage
-            notification={notification}
             user={user}
-            setNotification={setNotification}
           />
         } />
       </Routes>

@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import blogService from "../services/blogs";
-import commentService from "../services/comments";
-import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { initializeBlogs, likeBlog, deleteBlog } from "../reducers/blogReducer";
+import { useParams, useNavigate } from "react-router-dom";
 import CommentForm from "./CommentForm"
 import { 
   Container, 
@@ -15,41 +15,26 @@ import {
   Spinner
 } from 'react-bootstrap';
 
+
 const BlogPage = ({ user }) => {
-  const [blog, setBlog] = useState(null)
-  const [comments, setComments] = useState([])
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
   const { id } = useParams();
+  const navigate = useNavigate();
+
+  const blog = useSelector(state => 
+    state.blogs.find(blog => blog.id === id)
+  );
+  const comments = blog?.comments || [];
 
   useEffect(() => {
-    const fetchBlogAndComments = async () => {
-      try {
-        const blogData = await blogService.getById(id);
-        setBlog(blogData);
-        
-        const commentsData = await commentService.getAll(id);
-        setComments(commentsData);
-      } catch (error) {
-        console.error("Error fetching blog or comments:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBlogAndComments();
-  }, [id]);
+    if (!blog) {
+      dispatch(initializeBlogs());
+    }
+  }, [id, dispatch, blog]);
 
   const handleLike = async (id) => {
-    const updatedBlogData = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-    };
-
     try {
-      const returnedBlog = await blogService.update(id, updatedBlogData);
-      setBlog(returnedBlog);
+      dispatch(likeBlog(id));
     } catch (exception) {
       console.log("Error updating blog", exception);
     }
@@ -64,8 +49,8 @@ const BlogPage = ({ user }) => {
       return;
     }
     try {
-      await blogService.remove(id);
-      setBlog(null);
+      dispatch(deleteBlog(id));
+      navigate('/blogs');
     } catch (exception) {
       console.log("Error removing blog", exception);
     }
@@ -156,7 +141,7 @@ const BlogPage = ({ user }) => {
           <Card className="shadow-sm">
             <Card.Header className="bg-light">
               <h4 className="mb-0">
-                🗣️ Comments ({comments.length})
+                🗣️ Comments ({comments ? comments.length : 0})
               </h4>
             </Card.Header>
             <Card.Body>
@@ -164,9 +149,7 @@ const BlogPage = ({ user }) => {
                 <div className="mb-4">
                   <CommentForm 
                     blogId={blog.id} 
-                    userId={user.id} 
-                    setComments={setComments} 
-                    comments={comments} 
+                    userId={user.id}
                   />
                 </div>
               ) : (
@@ -184,7 +167,7 @@ const BlogPage = ({ user }) => {
                 <ListGroup variant="flush">
                   {comments.map((comment, index) => (
                     <ListGroup.Item 
-                      key={comment.id} 
+                      key={comment.id || index} 
                       className={index % 2 === 0 ? 'bg-light' : ''}
                     >
                       <div className="d-flex justify-content-between align-items-start">

@@ -6,18 +6,18 @@ import {
   Row, 
   Col, 
   Card, 
-  Alert,
   Spinner
 } from 'react-bootstrap';
 import { useState } from "react";
 import loginService from "../services/login";
 import blogService from "../services/blogs";
 import { useNavigate, Link } from "react-router-dom";
+import { createNotification } from "../reducers/notificationReducer";
+import { loggedInUser } from "../reducers/userReducer";
+import { useDispatch } from "react-redux";
 
-const LoginForm = ({
-  setUser,
-  setNotification
-}) => {
+const LoginForm = () => {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,22 +36,18 @@ const LoginForm = ({
       window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
       blogService.setToken(user.token);
 
-      setUser(user);
+      //setUser(user);
+      dispatch(loggedInUser(user));
       setUsername("");
       setPassword("");
-      setNotification({ 
-        message: `Welcome back, ${user.username}!`, 
-        color: "success" 
-      });
+      createNotification(`Welcome back, ${user.username}!`, "success");
 
       navigate("/");
     } catch (exception) {
-      setNotification({ 
-        message: "Wrong username or password", 
-        color: "danger" 
-      });
+      createNotification("Wrong username or password", "danger");
       setTimeout(() => {
-        setNotification({ message: null, color: "success" });
+        // setNotification({ message: null, color: "success" });
+        createNotification("", "success");
       }, 5000);
     } finally {
       setLoading(false);
@@ -163,11 +159,6 @@ const LoginForm = ({
       </Container>
     </div>
   );
-};
-
-LoginForm.propTypes = {
-  setUser: PropTypes.func.isRequired,
-  setNotification: PropTypes.func.isRequired,
 };
 
 export default LoginForm;
