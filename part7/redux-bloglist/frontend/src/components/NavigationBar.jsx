@@ -12,16 +12,18 @@ import BlogPage from './BlogPage';
 import { logout } from "../services/logout";
 import UsersPage from './UsersPage';
 import UserPage from './UserPage';
+import { loginUser } from '../reducers/userReducer';
+import { useDispatch, useSelector } from 'react-redux';
 
-const NavigationBar = ({ 
-  user,
-  setUser
- }) => {
+const NavigationBar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
 
   const handleLogout = () => {
     logout();
-    setUser(null);
+    //setUser(null);
+    dispatch(loginUser(null));
     navigate("/");
   };
 
@@ -90,7 +92,7 @@ const NavigationBar = ({
         } />
         <Route path="/login" element={
           <LoginForm
-            setUser={setUser}
+            // setUser={setUser}
           />
         } />
         <Route path="/" element={

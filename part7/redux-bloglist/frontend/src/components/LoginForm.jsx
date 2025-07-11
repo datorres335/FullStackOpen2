@@ -13,10 +13,11 @@ import loginService from "../services/login";
 import blogService from "../services/blogs";
 import { useNavigate, Link } from "react-router-dom";
 import { createNotification } from "../reducers/notificationReducer";
+import { loginUser } from "../reducers/userReducer";
+import { useDispatch } from "react-redux";
 
-const LoginForm = ({
-  setUser
-}) => {
+const LoginForm = () => {
+  const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -35,7 +36,8 @@ const LoginForm = ({
       window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
       blogService.setToken(user.token);
 
-      setUser(user);
+      //setUser(user);
+      dispatch(loginUser(user));
       setUsername("");
       setPassword("");
       createNotification(`Welcome back, ${user.username}!`, "success");
@@ -157,10 +159,6 @@ const LoginForm = ({
       </Container>
     </div>
   );
-};
-
-LoginForm.propTypes = {
-  setUser: PropTypes.func.isRequired,
 };
 
 export default LoginForm;

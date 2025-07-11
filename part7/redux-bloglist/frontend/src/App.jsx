@@ -2,14 +2,11 @@ import { useState, useEffect } from "react"; //What is useRef used for? It is us
 import blogService from "./services/blogs";
 import NavigationBar from "./components/NavigationBar";
 import { useDispatch } from "react-redux";
+import { loginUser } from "./reducers/userReducer";
 
 const App = () => {
-  //const dispatch = useDispatch();
-  const [user, setUser] = useState(null);
-  // const [notification, setNotification] = useState({
-  //   message: null,
-  //   color: "success",
-  // });
+  //const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // this effect checks if a user is already logged in when the component mounts
@@ -17,17 +14,15 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
 
-      setUser(user);
+      //setUser(user);
+      dispatch(loginUser(user));
       blogService.setToken(user.token);
     }
   }, []);
 
   return (
     <div className="container">
-      <NavigationBar 
-        user={user} 
-        setUser={setUser} 
-      />
+      <NavigationBar />
     </div>
   );
 };
