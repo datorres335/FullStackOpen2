@@ -4,12 +4,12 @@ import NavigationBar from "./components/NavigationBar";
 import { useDispatch } from "react-redux";
 
 const App = () => {
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   const [user, setUser] = useState(null);
-  const [notification, setNotification] = useState({
-    message: null,
-    color: "success",
-  });
+  // const [notification, setNotification] = useState({
+  //   message: null,
+  //   color: "success",
+  // });
 
   useEffect(() => {
     // this effect checks if a user is already logged in when the component mounts
@@ -27,8 +27,6 @@ const App = () => {
       <NavigationBar 
         user={user} 
         setUser={setUser} 
-        notification={notification} 
-        setNotification={setNotification}
       />
     </div>
   );

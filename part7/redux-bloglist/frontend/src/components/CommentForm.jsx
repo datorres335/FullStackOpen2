@@ -7,10 +7,6 @@ const CommentForm = ({blogId, userId}) => {
   const [newComment, setNewComment] = useState("");
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    
-  }, [newComment]);
-
   if (!blogId || !userId) { 
     return <p>Please log in to add comments.</p>; 
   }

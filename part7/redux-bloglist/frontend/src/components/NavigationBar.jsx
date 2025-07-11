@@ -15,9 +15,7 @@ import UserPage from './UserPage';
 
 const NavigationBar = ({ 
   user,
-  setUser,
-  notification, 
-  setNotification,
+  setUser
  }) => {
   const navigate = useNavigate();
 
@@ -76,9 +74,7 @@ const NavigationBar = ({
       <Routes>
         <Route path="/blogs" element={
           <BlogsPage
-            notification={notification}
             user={user}
-            setNotification={setNotification}
           />
         } />
         <Route path="/blogs/:id" element={
@@ -95,14 +91,11 @@ const NavigationBar = ({
         <Route path="/login" element={
           <LoginForm
             setUser={setUser}
-            setNotification={setNotification}
           />
         } />
         <Route path="/" element={
           <BlogsPage
-            notification={notification}
             user={user}
-            setNotification={setNotification}
           />
         } />
       </Routes>

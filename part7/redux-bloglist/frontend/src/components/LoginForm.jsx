@@ -6,17 +6,16 @@ import {
   Row, 
   Col, 
   Card, 
-  Alert,
   Spinner
 } from 'react-bootstrap';
 import { useState } from "react";
 import loginService from "../services/login";
 import blogService from "../services/blogs";
 import { useNavigate, Link } from "react-router-dom";
+import { createNotification } from "../reducers/notificationReducer";
 
 const LoginForm = ({
-  setUser,
-  setNotification
+  setUser
 }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -39,19 +38,14 @@ const LoginForm = ({
       setUser(user);
       setUsername("");
       setPassword("");
-      setNotification({ 
-        message: `Welcome back, ${user.username}!`, 
-        color: "success" 
-      });
+      createNotification(`Welcome back, ${user.username}!`, "success");
 
       navigate("/");
     } catch (exception) {
-      setNotification({ 
-        message: "Wrong username or password", 
-        color: "danger" 
-      });
+      createNotification("Wrong username or password", "danger");
       setTimeout(() => {
-        setNotification({ message: null, color: "success" });
+        // setNotification({ message: null, color: "success" });
+        createNotification("", "success");
       }, 5000);
     } finally {
       setLoading(false);
@@ -167,7 +161,6 @@ const LoginForm = ({
 
 LoginForm.propTypes = {
   setUser: PropTypes.func.isRequired,
-  setNotification: PropTypes.func.isRequired,
 };
 
 export default LoginForm;

@@ -1,10 +1,10 @@
 import { Alert } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 
-const Notification = ({ type }) => {
-  const notification = useSelector(state => state.notification[type]);
+const Notification = () => {
+  const notification = useSelector(state => state.notification.create);
 
-  if (!notification) {
+  if (notification.message === '') {
     return null;
   }
 

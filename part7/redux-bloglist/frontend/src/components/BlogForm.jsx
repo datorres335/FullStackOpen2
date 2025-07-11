@@ -29,20 +29,18 @@ const BlogForm = ({
     };
 
     try {
-      await dispatch(createBlog(blogObject));
-      dispatch(createNotification({
-        message: `A new blog "${blogObject.title}" by ${blogObject.author} added`,
-        color: "success",
-      }));
+      await dispatch(createBlog(blogObject))
+      dispatch(createNotification(
+        `A new blog "${blogObject.title}" by ${blogObject.author} added`,
+        "success"
+      ));
 
       setNewBlog({ title: "", author: "", url: "", likes: 0, userId: null }); // reset the form fields
 
       toggleVisibility(); // hide the form after submission
+      
     } catch (exception) {
-      dispatch(createNotification({
-        message: `A new blog "${blogObject.title}" by ${blogObject.author} added`,
-        color: "danger",
-      }));
+      console.error("Error creating blog:", exception);
     }
   };
 

@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { initializeBlogs } from "../reducers/blogReducer";
 import { Link } from "react-router-dom";
 
-const BlogsPage = ({ notification, user, setNotification }) => {
+const BlogsPage = ({ user }) => {
   const blogs = useSelector(state => state.blogs)
   const [loading, setLoading] = useState(true);
   const blogFormRef = useRef();
@@ -52,7 +52,7 @@ const BlogsPage = ({ notification, user, setNotification }) => {
             </Badge>
           </div>
 
-          <Notification message={notification.message} color={notification.color} />
+          <Notification />
           
           {user ? (
             <Card className="shadow-sm mb-4">
