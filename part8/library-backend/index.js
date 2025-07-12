@@ -1,5 +1,7 @@
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
+const { v4: uuid } = require('uuid')
+const { GraphQLError } = require('graphql')
 
 let authors = [
   {
@@ -92,14 +94,108 @@ let books = [
 */
 
 const typeDefs = `
+  type Author {
+    name: String!
+    id: ID!
+    born: Int
+    bookCount: Int
+  }
+
+  type Book {
+    title: String!
+    published: Int!
+    author: Author!
+    id: ID!
+    genres: [String!]!  
+  }
+
+  enum YesNo {
+    YES
+    NO
+  }
+
   type Query {
-    dummy: Int
+    authorCount: Int!
+    allAuthors(born: YesNo): [Author!]!
+    findAuthor(name: String!): Author
+
+    bookCount: Int!
+    allBooks(author: String): [Book!]!
+    findBook(title: String!): Book
+  }
+
+  type Mutation {
+    addAuthor(  # don't add id here, it will be generated automatically
+      name: String!
+      born: Int
+    ): Author
+
+    editBorn(
+      name: String!
+      born: Int
+    ): Author
   }
 `
 
 const resolvers = {
+  Author: {
+    bookCount: root => {
+      return books.filter(b => b.author === root.name).length
+    }
+  },
+  Book: {
+    author: (root) => {
+      return authors.find(a => a.name === root.author)
+    }
+  },
   Query: {
-    dummy: () => 0
+    authorCount: () => authors.length,
+    allAuthors: (root, args) => {
+      if (!args.born) {
+        return authors
+      }
+
+      const byBorn = author =>
+        args.born === 'YES' ? author.born : !author.born
+
+      return authors.filter(byBorn)
+    },
+    findAuthor: (root, args) => authors.find(a => a.name === args.name),
+
+    bookCount: () => books.length,
+    allBooks: (root, args) => {
+      if (!args.author) return books
+
+      return books.filter(b => b.author === args.author)
+    },
+    findBook: (root, args) => books.find(b => b.title === args.title)
+  },
+  Mutation: {
+    addAuthor: (root, args) => {
+      if (authors.find(a => a.name === args.name)) {
+        throw new GraphQLError('Author name must be unique', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.name
+          }
+        })
+      }
+
+      const author = { ...args, id: uuid() } //The id field is given a unique value using the uuid library.
+      authors = authors.concat(author)
+      return author
+    },
+
+    editBorn: (root, args) => {
+      const author = authors.find(a => a.name === args.name)
+      if (!author) {
+        return null
+      }
+
+      const updatedAuthor = { ...author, born: args.born }
+      authors = authors.map(a => a.name === args.name ? updatedAuthor : a)
+      return updatedAuthor
+    }
   }
 }
 

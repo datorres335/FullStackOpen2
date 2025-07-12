@@ -292,6 +292,26 @@ npm audit signatures
 
 // https://github.com/eslint-community/eslint-plugin-security
 npm install --save-dev eslint-plugin-security // helps identify potential security hotspots, but finds a lot of false positives which need triage by a 	human 
+
+
+PART 8 - GraphQL -------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
+npm install @apollo/server graphql //today's leading library for GraphQL servers (install in the backend)
+	// when you run the apollo graphql server, it'll take you to the GraphOS Studio Explorer interface if you click on the server's link in the 		terminal. This interface can be used to make queries to the server.
+
+// https://github.com/uuidjs/uuid#readme
+npm install uuid // used for generating unique IDs
+
+
+
+
+
+
+
+
+
+
+
 	
 
 
