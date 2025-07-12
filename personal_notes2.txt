@@ -279,12 +279,20 @@ npm install --save-dev --save-exact prettier // install both your frontend and b
 		--check is like --write, but only checks that files are already formatted, rather than overwriting them. prettier --write and 			prettier --check are the most common ways to run Prettier.
 	If you use ESLint, install eslint-config-prettier (https://github.com/prettier/eslint-config-prettier#installation) to make ESLint and Prettier 		play nice with each other. It turns off all ESLint rules that are unnecessary or might conflict with Prettier. 
 
+npm outdated --depth 0 // check how up-to-date your dependencies are 
+npm install -g npm-check-updates //The dependencies can be brought up to date by updating the file package.json. The best way to do that is by using a 	tool called npm-check-updates. This command can be installed globally
+	// The file package.json is brought up to date by running the command: ncu -u
+	// Then: npm install
 
+// https://docs.npmjs.com/cli/v11/commands/npm-audit
+	//these commands can be used to check the security of dependencies. It compares the version numbers of the dependencies in your application to 		a list of the version numbers of dependencies containing known security threats in a centralized error database
+npm audit //prints a long list of complaints and suggested fixes
+npm audit fix //audit fix does not update dependencies if their major version number has increased. Updating these dependencies could lead to the whole 	application breaking down.
+npm audit signatures
 
-
-
-
-
+// https://github.com/eslint-community/eslint-plugin-security
+npm install --save-dev eslint-plugin-security // helps identify potential security hotspots, but finds a lot of false positives which need triage by a 	human 
+	
 
 
 
