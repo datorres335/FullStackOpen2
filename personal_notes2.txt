@@ -302,7 +302,7 @@ npm install @apollo/server graphql //today's leading library for GraphQL servers
 // https://github.com/uuidjs/uuid#readme
 npm install uuid // used for generating unique IDs
 
-
+npm install @apollo/client graphql // Apollo Client is a powerful, flexible, and production-ready GraphQL client for JavaScript applications. It allows 	your frontend to interact with a GraphQL API, manage remote data, and handle caching, errors, and loading states — all in one place
 
 
 

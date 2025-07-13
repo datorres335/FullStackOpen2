@@ -1,9 +1,32 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 
+import { ApolloClient, ApolloProvider, InMemoryCache, gql } from "@apollo/client"
+
+const client = new ApolloClient({
+  uri: 'http://localhost:4000',
+  cache: new InMemoryCache()
+})
+
+const query = gql`
+  query {
+    allBooks {
+      title
+      author {
+        name
+      }
+      published
+      genres
+    }
+  }
+`
+
+client.query({ query })
+  .then(response => console.log(response.data)); // this sends a query to the server
+
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
+ //ApolloProvider makes the Apollo Client available to the rest of your app
+ <ApolloProvider client={client}>
     <App />
-  </React.StrictMode>
+  </ApolloProvider>  
 );
