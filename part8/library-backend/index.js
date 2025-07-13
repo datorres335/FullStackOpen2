@@ -120,7 +120,7 @@ const typeDefs = `
     findAuthor(name: String!): Author
 
     bookCount: Int!
-    allBooks(author: String): [Book!]!
+    allBooks(author: String, genre: String): [Book!]!
     findBook(title: String!): Book
   }
 
@@ -134,6 +134,13 @@ const typeDefs = `
       name: String!
       born: Int
     ): Author
+
+    addBook(
+      title: String!
+      published: Int!
+      author: String!
+      genres: [String!]!
+    ): Book
   }
 `
 
@@ -164,9 +171,12 @@ const resolvers = {
 
     bookCount: () => books.length,
     allBooks: (root, args) => {
-      if (!args.author) return books
+      if (!args.author && !args.genre) return books
 
-      return books.filter(b => b.author === args.author)
+      const byAuthor = book => args.author ? book.author === args.author : true
+      const byGenre = book => args.genre ? book.genres.includes(args.genre) : true
+
+      return books.filter(byAuthor).filter(byGenre)
     },
     findBook: (root, args) => books.find(b => b.title === args.title)
   },
@@ -195,6 +205,26 @@ const resolvers = {
       const updatedAuthor = { ...author, born: args.born }
       authors = authors.map(a => a.name === args.name ? updatedAuthor : a)
       return updatedAuthor
+    },
+
+    addBook: (root, args) => {
+      if (books.find(b => b.title === args.title)) {
+        throw new GraphQLError('Book title must be unique', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.title
+          }
+        })
+      }
+
+      if (!authors.find(a => a.name === args.author)) {
+        const author = { name: args.author, id: uuid(), born: null }
+        authors = authors.concat(author)
+      }
+
+      const book = { ...args, id: uuid() }
+      books = books.concat(book)
+      return book
     }
   }
 }
