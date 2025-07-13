@@ -32,12 +32,6 @@ const App = () => {
     return <div>loading...</div>
   }
 
-  // return (
-  //   <div>
-  //     {result.data.allAuthors.map(a => a.name).join(", ")}
-  //   </div>
-  // )
-
   return (
     <div>
       <div>
