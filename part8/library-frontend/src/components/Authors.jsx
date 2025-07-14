@@ -1,7 +1,7 @@
 import { gql, useQuery, useMutation } from "@apollo/client"
 import { useState } from 'react'
 
-const ALL_AUTHORS = gql`
+export const ALL_AUTHORS = gql`
   query {
     allAuthors {
       name
@@ -31,26 +31,38 @@ const EDIT_AUTHOR = gql`
   }
 `
 
-const SetBirthYear = () => {
-  const [setBirthYear, { loading, error }] = useMutation(EDIT_AUTHOR)
+const SetBirthYear = ({ authors }) => {
+  const [setBirthYear, { loading, error }] = useMutation(EDIT_AUTHOR, {
+    refetchQueries: [{ query: ALL_AUTHORS }] // Refetch authors after updating
+  })
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
-  const findAuthor = useQuery(FIND_AUTHOR, {
-    variables: { nameToSearch: name },
-  })
+  // const findAuthor = useQuery(FIND_AUTHOR, {
+  //   variables: { nameToSearch: name },
+  //   skip: !name, // Skip the query if name is empty
+  // })
 
   if (loading) return <div>loading...</div>
   if (error) return <div>Error: {error.message}</div>
 
   const submit = async (event) => {
     event.preventDefault()
-    findAuthor.refetch()
+    //findAuthor.refetch()
+    if (!name || !born) {
+      alert('Please select an author and enter a birth year')
+      return
+    }    
+
     await setBirthYear({
       variables: {
         name,
         setBornTo: parseInt(born)
       }
     })
+
+    setName('')
+    setBorn('')
+    alert('Author birth year updated successfully!')
   }
 
   return (
@@ -60,10 +72,21 @@ const SetBirthYear = () => {
         <div>
           <label>
             Name
-            <input
+            {/* <input
               value={name}
               onChange={({ target }) => setName(target.value)}
-            />
+            /> */}
+            <select
+              value={name}
+              onChange={({ target }) => setName(target.value)}
+            >
+              <option value="">Select an author...</option>
+              {authors.map(author => (
+                <option key={author.id} value={author.name}>
+                  {author.name}
+                </option>
+              ))}
+            </select>
           </label>
         </div>
         <div>
@@ -73,6 +96,7 @@ const SetBirthYear = () => {
               type="number"
               value={born}
               onChange={({ target }) => setBorn(target.value)}
+              placeholder="Enter birth year"
             />
           </label>
         </div>
@@ -116,7 +140,7 @@ const Authors = (props) => {
         </tbody>
       </table>
 
-      <SetBirthYear />
+      <SetBirthYear authors={authors.data.allAuthors}/>
     </div>
   )
 }
