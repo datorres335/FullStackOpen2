@@ -1,8 +1,38 @@
+import { gql, useQuery } from "@apollo/client"
+
+const ALL_AUTHORS = gql`
+  query {
+    allAuthors {
+      name
+      born
+      id
+      bookCount
+    }
+  }
+`
+const FIND_AUTHOR = gql`
+  query findAuthorByName($nameToSearch: String!) {
+    findAuthor(name: $nameToSearch) {
+      name
+      born
+      id
+    }
+  }
+`
+
 const Authors = (props) => {
+  const authors = useQuery(ALL_AUTHORS)
+  const findAuthor = useQuery(FIND_AUTHOR, {
+    variables: { nameToSearch: "Robert Martin" },
+  })
+
+  if (authors.loading || findAuthor.loading) {
+    return <div>loading...</div>
+  }
+
   if (!props.show) {
     return null
   }
-  const authors = props.authors
 
   return (
     <div>
@@ -14,7 +44,7 @@ const Authors = (props) => {
             <th>born</th>
             <th>books</th>
           </tr>
-          {authors.map((a) => (
+          {authors.data.allAuthors.map((a) => (
             <tr key={a.name}>
               <td>{a.name}</td>
               <td>{a.born}</td>
