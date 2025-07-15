@@ -1,53 +1,16 @@
-import { gql, useQuery, useMutation } from "@apollo/client"
+import { useQuery, useMutation } from "@apollo/client"
 import { useState } from 'react'
-
-export const ALL_AUTHORS = gql`
-  query {
-    allAuthors {
-      name
-      born
-      id
-      bookCount
-    }
-  }
-`
-const FIND_AUTHOR = gql`
-  query findAuthorByName($nameToSearch: String!) {
-    findAuthor(name: $nameToSearch) {
-      name
-      born
-      id
-    }
-  }
-`
-
-const EDIT_AUTHOR = gql`
-  mutation Mutation($name: String!, $setBornTo: Int) {
-    editAuthor(name: $name, setBornTo: $setBornTo) {
-      name
-      id
-      born
-    }
-  }
-`
+import { ALL_AUTHORS, EDIT_AUTHOR } from "../queries"
 
 const SetBirthYear = ({ authors }) => {
-  const [setBirthYear, { loading, error }] = useMutation(EDIT_AUTHOR, {
+  const [setBirthYear ] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }] // Refetch authors after updating
   })
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
-  // const findAuthor = useQuery(FIND_AUTHOR, {
-  //   variables: { nameToSearch: name },
-  //   skip: !name, // Skip the query if name is empty
-  // })
-
-  if (loading) return <div>loading...</div>
-  if (error) return <div>Error: {error.message}</div>
 
   const submit = async (event) => {
     event.preventDefault()
-    //findAuthor.refetch()
     if (!name || !born) {
       alert('Please select an author and enter a birth year')
       return
@@ -72,10 +35,6 @@ const SetBirthYear = ({ authors }) => {
         <div>
           <label>
             Name
-            {/* <input
-              value={name}
-              onChange={({ target }) => setName(target.value)}
-            /> */}
             <select
               value={name}
               onChange={({ target }) => setName(target.value)}
@@ -108,11 +67,8 @@ const SetBirthYear = ({ authors }) => {
 
 const Authors = (props) => {
   const authors = useQuery(ALL_AUTHORS)
-  const findAuthor = useQuery(FIND_AUTHOR, {
-    variables: { nameToSearch: "Robert Martin" },
-  })
 
-  if (authors.loading || findAuthor.loading) {
+  if (authors.loading) {
     return <div>loading...</div>
   }
 

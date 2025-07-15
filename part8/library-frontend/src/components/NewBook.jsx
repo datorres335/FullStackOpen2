@@ -1,21 +1,6 @@
 import { useState } from 'react'
-import { gql, useMutation } from "@apollo/client"
-import { ALL_BOOKS } from './Books'
-import { ALL_AUTHORS } from './Authors'
-
-const ADD_BOOK = gql`
-  mutation Mutation($title: String!, $published: Int!, $author: String!, $genres: [String!]!) {
-    addBook(title: $title, published: $published, author: $author, genres: $genres) {
-      author {
-        name
-      }
-      genres
-      id
-      published
-      title
-    }
-  }
-`
+import { useMutation } from "@apollo/client"
+import { ADD_BOOK, ALL_BOOKS, ALL_AUTHORS } from '../queries'
 
 const NewBook = (props) => {
   const [title, setTitle] = useState('')
@@ -24,15 +9,19 @@ const NewBook = (props) => {
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
 
-  const [addBook, { loading, error }] = useMutation(ADD_BOOK, {
+  const [addBook, { loading }] = useMutation(ADD_BOOK, {
     refetchQueries: [
       { query: ALL_BOOKS },
       { query: ALL_AUTHORS }
-    ]
+    ],
+    onError: error => {
+      const messages = error.graphQLErrors.map(e => e.message).join('\n')
+      props.notify(messages)
+    }
   });
 
   if (loading) return <div>loading...</div>
-  if (error) return <div>Error: {error.message}</div>
+  //if (error) return <div>Error: {error.message}</div>
   if (!props.show) return null
 
   const submit = async (event) => {
