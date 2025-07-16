@@ -10,53 +10,27 @@ const NewBook = (props) => {
   const [genres, setGenres] = useState([])
 
   const [addBook, { loading }] = useMutation(ADD_BOOK, {
-    // refetchQueries: [
-    //   { query: ALL_BOOKS },
-    //   { query: ALL_AUTHORS }
-    // ],
+    refetchQueries: [
+      { query: ALL_BOOKS },
+      { query: ALL_AUTHORS }
+    ],
     onError: error => {
       const messages = error.graphQLErrors.map(e => e.message).join('\n')
       props.notify(messages)
     },
-    update: (cache, response) => {
-      cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
-        return {
-          allBooks: allBooks.concat(response.data.addBook)
-        }
-      })
+    // update: (cache, response) => {
+    //   cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
+    //     return {
+    //       allBooks: allBooks.concat(response.data.addBook)
+    //     }
+    //   })
 
-      // cache.updateQuery({ query: ALL_AUTHORS }, ({ allAuthors }) => {
-      //   return {
-      //     allAuthors: allAuthors.concat(response.data.addAuthor.author)
-      //   }
-      // })
-      cache.updateQuery({ query: ALL_AUTHORS }, ({ allAuthors }) => {
-        const addedBook = response.data.addBook
-        const bookAuthor = addedBook.author
-        
-        // Check if author already exists
-        const existingAuthor = allAuthors.find(author => author.name === bookAuthor.name)
-
-        if (existingAuthor) {
-          // Author exists, update bookCount
-          return {
-            allAuthors: allAuthors.map(author =>
-              author.name === bookAuthor.name
-                ? { ...author, bookCount: author.bookCount + 1 }
-                : author
-            )
-          }
-        } else {
-          // New author, ADD to list with bookCount = 1
-          return {
-            allAuthors: allAuthors.concat({  // ✅ Use concat to ADD new author
-              ...bookAuthor,
-              bookCount: 1
-            })
-          }
-        }
-      })
-    }
+    //   // cache.updateQuery({ query: ALL_AUTHORS }, ({ allAuthors }) => {
+    //   //   return {
+    //   //     allAuthors: allAuthors.concat(response.data.addAuthor.author)
+    //   //   }
+    //   // })
+    // }
   });
 
   if (loading) return <div>loading...</div>
