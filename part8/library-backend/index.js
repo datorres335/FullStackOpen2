@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken')
 
 const Author = require('./models/author')
 const Book = require('./models/book')
-const User = require('../../part4BlogList/models/user')
+const User = require('./models/user')
 const MONGODB_URI = process.env.MONGODB_URI
 
 mongoose.connect(MONGODB_URI)
@@ -169,7 +169,7 @@ const typeDefs = `
 
     createUser(
       username: String!
-      favoriteGenre: String!
+      favoriteGenre: String
     ): User
 
     login(
@@ -181,31 +181,31 @@ const typeDefs = `
 
 const resolvers = {
   Author: {
-    bookCount: root => {
-      return Book.countDocuments({ author: root.id }) //books.filter(b => b.author === root.name).length
+    bookCount: async root => {
+      return await Book.countDocuments({ author: root.id }) //books.filter(b => b.author === root.name).length
     }
   },
   Book: {
-    author: (root) => {
-      return Author.findById(root.author) //authors.find(a => a.name === root.author)
+    author: async (root) => {
+      return await Author.findById(root.author) //authors.find(a => a.name === root.author)
     }
   },
   Query: {
     authorCount: async () => Author.collection.countDocuments(), //() => authors.length,
-    allAuthors: (root, args) => {
+    allAuthors: async (root, args) => {
       if (!args.born) {
-        return Author.find({})
+        return await Author.find({})
       }
 
     const byBorn = args.born === 'YES' 
       ? { born: { $ne: null } }
       : { born: null } 
 
-      return Author.find(byBorn)
+      return await Author.find(byBorn)
     },
-    findAuthor: (root, args) => Author.findOne({ name: args.name }), //authors.find(a => a.name === args.name),
+    findAuthor: async (root, args) => await Author.findOne({ name: args.name }), //authors.find(a => a.name === args.name),
 
-    bookCount: () => Book.countDocuments(), //books.length,
+    bookCount: async () => await Book.countDocuments(), //books.length,
 
     allBooks: async (root, args) => {
       // Build MongoDB filter object
@@ -227,9 +227,9 @@ const resolvers = {
         filter.genres = { $in: [args.genre] }
       }
       
-      return Book.find(filter).populate('author')
+      return await Book.find(filter).populate('author')
     },
-    findBook: (root, args) => Book.findOne({ title: args.title }), // books.find(b => b.title === args.title)
+    findBook: async (root, args) => await Book.findOne({ title: args.title }), // books.find(b => b.title === args.title)
 
     me: (root, args, context) => {
       return context.currentUser

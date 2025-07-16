@@ -71,6 +71,12 @@ const Authors = (props) => {
   if (authors.loading) {
     return <div>loading...</div>
   }
+  if (authors.error) {
+    return <div>Error: {authors.error.message}</div>
+  }
+  if (!authors.data || !authors.data.allAuthors) {
+    return <div>No authors found</div>
+  }
 
   if (!props.show) {
     return null
