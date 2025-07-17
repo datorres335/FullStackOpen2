@@ -345,6 +345,7 @@ const resolvers = {
 
       const userForToken = {
         username: user.username,
+        favoriteGenre: user.favoriteGenre,
         id: user._id,
       }
 
@@ -367,7 +368,7 @@ startStandaloneServer(server, {
         auth.substring(7), // remove 'Bearer ' prefix
         process.env.JWT_SECRET
       )
-      const currentUser = await User.findById(decodedToken.id).populate('favoriteGenre')
+      const currentUser = await User.findById(decodedToken.id)
       return { currentUser }
     }
   }

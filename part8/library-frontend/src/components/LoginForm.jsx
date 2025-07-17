@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/client'
 import { LOGIN } from '../queries'
+import { jwtDecode } from 'jwt-decode'
 
-const LoginForm = ({ setToken, notify }) => {
+const LoginForm = ({ setUser, setToken, notify }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -15,10 +16,19 @@ const LoginForm = ({ setToken, notify }) => {
   useEffect(() => {
     if (result.data) {
       const token = result.data.login.value
+      //console.log("Login successful, token:", token);
+      const decodedToken = jwtDecode(token)
+      
+      setUser({
+        username: decodedToken.username,
+        favoriteGenre: decodedToken.favoriteGenre,
+        id: decodedToken.id,
+      })
       setToken(token)
+      
       localStorage.setItem('library-user-token', token) // Where is localStorage defined? // It is a global object available in the browser environment.
     }
-  }, [result.data])
+  }, [result.data, setToken])
 
   const submit = async event => {
     event.preventDefault()

@@ -5,8 +5,11 @@ import NewBook from "./components/NewBook";
 import Notify from "./components/Notify";
 import LoginForm from "./components/LoginForm";
 import { useApolloClient } from "@apollo/client";
+import Recommendations from "./components/Recommendations";
+import { jwtDecode } from "jwt-decode";
 
 const App = () => {
+  const [user, setUser] = useState(null);
   const [page, setPage] = useState("authors");
   const [errorMessage, setErrorMessage] = useState(null);
   const [token, setToken] = useState(null)
@@ -16,6 +19,22 @@ const App = () => {
     const savedToken = localStorage.getItem('library-user-token')
     if (savedToken) {
       setToken(savedToken)
+
+      try {
+        const decodedToken = jwtDecode(savedToken)
+        // console.log("Decoded Token:", decodedToken);
+        // console.log("user's favorite genre from App comp.:", decodedToken.favoriteGenre);
+        
+        setUser({
+          username: decodedToken.username,
+          favoriteGenre: decodedToken.favoriteGenre,
+          id: decodedToken.id
+        })
+      } catch (error) {
+        console.error('Error decoding token:', error)
+        // If token is invalid, remove it
+        localStorage.removeItem('library-user-token')
+      }
     }
   }, [])
 
@@ -28,6 +47,7 @@ const App = () => {
 
   const logout = () => {
     setToken(null)
+    setUser(null)
     localStorage.clear()
     client.resetStore()
   }
@@ -36,7 +56,7 @@ const App = () => {
     return (
       <div>
         <Notify errorMessage={errorMessage} />
-        <LoginForm setToken={setToken} notify={notify} />
+        <LoginForm setToken={setToken} notify={notify} setUser={setUser} />
       </div>
     )
   }
@@ -48,12 +68,14 @@ const App = () => {
         <button onClick={() => setPage("authors")}>authors</button>
         <button onClick={() => setPage("books")}>books</button>
         <button onClick={() => setPage("add")}>add book</button>
+        <button onClick={() => setPage("recommendations")}>recommend</button>
         <button onClick={logout}>logout</button>
       </div>
 
       <Authors show={page === "authors"} />
       <Books show={page === "books"} />
       <NewBook show={page === "add"} notify={notify} />
+      <Recommendations show={page === "recommendations"} user={user} />
     </div>
   );
 };
