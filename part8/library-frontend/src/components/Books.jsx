@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client"
-import { ALL_BOOKS } from "../queries"
+import { ALL_BOOKS, FILTERED_BOOKS } from "../queries"
 import { useState, useEffect } from "react";
 
 const FilterGenreButtons = ({ setFilter, books }) => {
