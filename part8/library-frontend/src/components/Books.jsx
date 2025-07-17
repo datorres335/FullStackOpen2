@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client"
 import { ALL_BOOKS, FILTERED_BOOKS } from "../queries"
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const FilterGenreButtons = ({ setFilter, books }) => {
   const uniqueGenres = [...new Set(books.map(book => book.genres).flat())]
@@ -21,24 +21,19 @@ const FilterGenreButtons = ({ setFilter, books }) => {
 }
 
 const Books = (props) => {
-  const books = useQuery(ALL_BOOKS)
-  //console.log("Books Data:", books);
   const [filter, setFilter] = useState("all genres")
-  const [filteredBooks, setFilteredBooks] = useState(books.data ? books.data.allBooks : []);
+  const allBooksQuery = useQuery(ALL_BOOKS)
+  const filteredBooksQuery = useQuery(FILTERED_BOOKS, {
+    variables: filter === "all genres" ? {} : { genre: filter },
+  })
 
-  useEffect(() => {
-    if (books.data) {
-      if (filter === "all genres") {
-        setFilteredBooks(books.data.allBooks);
-      } else {
-        setFilteredBooks(books.data.allBooks.filter(book => book.genres.includes(filter)));
-      }
-    }
-  }, [books.data, filter]);
-
-  if (books.loading) return <div>loading...</div>
-  if (books.error) return <div>Error: {books.error.message}</div>
+  if (allBooksQuery.loading || filteredBooksQuery.loading) return <div>loading...</div>
+  if (allBooksQuery.error) return <div>Error: {allBooksQuery.error.message}</div>
+  if (filteredBooksQuery.error) return <div>Error: {filteredBooksQuery.error.message}</div>
   if (!props.show) return null
+
+  const allBooks = allBooksQuery.data?.allBooks || []
+  const booksToDisplay = filteredBooksQuery.data?.allBooks || []
 
   return (
     <div>
@@ -52,7 +47,7 @@ const Books = (props) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {filteredBooks.map((a) => (
+          {booksToDisplay.map((a) => (
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>
@@ -61,7 +56,7 @@ const Books = (props) => {
           ))}
         </tbody>
       </table>
-      <FilterGenreButtons setFilter={setFilter} books={books.data.allBooks} />
+      <FilterGenreButtons setFilter={setFilter} books={allBooks} />
     </div>
   )
 }
