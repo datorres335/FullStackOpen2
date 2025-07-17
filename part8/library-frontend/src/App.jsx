@@ -36,7 +36,6 @@ const App = () => {
     return (
       <div>
         <Notify errorMessage={errorMessage} />
-        {/* <button onClick={logout}>logout</button> */}
         <LoginForm setToken={setToken} notify={notify} />
       </div>
     )
@@ -53,9 +52,7 @@ const App = () => {
       </div>
 
       <Authors show={page === "authors"} />
-
       <Books show={page === "books"} />
-
       <NewBook show={page === "add"} notify={notify} />
     </div>
   );
