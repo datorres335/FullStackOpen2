@@ -67,8 +67,20 @@ const start = async () => {
     // cors(),
     // express.json(),
     expressMiddleware(server, {
-      context: async () => {
-        return {} // Simple context for testing
+      context: async ({ req }) => {
+        try {
+          const auth = req ? req.headers.authorization : null
+          if (auth && auth.startsWith('Bearer ')) {
+            const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET)
+            // Completely remove .populate() - it's causing issues
+            const currentUser = await User.findById(decodedToken.id)
+            return { currentUser }
+          }
+          return {} // Return empty context if no auth
+        } catch (error) {
+          console.error('Context error:', error)
+          return {} // Return empty context on error
+        }
       }
     })
   )
