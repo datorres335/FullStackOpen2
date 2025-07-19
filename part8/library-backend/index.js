@@ -7,8 +7,7 @@ const express = require('express')
 const cors = require('cors')
 const http = require('http')
 const { WebSocketServer } = require('ws')
-//const { useServer } = require('graphql-ws/lib/use/ws')
-const { makeServer } = require('graphql-ws')
+const { useServer } = require('graphql-ws/lib/use/ws')
 //const { v4: uuid } = require('uuid')
 require('dotenv').config()
 const mongoose = require('mongoose')
@@ -31,21 +30,9 @@ mongoose
 const start = async () => {
   const app = express()
 
-  // Add debugging middleware
-  app.use((req, res, next) => {
-    console.log('Request body:', req.body)
-    console.log('Content-Type:', req.headers['content-type'])
-    next()
-  })
-
+  // Apply middleware GLOBALLY to the app, not to the route
   app.use(cors())
   app.use(express.json())
-
-  // Add another debug to confirm json middleware ran
-  app.use((req, res, next) => {
-    console.log('After express.json(), req.body:', req.body)
-    next()
-  })
 
   const httpServer = http.createServer(app)
 
@@ -54,7 +41,7 @@ const start = async () => {
     path: '/',
   })
   const schema = makeExecutableSchema({ typeDefs, resolvers })
-  const serverCleanup = makeServer({ schema }, wsServer)
+  const serverCleanup = useServer({ schema }, wsServer)
 
   const server = new ApolloServer({
     schema,
@@ -64,10 +51,7 @@ const start = async () => {
         async serverWillStart() {
           return {
             async drainServer() {
-              // await serverCleanup.dispose()
-              
-              // For makeServer, you don't need .dispose()
-              wsServer.close()              
+              await serverCleanup.dispose()
             }
           }
         }
@@ -77,19 +61,14 @@ const start = async () => {
 
   await server.start()
 
+  // Remove cors() and express.json() from here
   app.use(
     '/',
     // cors(),
     // express.json(),
     expressMiddleware(server, {
-      context: async ({ req }) => {
-        console.log('Context function - req.body:', req.body) // Debug
-        const auth = req ? req.headers.authorization : null
-        if (auth && auth.startsWith('Bearer ')) {
-          const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET)
-          const currentUser = await User.findById(decodedToken.id)//.populate('favoriteGenre')
-          return { currentUser }
-        }
+      context: async () => {
+        return {} // Simple context for testing
       }
     })
   )
@@ -99,25 +78,3 @@ const start = async () => {
   httpServer.listen(PORT, () => console.log(`Server is now running on http://localhost:${PORT}`))
 }
 start()
-
-// const server = new ApolloServer({
-//   typeDefs,
-//   resolvers,
-// })
-
-// startStandaloneServer(server, {
-//   listen: { port: 4000 },
-//   context: async ({req, res}) => {
-//     const auth = req ? req.headers.authorization : null
-//     if (auth && auth.startsWith('Bearer ')) {
-//       const decodedToken = jwt.verify(
-//         auth.substring(7), // remove 'Bearer ' prefix
-//         process.env.JWT_SECRET
-//       )
-//       const currentUser = await User.findById(decodedToken.id)
-//       return { currentUser }
-//     }
-//   }
-// }).then(({ url }) => {
-//   console.log(`Server ready at ${url}`)
-// })
