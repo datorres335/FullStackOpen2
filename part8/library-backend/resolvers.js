@@ -1,3 +1,5 @@
+const { PubSub } = require('graphql-subscriptions')
+const pubsub = new PubSub()
 const { GraphQLError } = require('graphql')
 const jwt = require('jsonwebtoken')
 const Author = require('./models/author')
@@ -69,7 +71,7 @@ const resolvers = {
       }
       
       try {
-        return await author.save()
+        await author.save()
       } catch (error) {
         throw new GraphQLError('Author name must be unique', {
           extensions: {
@@ -78,6 +80,10 @@ const resolvers = {
           }
         })
       }
+
+      pubsub.publish('AUTHOR_ADDED', { authorAdded: author })
+
+      return author
     },
 
     editAuthor: async (root, args) => {
@@ -125,7 +131,7 @@ const resolvers = {
       
       try {
         const savedBook = await book.save()
-        return Book.findById(savedBook._id).populate('author')
+        const populatedBook = await Book.findById(savedBook._id).populate('author')
       } catch (error) {
         throw new GraphQLError('Book title must be unique', {
           extensions: {
@@ -134,6 +140,8 @@ const resolvers = {
           }
         })
       }
+      pubsub.publish('BOOK_ADDED', { bookAdded: populatedBook })
+      return populatedBook
     },
     createUser: async (root, args) => {
       const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre })
@@ -168,6 +176,14 @@ const resolvers = {
       }
 
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
+    }
+  },
+  Subscription: {
+    authorAdded: {
+      subscribe: () => pubsub.asyncIterator('AUTHOR_ADDED')
+    },
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator('BOOK_ADDED')
     }
   }
 }
