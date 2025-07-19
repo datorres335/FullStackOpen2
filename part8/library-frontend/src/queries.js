@@ -13,52 +13,60 @@ export const ADD_BOOK = gql`
     }
   }
 `
+const BOOK_DETAILS = gql`
+  fragment BookDetails on Book {
+    title
+    author {
+      name
+    }
+    published
+    genres
+    id
+  }
+`
 
 export const ALL_BOOKS = gql`
   query {
     allBooks {
-      title
-      author {
-        name
-      }
-      published
-      genres
+      ...BookDetails
     }
   }
+  ${BOOK_DETAILS}
 `
 
 export const FILTERED_BOOKS = gql`
   query allBooks($genre: String) {
     allBooks(genre: $genre) {
-      title
-      author {
-        name
-      }
-      published
-      genres
-      id
+      ...BookDetails
     }
+  }
+  ${BOOK_DETAILS}
+`
+
+const AUTHOR_DETAILS = gql`
+  fragment AuthorDetails on Author {
+    name
+    born
+    id
+    bookCount   
   }
 `
 
 export const ALL_AUTHORS = gql`
   query {
     allAuthors {
-      name
-      born
-      id
-      bookCount
+      ...AuthorDetails
     }
   }
+  ${AUTHOR_DETAILS}
 `
 export const FIND_AUTHOR = gql`
   query findAuthorByName($nameToSearch: String!) {
     findAuthor(name: $nameToSearch) {
-      name
-      born
-      id
+      ...AuthorDetails
     }
   }
+  ${AUTHOR_DETAILS}
 `
 
 export const EDIT_AUTHOR = gql`

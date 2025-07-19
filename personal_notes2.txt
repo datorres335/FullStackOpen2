@@ -310,7 +310,15 @@ npm install @apollo/client graphql // Apollo Client is a powerful, flexible, and
 npm install mongoose dotenv // used previously
 npm install express cors // used to help configure apollo server to make use of Websockets API
 
-npm install graphql-ws ws @graphql-tools/schema // two packages for adding subscriptions to GraphQL and a Node.js WebSocket library
+npm install graphql-ws ws @graphql-tools/schema // two packages for adding subscriptions to GraphQL and a Node.js WebSocket library in the backend
+
+npm install graphql-subscriptions // a core utility for enabling real-time GraphQL subscriptions in an app
+
+
+
+
+
+
 
 
 
