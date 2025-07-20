@@ -1,13 +1,13 @@
 const { ApolloServer } = require('@apollo/server')
 //const { startStandaloneServer } = require('@apollo/server/standalone')
-const { expressMiddleware } = require('@apollo/server/express4')
+const { expressMiddleware } = require('@apollo/server/express4') // FIXED APOLLO SERVER EXPRESS BUG. Had to downgrade to express4 from express5
 const { ApolloServerPluginDrainHttpServer } = require('@apollo/server/plugin/drainHttpServer')
 const { makeExecutableSchema } = require('@graphql-tools/schema')
 const express = require('express')
 const cors = require('cors')
 const http = require('http')
 const { WebSocketServer } = require('ws')
-const { useServer } = require('graphql-ws/lib/use/ws')
+const { useServer } = require('graphql-ws/lib/use/ws') //had to downgrade from graphql-ws@v6 to v5 as v6 did not have useServer function
 //const { v4: uuid } = require('uuid')
 require('dotenv').config()
 const mongoose = require('mongoose')
@@ -31,8 +31,8 @@ const start = async () => {
   const app = express()
 
   // Apply middleware GLOBALLY to the app, not to the route
-  app.use(cors())
-  app.use(express.json())
+  // app.use(cors())
+  // app.use(express.json())
 
   const httpServer = http.createServer(app)
 
@@ -61,11 +61,10 @@ const start = async () => {
 
   await server.start()
 
-  // Remove cors() and express.json() from here
   app.use(
     '/',
-    // cors(),
-    // express.json(),
+    cors(),
+    express.json(),
     expressMiddleware(server, {
       context: async ({ req }) => {
         try {

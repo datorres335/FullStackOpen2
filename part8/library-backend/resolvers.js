@@ -180,10 +180,10 @@ const resolvers = {
   },
   Subscription: {
     authorAdded: {
-      subscribe: () => pubsub.asyncIterator('AUTHOR_ADDED')
+      subscribe: () => pubsub.asyncIterator(['AUTHOR_ADDED'])
     },
     bookAdded: {
-      subscribe: () => pubsub.asyncIterator('BOOK_ADDED')
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
     }
   }
 }
