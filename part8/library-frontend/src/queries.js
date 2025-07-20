@@ -34,14 +34,14 @@ export const ALL_BOOKS = gql`
   ${BOOK_DETAILS}
 `
 
-export const FILTERED_BOOKS = gql`
-  query allBooks($genre: String) {
-    allBooks(genre: $genre) {
-      ...BookDetails
-    }
-  }
-  ${BOOK_DETAILS}
-`
+// export const FILTERED_BOOKS = gql`
+//   query allBooks($genre: String) {
+//     allBooks(genre: $genre) {
+//       ...BookDetails
+//     }
+//   }
+//   ${BOOK_DETAILS}
+// `
 
 const AUTHOR_DETAILS = gql`
   fragment AuthorDetails on Author {

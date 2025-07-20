@@ -128,10 +128,11 @@ const resolvers = {
         author: author._id,
         genres: args.genres
       })
-      
+
+      let populatedBook
       try {
         const savedBook = await book.save()
-        const populatedBook = await Book.findById(savedBook._id).populate('author')
+        populatedBook = await Book.findById(savedBook._id).populate('author')
       } catch (error) {
         throw new GraphQLError('Book title must be unique', {
           extensions: {
