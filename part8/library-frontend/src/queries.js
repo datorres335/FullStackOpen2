@@ -60,6 +60,16 @@ export const ALL_AUTHORS = gql`
   }
   ${AUTHOR_DETAILS}
 `
+
+export const AUTHOR_ADDED = gql`
+  subscription {
+    authorAdded {
+      ...AuthorDetails
+    }
+  }
+  ${AUTHOR_DETAILS}
+`
+
 export const FIND_AUTHOR = gql`
   query findAuthorByName($nameToSearch: String!) {
     findAuthor(name: $nameToSearch) {

@@ -1,10 +1,9 @@
-import { useQuery } from "@apollo/client"
-import { ALL_BOOKS } from "../queries"
+import { useQuery, useSubscription } from "@apollo/client"
+import { ALL_BOOKS, BOOK_ADDED } from "../queries"
 import { useState } from "react";
 
 const FilterGenreButtons = ({ setFilter, books }) => {
   const uniqueGenres = [...new Set(books.map(book => book.genres).flat())]
-  //console.log("Unique Genres:", uniqueGenres);
   
   return (
     <div>
@@ -25,9 +24,33 @@ const Books = (props) => {
   const allBooksQuery = useQuery(ALL_BOOKS, {
     variables: filter === "all genres" ? {} : { genre: filter },
   })
-  // const filteredBooksQuery = useQuery(FILTERED_BOOKS, {
-  //   variables: filter === "all genres" ? {} : { genre: filter },
-  // })
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data, client }) => {
+      const addedBook = data.data.bookAdded
+      
+      client.cache.updateQuery(
+        { 
+          query: ALL_BOOKS,
+          variables: filter === "all genres" ? {} : { genre: filter }
+        }, 
+        (data) => {
+          if (!data) return data
+          
+          const bookExists = data.allBooks.some(book => book.id === addedBook.id)
+          if (bookExists) return data
+          
+          if (filter === "all genres" || addedBook.genres.includes(filter)) {
+            return {
+              allBooks: [...data.allBooks, addedBook]
+            }
+          }
+          
+          return data
+        }
+      )
+    }
+  })
 
   if (allBooksQuery.loading) return <div>loading...</div>
   if (allBooksQuery.error) return <div>Error: {allBooksQuery.error.message}</div>
@@ -35,7 +58,6 @@ const Books = (props) => {
   if (!props.show) return null
 
   const allBooks = allBooksQuery.data?.allBooks || []
-  //const booksToDisplay = allBooks
 
   return (
     <div>

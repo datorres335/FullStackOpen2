@@ -22,19 +22,6 @@ const NewBook = (props) => {
     update: (cache, response) => {
       updateCache(cache, { query: ALL_BOOKS }, response.data.addBook)
     }
-    // update: (cache, response) => {
-    //   cache.updateQuery({ query: ALL_BOOKS }, ({ allBooks }) => {
-    //     return {
-    //       allBooks: allBooks.concat(response.data.addBook)
-    //     }
-    //   })
-
-    //   // cache.updateQuery({ query: ALL_AUTHORS }, ({ allAuthors }) => {
-    //   //   return {
-    //   //     allAuthors: allAuthors.concat(response.data.addAuthor.author)
-    //   //   }
-    //   // })
-    // }
   });
 
   if (loading) return <div>loading...</div>

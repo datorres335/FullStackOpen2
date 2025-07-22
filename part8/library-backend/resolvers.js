@@ -129,6 +129,16 @@ const resolvers = {
         })
       }
 
+      const existingBook = await Book.findOne({ title: args.title })
+      if (existingBook) {
+        throw new GraphQLError('Book title must be unique', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.title
+          }
+        })
+      }
+
       let author = await Author.findOne({ name: args.author })
       if (!author) {
         author = new Author({ name: args.author })
@@ -142,7 +152,6 @@ const resolvers = {
         genres: args.genres
       })
 
-      let populatedBook
       try {
         const savedBook = await book.save()
 
@@ -151,7 +160,10 @@ const resolvers = {
           { $push: { authorOf: savedBook._id } }
         )
 
-        populatedBook = await Book.findById(savedBook._id).populate('author')
+        const populatedBook = await Book.findById(savedBook._id).populate('author')
+
+        pubsub.publish('BOOK_ADDED', { bookAdded: populatedBook })
+        return populatedBook
       } catch (error) {
         throw new GraphQLError('Book title must be unique', {
           extensions: {
@@ -160,8 +172,6 @@ const resolvers = {
           }
         })
       }
-      pubsub.publish('BOOK_ADDED', { bookAdded: populatedBook })
-      return populatedBook
     },
     createUser: async (root, args) => {
       const user = new User({ username: args.username, favoriteGenre: args.favoriteGenre })

@@ -71,6 +71,7 @@ const App = () => {
     setTimeout(() => {
       setErrorMessage(null)
     }, 10000)
+    alert(message) 
   }
 
   const logout = () => {

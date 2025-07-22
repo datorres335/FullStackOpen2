@@ -1,6 +1,6 @@
-import { useQuery, useMutation } from "@apollo/client"
+import { useQuery, useMutation, useSubscription } from "@apollo/client"
 import { useState } from 'react'
-import { ALL_AUTHORS, EDIT_AUTHOR } from "../queries"
+import { ALL_AUTHORS, EDIT_AUTHOR, BOOK_ADDED, AUTHOR_ADDED } from "../queries"
 
 const SetBirthYear = ({ authors }) => {
   const [setBirthYear ] = useMutation(EDIT_AUTHOR, {
@@ -67,6 +67,50 @@ const SetBirthYear = ({ authors }) => {
 
 const Authors = (props) => {
   const authors = useQuery(ALL_AUTHORS)
+
+    useSubscription(BOOK_ADDED, {
+    onData: ({ data, client }) => {
+      const addedBook = data.data.bookAdded
+      
+      client.cache.updateQuery({ query: ALL_AUTHORS }, (data) => {
+        if (!data) return data
+        
+        return {
+          allAuthors: data.allAuthors.map(author => {
+            if (author.id === addedBook.author.id) {
+              return {
+                ...author,
+                authorOf: [...author.authorOf, addedBook],
+                bookCount: author.bookCount + 1
+              }
+            }
+            return author
+          })
+        }
+      })
+      
+      console.log('Authors view updated for new book:', addedBook.title)
+    }
+  })
+
+    useSubscription(AUTHOR_ADDED, {
+    onData: ({ data, client }) => {
+      const addedAuthor = data.data.authorAdded
+      
+      client.cache.updateQuery({ query: ALL_AUTHORS }, (data) => {
+        if (!data) return data
+        
+        const authorExists = data.allAuthors.some(author => author.id === addedAuthor.id)
+        if (authorExists) return data
+        
+        return {
+          allAuthors: [...data.allAuthors, addedAuthor]
+        }
+      })
+      
+      console.log('New author added to view:', addedAuthor.name)
+    }
+  })
 
   if (authors.loading) {
     return <div>loading...</div>

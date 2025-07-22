@@ -20,7 +20,15 @@ const httpLink = createHttpLink({
   uri: 'http://localhost:4000'
 })
 
-const wsLink = new GraphQLWsLink(createClient({ url: 'ws://localhost:4000'}))
+const wsLink = new GraphQLWsLink(createClient({ 
+  url: 'ws://localhost:4000',
+  connectionParams: () => {
+    const token = localStorage.getItem('library-user-token')
+    return {
+      authorization: token ? `Bearer ${token}` : null,
+    }
+  }
+}))
 
 const splitLink = split(
   ({ query }) => {
