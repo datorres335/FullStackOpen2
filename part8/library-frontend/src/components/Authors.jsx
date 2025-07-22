@@ -89,14 +89,18 @@ const Authors = (props) => {
         <tbody>
           <tr>
             <th></th>
-            <th>born</th>
-            <th>books</th>
+            <th>Born:</th>
+            <th>Book Count:</th>
+            <th>Author Of:</th>
           </tr>
           {authors.data.allAuthors.map((a) => (
             <tr key={a.name}>
               <td>{a.name}</td>
               <td>{a.born}</td>
               <td>{a.bookCount}</td>
+              <td>
+                {a.authorOf.map(book => `${book.title} ${book.published}`).join(', ')}
+              </td>
             </tr>
           ))}
         </tbody>

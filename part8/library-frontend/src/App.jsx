@@ -7,23 +7,23 @@ import LoginForm from "./components/LoginForm";
 import { useApolloClient } from "@apollo/client";
 import Recommendations from "./components/Recommendations";
 import { jwtDecode } from "jwt-decode";
-import { useQuery, useMutation, useSubscription } from '@apollo/client'
+import { useSubscription } from '@apollo/client'
 import { ALL_BOOKS, BOOK_ADDED } from "./queries";
 
 // function that takes care of munipulating cache
 export const updateCache = (cache, query, addedBook) => {
   // helper that is used to eliminate saving same person twice
-  const uniqByName = a => {
+  const uniqById = a => {
     let seen = new Set()
     return a.filter(item => {
-      let k = item.name
+      let k = item.id
       return seen.has(k) ? false : seen.add(k)
     })
   }
 
   cache.updateQuery(query, ({ allBooks }) => {
     return {
-      allBooks: uniqByName(allBooks.concat(addedBook))
+      allBooks: uniqById(allBooks.concat(addedBook))
     }
   })
 }

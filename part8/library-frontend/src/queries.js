@@ -44,7 +44,11 @@ const AUTHOR_DETAILS = gql`
     name
     born
     id
-    bookCount   
+    bookCount
+    authorOf {
+      title
+      published
+    }
   }
 `
 

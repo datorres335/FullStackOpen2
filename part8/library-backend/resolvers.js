@@ -7,9 +7,20 @@ const Book = require('./models/book')
 
 const resolvers = {
   Author: {
-    bookCount: async root => {
-      return await Book.countDocuments({ author: root.id }) //books.filter(b => b.author === root.name).length
-    }
+    bookCount: root => root.authorOf ? root.authorOf.length : 0
+    // bookCount: async root => {
+    //   return await Book.countDocuments({ author: root.id }) //books.filter(b => b.author === root.name).length
+    // },
+    // authorOf: async root => {
+    //   const books = await Book.find({
+    //     author: {
+    //       $in: [root._id] // Find books where the author field matches the author's ID
+    //     }
+    //   })
+    //   console.log("Book.find");
+      
+    //   return books
+    // }
   },
   Book: {
     author: async (root) => {
@@ -19,17 +30,17 @@ const resolvers = {
   Query: {
     authorCount: async () => Author.collection.countDocuments(), //() => authors.length,
     allAuthors: async (root, args) => {
-      //console.log('Author.find');
+      console.log('Author.find');
       
       if (!args.born) {
-        return await Author.find({})
+        return await Author.find({}).populate('authorOf')
       }
 
       const byBorn = args.born === 'YES' 
         ? { born: { $ne: null } }
         : { born: null } 
 
-      return await Author.find(byBorn)
+      return await Author.find(byBorn).populate('authorOf')
     },
     findAuthor: async (root, args) => await Author.findOne({ name: args.name }), //authors.find(a => a.name === args.name),
 
@@ -134,6 +145,12 @@ const resolvers = {
       let populatedBook
       try {
         const savedBook = await book.save()
+
+        await Author.findByIdAndUpdate(
+          author._id,
+          { $push: { authorOf: savedBook._id } }
+        )
+
         populatedBook = await Book.findById(savedBook._id).populate('author')
       } catch (error) {
         throw new GraphQLError('Book title must be unique', {
