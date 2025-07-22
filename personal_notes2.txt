@@ -314,9 +314,18 @@ npm install graphql-ws ws @graphql-tools/schema // two packages for adding subsc
 
 npm install graphql-subscriptions // a core utility for enabling real-time GraphQL subscriptions in an app
 
+npm install graphql-ws  // install this in the frontend in order to make subscriptions work on the client side
 
 
+PART 9 - TypeScript ----------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
+npm install --save-dev ts-node typescript //ts-node compiles and executes the specified TypeScript file immediately so that there is no need for a 	separate compilation step
 
+npm run ts-node file.ts -- -s --someoption
+	// ts-node is a custom script -> "ts-node": "ts-node" 
+	// file.ts - The TypeScript file you want to execute
+	// -- - This is the argument separator. Everything after -- gets passed directly to the underlying command (ts-node)
+	// -s --someoption - These are command-line arguments passed to your TypeScript file
 
 
 
