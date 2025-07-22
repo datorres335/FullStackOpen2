@@ -27,6 +27,8 @@ mongoose
     console.log('error connection to MongoDB: ', error.message);
   })
 
+mongoose.set('debug', true) // Enable mongoose debug mode to log all queries
+
 const start = async () => {
   const app = express()
 

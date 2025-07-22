@@ -19,13 +19,15 @@ const resolvers = {
   Query: {
     authorCount: async () => Author.collection.countDocuments(), //() => authors.length,
     allAuthors: async (root, args) => {
+      //console.log('Author.find');
+      
       if (!args.born) {
         return await Author.find({})
       }
 
-    const byBorn = args.born === 'YES' 
-      ? { born: { $ne: null } }
-      : { born: null } 
+      const byBorn = args.born === 'YES' 
+        ? { born: { $ne: null } }
+        : { born: null } 
 
       return await Author.find(byBorn)
     },
