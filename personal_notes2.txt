@@ -333,8 +333,11 @@ npm install --save-dev @types/react @types/express @types/lodash @types/jest @ty
 
 npm install --save-dev ts-node-dev // enables auto-reloading in TypeScript files to improve workflow
 
+npm install --save-dev eslint @eslint/js @types/eslint__js typescript typescript-eslint // an additional method to tsconfig.json to restricts 	developers from using the 'any' type
+	// need to create the eslint restrictions rules to its own file eslint.config.mjs 
+	// for details refer to https://fullstackopen.com/en/part9/first_steps_with_type_script 
 
-
+npm install --save-dev @stylistic/eslint-plugin // a modern continuation of eslint-config-prettier and built-in ESLint formatting rules
 
 
 

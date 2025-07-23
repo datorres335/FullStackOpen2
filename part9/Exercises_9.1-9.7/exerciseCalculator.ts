@@ -1,6 +1,6 @@
-type Rating = 1 | 2 | 3;
+export type Rating = 1 | 2 | 3;
 
-interface ExerciseValues {
+export interface ExerciseValues {
   periodLength: number; //the number of days
   trainingDays: number; //the number of training days
   success: boolean; //boolean value describing if the target was reached
@@ -15,20 +15,20 @@ const exerciseParseArguments = (args: string[]): { target: number; exerciseHours
   const isAllNumbers = args.slice(2).every(value => !isNaN(Number(value)));
   if (args.length < 3) throw new Error('Not enough daily exercise values provided');
   if (isAllNumbers && args.length >= 3) {
-    const [throwAway1, throwAway2, target, ...exerciseHours] = args.map(Number);
+    const [, , target, ...exerciseHours] = args.map(Number);
     return { target, exerciseHours };
   }
   throw new Error('Invalid arguments');
-}
+};
 
-const calculateExercises = (target: number, exerciseHours: number[]) : ExerciseValues => {
-  const average = exerciseHours.reduce((sum, hours) => sum + hours, 0) / exerciseHours.length;
+export const calculateExercises = (target: number, daily_exercises: number[]) : ExerciseValues => {
+  const average = daily_exercises.reduce((sum, hours) => sum + hours, 0) / daily_exercises.length;
   const ratingOf1 = average < target * 0.5;
   const ratingOf2 = average < target * 0.75;
   return {
-    periodLength: exerciseHours.length,
-    trainingDays: exerciseHours.filter(hours => hours > 0).length,
-    success: exerciseHours.reduce((sum, hours) => sum + hours, 0) >= target,
+    periodLength: daily_exercises.length,
+    trainingDays: daily_exercises.filter(hours => hours > 0).length,
+    success: daily_exercises.reduce((sum, hours) => sum + hours, 0) >= target,
     rating: (() => { 
       if (ratingOf1) return 1;
       if (ratingOf2) return 2;
@@ -41,19 +41,20 @@ const calculateExercises = (target: number, exerciseHours: number[]) : ExerciseV
     })(),
     target: target,
     average: average
-  }
-}
+  };
+};
 
-try {
-  const { target, exerciseHours } = exerciseParseArguments(process.argv);
-  const result = calculateExercises(target, exerciseHours);
-  console.log(result);
-} catch (error: unknown) {
-  let errorMessage = 'Something bad happened.';
-  if (error instanceof Error) {
-    errorMessage += ' Error: ' + error.message;
+if (require.main === module) {
+  try {
+    const { target, exerciseHours } = exerciseParseArguments(process.argv);
+    const result = calculateExercises(target, exerciseHours);
+    console.log(result);
+  } catch (error: unknown) {
+    let errorMessage = 'Something bad happened.';
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message;
+    }
+    console.log(errorMessage);
   }
-  console.log(errorMessage);
 }
-//console.log(calculateExercises(2, [3, 0, 2, 4.5, 0, 3, 1]));
 

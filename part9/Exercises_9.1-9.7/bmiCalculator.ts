@@ -12,11 +12,11 @@ const bmiParseArguments = (args: string[]): BMIValues => {
     return {
       height: Number(args[2]),
       weight: Number(args[3])
-    }
+    };
   } else {
     throw new Error('Provided values were not numbers!');
   }
-}
+};
 
 export const calculateBmi = (height: number, weight: number): string => {
   const bmi: number = weight / (height * height * 1/10000);
@@ -40,9 +40,10 @@ export const calculateBmi = (height: number, weight: number): string => {
     default:
       return 'Obese (Class III)';
   }
-}
+};
 
-
+// only run the following code if this file is run directly
+// (not when imported in another file)
 if (require.main === module) {
   try {
     const { height, weight } = bmiParseArguments(process.argv);

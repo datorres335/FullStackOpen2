@@ -2,14 +2,17 @@
   "compilerOptions": {
     "noImplicitAny": true,
     "noImplicitReturns": true,
+    "strict": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "strictBindCallApply": true,
+    "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
     "esModuleInterop": true,
     "declaration": true,
+    "moduleResolution": "node"
   }
 }
