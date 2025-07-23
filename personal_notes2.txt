@@ -327,8 +327,11 @@ npm run ts-node file.ts -- -s --someoption
 	// -- - This is the argument separator. Everything after -- gets passed directly to the underlying command (ts-node)
 	// -s --someoption - These are command-line arguments passed to your TypeScript file
 
+// Usually, types for existing packages can be found from the @types organization within npm, and you can add the relevant types to your project by 	installing an npm package with the name of your package with a @types/ prefix. For example:
+npm install --save-dev @types/react @types/express @types/lodash @types/jest @types/mongoose
+	// and so on and so on. The @types/ are maintained by "Definitely typed" https://github.com/DefinitelyTyped/DefinitelyTyped, a community 		project to maintain types of everything in one place.
 
-
+npm install --save-dev ts-node-dev // enables auto-reloading in TypeScript files to improve workflow
 
 
 
