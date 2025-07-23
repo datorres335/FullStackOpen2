@@ -10,7 +10,18 @@ interface ExerciseValues {
   average: number; //the calculated average time
 }
 
-const calculateExercises = (exerciseHours: number[], target: number) : ExerciseValues => {
+const exerciseParseArguments = (args: string[]): { target: number; exerciseHours: number[] } => {
+  //const isAllNumbers = args.every(value => !isNaN(Number(value)));
+  const isAllNumbers = args.slice(2).every(value => !isNaN(Number(value)));
+  if (args.length < 3) throw new Error('Not enough daily exercise values provided');
+  if (isAllNumbers && args.length >= 3) {
+    const [throwAway1, throwAway2, target, ...exerciseHours] = args.map(Number);
+    return { target, exerciseHours };
+  }
+  throw new Error('Invalid arguments');
+}
+
+const calculateExercises = (target: number, exerciseHours: number[]) : ExerciseValues => {
   const average = exerciseHours.reduce((sum, hours) => sum + hours, 0) / exerciseHours.length;
   const ratingOf1 = average < target * 0.5;
   const ratingOf2 = average < target * 0.75;
@@ -33,4 +44,16 @@ const calculateExercises = (exerciseHours: number[], target: number) : ExerciseV
   }
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+try {
+  const { target, exerciseHours } = exerciseParseArguments(process.argv);
+  const result = calculateExercises(target, exerciseHours);
+  console.log(result);
+} catch (error: unknown) {
+  let errorMessage = 'Something bad happened.';
+  if (error instanceof Error) {
+    errorMessage += ' Error: ' + error.message;
+  }
+  console.log(errorMessage);
+}
+//console.log(calculateExercises(2, [3, 0, 2, 4.5, 0, 3, 1]));
+
