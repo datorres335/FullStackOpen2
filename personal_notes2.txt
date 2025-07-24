@@ -320,6 +320,7 @@ npm install graphql-ws  // install this in the frontend in order to make subscri
 PART 9 - TypeScript ----------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 npm install --save-dev ts-node typescript //ts-node compiles and executes the specified TypeScript file immediately so that there is no need for a 	separate compilation step
+	// NOTE: it is actually advisable not to use ts-node for official projects
 
 npm install express
 npm install --save-dev @types/express //installs the TypeScript type definitions (type checking) for the Express.js library.
@@ -342,6 +343,16 @@ npm install --save-dev eslint @eslint/js @types/eslint__js typescript typescript
 
 npm install --save-dev @stylistic/eslint-plugin // a modern continuation of eslint-config-prettier and built-in ESLint formatting rules
 
+// script below not working as intended!! use this command instead -> npx tsc --init
+**npm run tsc -- --init // this will generate a tsconfig.json file. Must add the custom script "tsc": "tsc" first in package.json
+	// Note the extra -- before the actual argument! Arguments before -- are interpreted as being for the npm command, while the ones after that 		are meant for the command that is run through the script (i.e. tsc in this case).
+	// script above not working as intended!! use this command instead -> npx tsc --init
+
+npm run tsc // creates a production build by running the TypeScript compiler. A new file will get generated once you run this command
+	// in your tsconfig.json file, add this compiler option -> "outDir": "./build/"  
+
+npm start // add this custom script -> "start": "node build/index.js"
+	
 // run these commands if VScode shows type or style related warnings despite the code having been fixed and you have tried to close and open the file 	that is giving you trouble or restarting the editor. Never trust the editor too much!
 npm run tsc
 npm run lint
