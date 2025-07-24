@@ -1,11 +1,11 @@
 PART 1 -----------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
-//If you clone a project, run the "npm install" command before starting the application with "npm start" or "npm run dev"
 //IMPORTANT!! When cloning an external project inside of an existing project, make sure to go inside of the newly cloned repo and delete the 	existing .git file with the commands:
 		git clone <new project>
 		cd <new project>
 		rm -rf .git // MUST REMOVE .git FILE WHEN CLONING INTO EXISITNG PROJECT!!! 
 		npm install
+		"npm start" or "npm run dev"
 
 npm create vite@latest folder-name -- --template react
 
@@ -321,6 +321,9 @@ PART 9 - TypeScript ------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 npm install --save-dev ts-node typescript //ts-node compiles and executes the specified TypeScript file immediately so that there is no need for a 	separate compilation step
 
+npm install express
+npm install --save-dev @types/express //installs the TypeScript type definitions (type checking) for the Express.js library.
+
 npm run ts-node file.ts -- -s --someoption
 	// ts-node is a custom script -> "ts-node": "ts-node" 
 	// file.ts - The TypeScript file you want to execute
@@ -339,7 +342,9 @@ npm install --save-dev eslint @eslint/js @types/eslint__js typescript typescript
 
 npm install --save-dev @stylistic/eslint-plugin // a modern continuation of eslint-config-prettier and built-in ESLint formatting rules
 
-
+// run these commands if VScode shows type or style related warnings despite the code having been fixed and you have tried to close and open the file 	that is giving you trouble or restarting the editor. Never trust the editor too much!
+npm run tsc
+npm run lint
 
 	
 
