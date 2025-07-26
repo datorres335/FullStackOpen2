@@ -4,7 +4,7 @@ import { DiagnosisEntry } from '../types';
 
 const router = express.Router();
 
-router.get('/api/diagnoses', (_req, res: Response<DiagnosisEntry[]>) => {
+router.get('/', (_req, res: Response<DiagnosisEntry[]>) => {
   res.send(diagnosesService.getDiagnoses());
 });
 
