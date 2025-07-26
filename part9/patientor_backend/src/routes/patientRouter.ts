@@ -1,9 +1,11 @@
-import express from 'express';
+import express, { Response } from 'express';
+import patientService from '../services/patientService';
+import { NonSensitivePatientEntry } from '../types';
 
 const router = express.Router();
 
-router.get('/', (_req, res) => {
-  res.send('Fetching all patients!');
+router.get('/', (_req, res: Response<NonSensitivePatientEntry[]>) => {
+  res.send(patientService.getNonSensitiveEntries());
 });
 
 router.post('/', (_req, res) => {

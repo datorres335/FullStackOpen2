@@ -14,3 +14,5 @@ export interface DiagnosisEntry {
   name: string;
   latin?: string;
 }
+
+export type NonSensitivePatientEntry = Omit<PatientEntry, 'ssn'>;
