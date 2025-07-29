@@ -360,6 +360,7 @@ npm run lint
 npm install zod // Zod is a TypeScript-first validation library. Using Zod, you can define schemas you can use to validate data, from a simple string 	to a complex nested objec
 	// https://zod.dev/
 
+npm create vite@latest my-app-name -- --template react-ts // Creates a new React project with typescript?
 
 
 
