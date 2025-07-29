@@ -357,7 +357,8 @@ npm start // add this custom script -> "start": "node build/index.js"
 npm run tsc
 npm run lint
 
-	
+npm install zod // Zod is a TypeScript-first validation library. Using Zod, you can define schemas you can use to validate data, from a simple string 	to a complex nested objec
+	// https://zod.dev/
 
 
 
