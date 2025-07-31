@@ -2,7 +2,7 @@ import diaryData from '../../data/entries';
 
 import { 
   NonSensitiveDiaryEntry, DiaryEntry, NewDiaryEntry
- } from '../types';
+ } from '../../../packages/types';
 
 const diaries: DiaryEntry[] = diaryData;
 

@@ -1,4 +1,4 @@
-import { DiaryEntry } from "../src/types";
+import { DiaryEntry } from "../../packages/types";
 import toNewDiaryEntry from "../src/utils";
 
 const data = [
