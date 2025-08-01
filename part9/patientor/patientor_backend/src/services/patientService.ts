@@ -13,19 +13,21 @@ const getPatients = (): PatientEntry[] => {
 };
 
 const getNonSensitiveEntries = (): NonSensitivePatientEntry[] => {
-  return patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
+  return patients.map(({ id, name, dateOfBirth, gender, occupation, entries }) => ({
     id,
     name,
     dateOfBirth,
     gender,
-    occupation
+    occupation,
+    entries
   }));
 };
 
 const addPatient = ( patient: NewPatientEntry): PatientEntry => {
   const newPatientEntry = {
     id: uuid(),
-    ...patient
+    ...patient,
+    entries: []
   };
   patients.push(newPatientEntry);
   return newPatientEntry;

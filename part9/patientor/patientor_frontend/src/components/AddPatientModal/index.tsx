@@ -6,7 +6,8 @@ import { PatientFormValues } from "../../types";
 interface Props {
   modalOpen: boolean;
   onClose: () => void;
-  onSubmit: (values: PatientFormValues) => void;
+  //onSubmit: (values: PatientFormValues) => void; //why isn't the return value of the onSubmit function Promise<void>?
+  onSubmit: (values: PatientFormValues) => Promise<void>;
   error?: string;
 }
 
