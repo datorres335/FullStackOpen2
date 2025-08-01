@@ -7,7 +7,6 @@ const App = () => {
   const [diaryEntries, setDiaryEntries] = useState<DiaryEntry[]>([])
 
   useEffect(() => {
-    // Fetch initial diary entries from the server or local storage
     const fetchDiaryEntries = async () => {
       const entries = await getAllEntries()
       setDiaryEntries(entries)
@@ -23,8 +22,13 @@ const App = () => {
       <h2>Diary Entries</h2>
       {diaryEntries.map(entry => (
         <div key={entry.id}>
-          <p>{entry.date} - {entry.weather} - {entry.visibility}</p>
-          <p>{entry.comment}</p>
+          <hr style={{height: "1px", backgroundColor: "#e0e0e0", margin: "20px 0"}}/>
+          <p>
+            <strong>{entry.date}</strong> <br /> <br />
+            Visibility: {entry.visibility} <br />
+            Weather: {entry.weather} <br />
+            Comment: {entry.comment}
+          </p>
         </div>
       ))}
     </>
