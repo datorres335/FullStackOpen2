@@ -1,13 +1,13 @@
 import patientService from '../services/patients';
-import diagnosesService from '../services/diagnoses';
 import { useEffect, useState } from 'react';
-import { PatientEntry, Diagnosis } from '../types';
+import { PatientEntry } from '../types';
 import { useParams } from 'react-router-dom';
+import DisplayPatientEntries from './DisplayPatientEntries';
 
 const PatientInfo = () => {
-   const { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
   const [patient, setPatient] = useState<PatientEntry | null>(null);
-  const [diagnosesMap, setDiagnosesMap] = useState<Map<string, Diagnosis>>(new Map());
+  //const [diagnosesMap, setDiagnosesMap] = useState<Map<string, Diagnosis>>(new Map());
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,32 +16,32 @@ const PatientInfo = () => {
         //const diagnosesData = patientData.entries.flatMap(entry => entry.diagnosisCodes || []);
         setPatient(patientData);
 
-        const uniqueCodes = new Set<string>();
-        patientData.entries.forEach(entry => {
-          entry.diagnosisCodes?.forEach(code => uniqueCodes.add(code));
-        });
-        const diagnosesData = new Map<string, Diagnosis>();
-        await Promise.all(
-          Array.from(uniqueCodes).map(async (code) => {
-            const diagnosis = await diagnosesService.getDiagnosesByCode(code);
-            if (diagnosis) {
-              diagnosesData.set(code, diagnosis);
-            }
-          })
-        );
-        setDiagnosesMap(diagnosesData);
+        // const uniqueCodes = new Set<string>();
+        // patientData.entries.forEach(entry => {
+        //   entry.diagnosisCodes?.forEach(code => uniqueCodes.add(code));
+        // });
+        // const diagnosesData = new Map<string, Diagnosis>();
+        // await Promise.all(
+        //   Array.from(uniqueCodes).map(async (code) => {
+        //     const diagnosis = await diagnosesService.getDiagnosesByCode(code);
+        //     if (diagnosis) {
+        //       diagnosesData.set(code, diagnosis);
+        //     }
+        //   })
+        // );
+        // setDiagnosesMap(diagnosesData);
       } else {
         setPatient(null);
-        setDiagnosesMap(new Map());
+        //setDiagnosesMap(new Map());
       }
     };
 
     fetchData();
   }, [id]);
 
-  const getDiagnosisName = (code: string): string => {
-    return diagnosesMap.get(code)?.name || 'Unknown diagnosis';
-  };
+  // const getDiagnosisName = (code: string): string => {
+  //   return diagnosesMap.get(code)?.name || 'Unknown diagnosis';
+  // };
 
   return (
     <div>
@@ -56,26 +56,14 @@ const PatientInfo = () => {
           {patient.entries.length > 0 ? (
             <ul>
               {patient.entries.map((entry) => (
-                <li key={entry.id}>
-                  <p><strong>Date:</strong> {entry.date}</p>
-                  <p><strong>Description:</strong> {entry.description}</p>
-                  {entry.diagnosisCodes && (
-                    <div>
-                      <strong>Diagnosis Codes:</strong>
-                      <ul>
-                        {entry.diagnosisCodes.map((code) => (
-                          <li key={code}>{code} {getDiagnosisName(code)}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </li>
+                <DisplayPatientEntries key={entry.id} entry={entry} />
               ))}
             </ul>
           ) : (
             <p>No entries available.</p>
           )}
         </div>
+
       ) : (
         <p>Loading patient information...</p>
       )}
