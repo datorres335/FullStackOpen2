@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Table, Button, TableHead, Typography, TableCell, TableRow, TableBody } from '@mui/material';
 import axios from 'axios';
 
-import { PatientFormValues, Patient } from "../../types";
+import { PatientFormValues, PatientEntry } from "../../types";
 import AddPatientModal from "../AddPatientModal";
 import HealthRatingBar from "../HealthRatingBar";
 import patientService from "../../services/patients";
 
 interface Props {
-  patients : Patient[]
-  setPatients: React.Dispatch<React.SetStateAction<Patient[]>>
+  patients : PatientEntry[]
+  setPatients: React.Dispatch<React.SetStateAction<PatientEntry[]>>
 }
 
 const PatientListPage = ({ patients, setPatients } : Props ) => {
@@ -67,7 +67,7 @@ const PatientListPage = ({ patients, setPatients } : Props ) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Array.isArray(patients) && patients.map((patient: Patient) => (
+          {Array.isArray(patients) && patients.map((patient: PatientEntry) => (
             <TableRow 
               key={patient.id}
               onClick={() => handlePatientClick(patient.id)}

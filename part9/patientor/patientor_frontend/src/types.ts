@@ -1,34 +1,78 @@
+import { z } from 'zod';
+import { newPatientEntrySchema } from '../../patientor_backend/src/utils/toNewPatientEntry';
+
+export enum Gender {
+  Male = 'male',
+  Female = 'female',
+  Other = 'other'
+}
+
 export interface Diagnosis {
   code: string;
   name: string;
   latin?: string;
 }
 
-export enum Gender {
-  Male = "male",
-  Female = "female",
-  Other = "other"
+interface BaseEntry {
+  id: string;
+  description: string;
+  date: string;
+  specialist: string;
+  diagnosisCodes?: Array<Diagnosis['code']>;
 }
 
-export interface Patient {
+export enum HealthCheckRating {
+  "Healthy" = 0,
+  "LowRisk" = 1,
+  "HighRisk" = 2,
+  "CriticalRisk" = 3
+}
+
+interface HealthCheckEntry extends BaseEntry {
+  type: "HealthCheck";
+  healthCheckRating: HealthCheckRating;
+}
+
+interface HospitalEntry extends BaseEntry {
+  type: "Hospital";
+  discharge: {
+    date: string;
+    criteria: string;
+  };
+}
+
+interface OccupationalHealthcareEntry extends BaseEntry {
+  type: "OccupationalHealthcare";
+  employerName: string;
+  sickLeave?: {
+    startDate: string;
+    endDate: string;
+  };
+}
+
+export type Entry =
+  | HospitalEntry
+  | OccupationalHealthcareEntry
+  | HealthCheckEntry;
+
+export interface PatientEntry {
   id: string;
   name: string;
-  occupation: string;
+  dateOfBirth: string;
+  ssn: string;
   gender: Gender;
-  ssn?: string;
-  dateOfBirth?: string;
+  occupation?: string;
   entries: Entry[];
 }
 
-export type PatientFormValues = Omit<Patient, "id" | "entries">;
+export type PatientFormValues = Omit<PatientEntry, "id" | "entries">;
 
-export interface Entry {
-  id: string;
-  date: string;
-  //type: string; // is this field necessary?
-  specialist: string;
-  diagnosisCodes?: Array<Diagnosis['code']>;
-  description: string;
+export type NewPatientEntry = z.infer<typeof newPatientEntrySchema>; 
+
+export interface DiagnosisEntry {
+  code: string;
+  name: string;
+  latin?: string;
 }
 
-export type NonSensitivePatient = Omit<Patient, "ssn" | "entries">;
+export type NonSensitivePatientEntry = Omit<PatientEntry, 'ssn'>;
