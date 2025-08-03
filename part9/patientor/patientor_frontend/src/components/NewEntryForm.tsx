@@ -1,5 +1,6 @@
 import { useState, SyntheticEvent } from "react";
 import { Entry, Diagnosis, HealthCheckRating, HealthCheckEntry, HospitalEntry, OccupationalHealthcareEntry } from "../types";
+import DiagnosisCodeSelector from "./DiagnosisCodeSelector";
 
 interface Props {
   onSubmit: (entry: Omit<Entry, 'id'>) => void;
@@ -130,12 +131,9 @@ const NewEntryForm = ({ onSubmit, onCancel, error }: Props) => {
           />
         </div>
         <div>
-          <label>Diagnosis Codes (comma-separated)</label>
-          <input
-            type="text"
-            value={diagnosisCodes.join(",")}
-            onChange={({ target }) => setDiagnosisCodes(target.value.split(",").map(code => code.trim()))}
-            placeholder="e.g., M24.2, M51.2"
+          <DiagnosisCodeSelector 
+            selectedCodes={diagnosisCodes}
+            onCodesChange={setDiagnosisCodes}
           />
         </div>
 
