@@ -1,47 +1,57 @@
 import patientService from '../services/patients';
 import { useEffect, useState } from 'react';
-import { PatientEntry } from '../types';
+import { PatientEntry, Entry } from '../types';
 import { useParams } from 'react-router-dom';
 import DisplayPatientEntries from './DisplayPatientEntries';
+import NewEntryForm from './NewEntryForm';
 
 const PatientInfo = () => {
   const { id } = useParams<{ id: string }>();
   const [patient, setPatient] = useState<PatientEntry | null>(null);
-  //const [diagnosesMap, setDiagnosesMap] = useState<Map<string, Diagnosis>>(new Map());
+  const [showForm, setShowForm] = useState<boolean>(false);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
-        const patientData = await patientService.getPatientById(id);
-        //const diagnosesData = patientData.entries.flatMap(entry => entry.diagnosisCodes || []);
-        setPatient(patientData);
-
-        // const uniqueCodes = new Set<string>();
-        // patientData.entries.forEach(entry => {
-        //   entry.diagnosisCodes?.forEach(code => uniqueCodes.add(code));
-        // });
-        // const diagnosesData = new Map<string, Diagnosis>();
-        // await Promise.all(
-        //   Array.from(uniqueCodes).map(async (code) => {
-        //     const diagnosis = await diagnosesService.getDiagnosesByCode(code);
-        //     if (diagnosis) {
-        //       diagnosesData.set(code, diagnosis);
-        //     }
-        //   })
-        // );
-        // setDiagnosesMap(diagnosesData);
-      } else {
-        setPatient(null);
-        //setDiagnosesMap(new Map());
+        try {
+          const patientData = await patientService.getPatientById(id);
+          setPatient(patientData);
+        } catch (error) {
+          console.error('Error fetching patient:', error);
+          setError('Failed to fetch patient data');
+        }
       }
     };
 
     fetchData();
   }, [id]);
 
-  // const getDiagnosisName = (code: string): string => {
-  //   return diagnosesMap.get(code)?.name || 'Unknown diagnosis';
-  // };
+  const handleAddEntry = async (entry: Omit<Entry, 'id'>) => {
+    if (!id || !patient) return;
+    
+    try {
+      const newEntry = await patientService.addEntry(id, entry);
+      setPatient({
+        ...patient,
+        entries: patient.entries.concat(newEntry)
+      });
+      setShowForm(false);
+      setError('');
+    } catch (error) {
+      console.error('Error adding entry:', error);
+      setError('Failed to add entry');
+    }
+  };
+
+  const handleCancelForm = () => {
+    setShowForm(false);
+    setError('');
+  };
+
+  if (error) {
+    return <div style={{ color: 'red' }}>Error: {error}</div>;
+  }
 
   return (
     <div>
@@ -52,7 +62,19 @@ const PatientInfo = () => {
           <p><strong>Gender:</strong> {patient.gender}</p>
           <p><strong>SSN:</strong> {patient.ssn}</p>
           <p><strong>Date of Birth:</strong> {patient.dateOfBirth}</p>
+          
           <h3>Entries</h3>
+          {!showForm && (
+            <button onClick={() => setShowForm(true)}>Add New Entry</button>
+          )}
+          
+          {showForm && (
+            <NewEntryForm 
+              onSubmit={handleAddEntry} 
+              onCancel={handleCancelForm}
+            />
+          )}
+          
           {patient.entries.length > 0 ? (
             <ul>
               {patient.entries.map((entry) => (
@@ -63,7 +85,6 @@ const PatientInfo = () => {
             <p>No entries available.</p>
           )}
         </div>
-
       ) : (
         <p>Loading patient information...</p>
       )}
