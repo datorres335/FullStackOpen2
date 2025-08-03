@@ -49,7 +49,7 @@ const PatientInfo = () => {
     setError('');
   };
 
-  if (error) {
+  if (error && !showForm) {
     return <div style={{ color: 'red' }}>Error: {error}</div>;
   }
 
@@ -72,6 +72,7 @@ const PatientInfo = () => {
             <NewEntryForm 
               onSubmit={handleAddEntry} 
               onCancel={handleCancelForm}
+              error={error}
             />
           )}
           

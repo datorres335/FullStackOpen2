@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import patientService from '../services/patientService';
 import { NewPatientEntry, NonSensitivePatientEntry, PatientEntry, Entry } from '../types';
 import { newPatientEntrySchema } from '../utils/toNewPatientEntry';
+import { newEntrySchema } from '../utils/toNewEntry';
 import z from 'zod';
 
 const router = express.Router();
@@ -29,9 +30,25 @@ const newPatientParser = (req: Request, _res: Response, next: NextFunction) => {
   }
 };
 
+const newEntryParser = (req: Request, _res: Response, next: NextFunction) => {
+  try {
+    const validatedData = newEntrySchema.parse(req.body);
+    req.body = validatedData; // Replace with validated data
+    next();
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
 const errorMiddleware = (error: unknown, _req: Request, res: Response, next: NextFunction) => {
   if (error instanceof z.ZodError) {
-    res.status(400).send({ error: error.issues });
+    res.status(400).send({ 
+      error: "Validation failed", 
+      details: error.issues.map(issue => ({
+        field: issue.path.join('.'),
+        message: issue.message
+      }))
+    });
   } else {
     next(error);
   }
@@ -42,18 +59,22 @@ router.post('/', newPatientParser, (req: Request<unknown, unknown, NewPatientEnt
   res.json(addedEntry);
 });
 
-router.post('/:id/entries', (
+router.post('/:id/entries', newEntryParser, (
   req: Request<{ id: string }, Entry, Omit<Entry, 'id'>>,
   res: Response<Entry | { error: string }>
 ) => {
-  const patient = patientService.findById(req.params.id);
-  if (!patient) {
-    return res.status(404).send({ error: 'Patient not found' });
-  }
+  try {
+    const patient = patientService.findById(req.params.id);
+    if (!patient) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
 
-  const newEntry = req.body;
-  const addedEntry = patientService.addEntry(patient, newEntry);
-  return res.status(201).send(addedEntry);
+    const newEntry = req.body;
+    const addedEntry = patientService.addEntry(patient, newEntry);
+    return res.status(201).json(addedEntry);
+  } catch (error) {
+    return res.status(500).json({ error: 'Internal server error: ' + error });
+  }
 });
 
 router.use(errorMiddleware);

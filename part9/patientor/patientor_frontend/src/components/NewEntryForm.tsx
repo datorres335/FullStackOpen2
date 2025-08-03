@@ -4,9 +4,10 @@ import { Entry, Diagnosis, HealthCheckRating, HealthCheckEntry, HospitalEntry, O
 interface Props {
   onSubmit: (entry: Omit<Entry, 'id'>) => void;
   onCancel: () => void;
+  error?: string;
 }
 
-const NewEntryForm = ({ onSubmit, onCancel }: Props) => {
+const NewEntryForm = ({ onSubmit, onCancel, error }: Props) => {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [specialist, setSpecialist] = useState("");
@@ -17,55 +18,79 @@ const NewEntryForm = ({ onSubmit, onCancel }: Props) => {
   const [employerName, setEmployerName] = useState("");
   const [sickLeave, setSickLeave] = useState<{ startDate: string; endDate: string }>({ startDate: "", endDate: "" });
 
-  const handleSubmit = (event: SyntheticEvent) => {
-  event.preventDefault();
-  
-  const baseEntry = {
-    description,
-    date,
-    specialist,
-    diagnosisCodes: diagnosisCodes.filter(code => code.trim() !== "")
+  const isValidDiagnosisCode = (code: string): boolean => {
+    return /^[A-Z]\d{2}(\.\d{1,2})?$/.test(code.trim());
   };
 
-  switch (type) {
-    case "HealthCheck": {
-      const healthCheckEntry: Omit<HealthCheckEntry, 'id'> = { 
-        ...baseEntry, 
-        type, 
-        healthCheckRating 
-      };
-      onSubmit(healthCheckEntry);
-      break;
-    }
-    case "Hospital": {
-      const hospitalEntry: Omit<HospitalEntry, 'id'> = { 
-        ...baseEntry, 
-        type, 
-        discharge 
-      };
-      onSubmit(hospitalEntry);
-      break;
-    }
-    case "OccupationalHealthcare": {
-      const occupationalEntry: Omit<OccupationalHealthcareEntry, 'id'> = { 
-        ...baseEntry, 
-        type, 
-        employerName,
-        ...(sickLeave.startDate && sickLeave.endDate && { sickLeave })
-      };
-      onSubmit(occupationalEntry);
-      break;
-    }
-    default:
+  const handleSubmit = (event: SyntheticEvent) => {
+    event.preventDefault();
+
+    const validDiagnosisCodes = diagnosisCodes.filter(code => {
+      const trimmedCode = code.trim();
+      return trimmedCode !== "" && isValidDiagnosisCode(trimmedCode);
+    });
+
+    // Check if any invalid codes were entered
+    const invalidCodes = diagnosisCodes.filter(code => {
+      const trimmedCode = code.trim();
+      return trimmedCode !== "" && !isValidDiagnosisCode(trimmedCode);
+    });
+
+    if (invalidCodes.length > 0) {
+      alert(`Invalid diagnosis codes: ${invalidCodes.join(', ')}. Please use format like M24.2, Z57.1`);
       return;
-  }
-};
+    }
+
+    const baseEntry = {
+      description,
+      date,
+      specialist,
+      diagnosisCodes: validDiagnosisCodes
+    };
+
+    switch (type) {
+      case "HealthCheck": {
+        const healthCheckEntry: Omit<HealthCheckEntry, 'id'> = { 
+          ...baseEntry, 
+          type, 
+          healthCheckRating 
+        };
+        onSubmit(healthCheckEntry);
+        break;
+      }
+      case "Hospital": {
+        const hospitalEntry: Omit<HospitalEntry, 'id'> = { 
+          ...baseEntry, 
+          type, 
+          discharge 
+        };
+        onSubmit(hospitalEntry);
+        break;
+      }
+      case "OccupationalHealthcare": {
+        const occupationalEntry: Omit<OccupationalHealthcareEntry, 'id'> = { 
+          ...baseEntry, 
+          type, 
+          employerName,
+          ...(sickLeave.startDate && sickLeave.endDate && { sickLeave })
+        };
+        onSubmit(occupationalEntry);
+        break;
+      }
+      default:
+        return;
+    }
+  };
 
   return (
     <div>
       <h2>Add New Entry</h2>
+      {error && (
+        <div style={{ color: 'red', marginBottom: '1rem', padding: '0.5rem', backgroundColor: '#ffe6e6', border: '1px solid #ff0000' }}>
+          <strong>Error:</strong> {error}
+        </div>
+      )}
       <form onSubmit={handleSubmit}>
-        {/* Entry Type Selection */}
         <div>
           <label>Entry Type</label>
           <select 
@@ -77,8 +102,6 @@ const NewEntryForm = ({ onSubmit, onCancel }: Props) => {
             <option value="OccupationalHealthcare">Occupational Healthcare</option>
           </select>
         </div>
-
-        {/* Common Fields */}
         <div>
           <label>Description</label>
           <input
@@ -116,7 +139,6 @@ const NewEntryForm = ({ onSubmit, onCancel }: Props) => {
           />
         </div>
 
-        {/* Type-specific Fields */}
         {type === "HealthCheck" && (
           <div>
             <label>Health Check Rating</label>
