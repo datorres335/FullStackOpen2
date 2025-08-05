@@ -12,19 +12,6 @@ import About from './components/About'
 import Footer from './components/Footer'
 import Notification from './components/Notification'
 
-// const Menu = () => {
-//   const padding = {
-//     paddingRight: 5
-//   }
-//   return (
-//     <div>
-//       <a href='#' style={padding}>anecdotes</a>
-//       <a href='#' style={padding}>create new</a>
-//       <a href='#' style={padding}>about</a>
-//     </div>
-//   )
-// }
-
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -53,17 +40,6 @@ const App = () => {
 
   const anecdoteById = (id) =>
     anecdotes.find(a => a.id === id)
-
-  // const vote = (id) => { // HAVE NOT IMPLEMENTED
-  //   const anecdote = anecdoteById(id)
-
-  //   const voted = {
-  //     ...anecdote,
-  //     votes: anecdote.votes + 1
-  //   }
-
-  //   setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
-  // }
   
   const padding = {
     paddingRight: 5

@@ -1,44 +1,37 @@
-import { defineConfig } from "eslint/config";
-import react from "eslint-plugin-react";
-import reactNative from "eslint-plugin-react-native";
-import babelParser from "@babel/eslint-parser";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+import globals from "globals";
+import pluginReact from "eslint-plugin-react";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all
-});
-
-export default defineConfig([{
-    extends: compat.extends("eslint:recommended", "plugin:react/recommended"),
-
-    plugins: {
-        react,
-        "react-native": reactNative,
-    },
-
-    languageOptions: {
-        globals: {
-            ...reactNative.environments["react-native"]["react-native"],
-        },
-
-        parser: babelParser,
-    },
-
+export default [
+  { files: ["**/*.js"], languageOptions: { sourceType: "commonjs" } },
+  { 
+    files: ["**/*.{js,mjs,cjs,jsx}"], 
+    languageOptions: { 
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        __DEV__: "readonly"
+      },
+      ecmaVersion: 2022,
+      sourceType: "module",
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true
+        }
+      }
+    }
+  },
+  {
+    ...pluginReact.configs.flat.recommended,
     settings: {
-        react: {
-            version: "detect",
-        },
+      react: {
+        version: "detect"
+      }
     },
-
     rules: {
-        "react/prop-types": "off",
-        "react/react-in-jsx-scope": "off",
-    },
-}]);
+      ...pluginReact.configs.flat.recommended.rules,
+      "react/react-in-jsx-scope": "off",
+      "react/jsx-uses-react": "off",
+      "react/prop-types": "off"
+    }
+  }
+];

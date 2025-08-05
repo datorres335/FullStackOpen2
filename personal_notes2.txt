@@ -363,9 +363,35 @@ npm install zod // Zod is a TypeScript-first validation library. Using Zod, you 
 npm create vite@latest my-app-name -- --template react-ts // Creates a new React project with typescript?
 
 
+PART 10 - React Native -------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
+//NOTE: you might have to switch to Node version 20 is order to get your scripts in this project to work
+npx create-expo-app rate-repository-app --template expo-template-blank@sdk-50 // Uses Expo to create a React Native app
+npx expo install react-native-web@~0.19.6 react-dom@18.2.0 @expo/metro-runtime@~3.1.1 // after you've created the project with the previous command, 
+	navigate to the created rate-repository-app directory with the terminal and install these dependencies we'll be needing
+npm install --save-dev eslint @babel/eslint-parser eslint-plugin-react eslint-plugin-react-native
 
+To run your project, navigate to the directory and run one of the following npm commands:
+- cd rate-repository-app
+- npm run android
+- npm run ios # you need to use macOS to build the iOS project - use the Expo app if you need to do iOS development without a Mac
+- npm run web
 
+npm start // NOTE!!!: if this script doesn't work, it is most likely your Node version. In case of problems, switch to version 20
 
+To start emulator manually from VSCode terminal:
+	emulator -avd Pixel_9_Pro_XL_API_VanillaIceCream
+	npx expo start
+	Then press a to launch the app on the Android emulator.
+		//Note you can see all the available emulators you have downloaded with -> emulator -list-avds
+		// To download other emulators you must do it through Android Studio
+
+npm run lint // need to add this script -> "lint": "eslint ./src/**/*.{js,jsx} App.js --no-error-on-unmatched-pattern"
+
+npx react-devtools // used for debugging
+	// can read more about debugging here -> https://reactnative.dev/docs/debugging
+		and https://reactnative.dev/docs/react-native-devtools
+		and https://docs.expo.dev/debugging/runtime-issues/
 
 
 
