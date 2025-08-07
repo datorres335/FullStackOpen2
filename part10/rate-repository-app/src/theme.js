@@ -6,6 +6,7 @@ const theme = {
     primary: '#0366d6',
     backgroundColor: '#24292e',
     inputBorderColor: '#d0d7de',
+    errorState: '#d73a4a',
   },
   fontSizes: {
     body: 14,

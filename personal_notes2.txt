@@ -395,6 +395,17 @@ npx react-devtools // used for debugging
 
 npm install react-router-native // Routing used specifically for React Native apps
 
+// https://formik.org/docs/overview
+npm install formik 
+	// Formik helps you manage forms by handling things like:
+		- Form state (values)
+		- Validation
+		- Error messages
+		- Input change handling
+		- Form submission
+		It's especially helpful for complex forms with lots of inputs, validation rules, and conditional logic.
+npm install yup // a validation schema used 
+
 
 
 
