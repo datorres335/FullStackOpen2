@@ -393,6 +393,8 @@ npx react-devtools // used for debugging
 		and https://reactnative.dev/docs/react-native-devtools
 		and https://docs.expo.dev/debugging/runtime-issues/
 
+npm install react-router-native // Routing used specifically for React Native apps
+
 
 
 
