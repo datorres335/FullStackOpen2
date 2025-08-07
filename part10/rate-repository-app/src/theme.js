@@ -5,6 +5,7 @@ const theme = {
     textWhite: '#ffffff',
     primary: '#0366d6',
     backgroundColor: '#24292e',
+    inputBorderColor: '#d0d7de',
   },
   fontSizes: {
     body: 14,

@@ -6,7 +6,12 @@ import Main from './src/components/Main';
 const App = () => {
   return (
     <>
-      <NativeRouter>
+      <NativeRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
         <Main />
       </NativeRouter>
       <StatusBar style="auto" />
