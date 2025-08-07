@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,6 +15,11 @@ const styles = StyleSheet.create({
   avatarContainer: {
     flexGrow: 0, // Defines how much a child should grow relative to other children: 0 - Don't grow (maintain original size) - default
     marginRight: 15,
+  },
+  avatarImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 10,
   },
   contentContainer: {
     flexGrow: 1, // Defines how much a child should grow relative to other children: 1 - Take up remaining space after other flex items have been laid out
@@ -71,44 +76,58 @@ const formatCount = (count) => {
   return count.toString();
 };
 
+const Header = ({ repository }) => {
+  return (
+    <View style={styles.headerContainer}>
+      <View style={styles.avatarContainer}>
+        <Image source={{ uri: repository.ownerAvatarUrl }} style={styles.avatarImage} />
+      </View>
+      <View style={styles.contentContainer}>
+        <Text style={styles.nameText}>{repository.fullName}</Text>
+        <Text style={styles.descriptionText}>{repository.description}</Text>
+        <View style={styles.languageContainer}>
+          <Text style={styles.languageText}>{repository.language}</Text>
+        </View>
+      </View>
+      <View style={styles.contentContainer}>
+        <Text style={styles.nameText}>{repository.fullName}</Text>
+        <Text style={styles.descriptionText}>{repository.description}</Text>
+        <View style={styles.languageContainer}>
+          <Text style={styles.languageText}>{repository.language}</Text>
+        </View>
+      </View>
+    </View>
+  )
+}
+
+const Stats = ({ repository }) => {
+  return (
+    <View style={styles.statsContainer}>
+      <View style={styles.statItem}>
+        <Text style={styles.statNumber}>{formatCount(repository.stargazersCount)}</Text>
+        <Text style={styles.statLabel}>Stars</Text>
+      </View>
+      <View style={styles.statItem}>
+        <Text style={styles.statNumber}>{formatCount(repository.forksCount)}</Text>
+        <Text style={styles.statLabel}>Forks</Text>
+      </View>
+      <View style={styles.statItem}>
+        <Text style={styles.statNumber}>{repository.reviewCount}</Text>
+        <Text style={styles.statLabel}>Reviews</Text>
+      </View>
+      <View style={styles.statItem}>
+        <Text style={styles.statNumber}>{repository.ratingAverage}</Text>
+        <Text style={styles.statLabel}>Rating</Text>
+      </View>
+    </View>
+  )
+}
+
 const RepositoryItem = ({ repository }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <View style={styles.contentContainer}>
-          <Text style={styles.nameText}>{repository.fullName}</Text>
-          <Text style={styles.descriptionText}>{repository.description}</Text>
-          <View style={styles.languageContainer}>
-            <Text style={styles.languageText}>{repository.language}</Text>
-          </View>
-        </View>
-        <View style={styles.contentContainer}>
-          <Text style={styles.nameText}>{repository.fullName}</Text>
-          <Text style={styles.descriptionText}>{repository.description}</Text>
-          <View style={styles.languageContainer}>
-            <Text style={styles.languageText}>{repository.language}</Text>
-          </View>
-        </View>
-      </View>
-      
-      <View style={styles.statsContainer}>
-        <View style={styles.statItem}>
-          <Text style={styles.statNumber}>{formatCount(repository.stargazersCount)}</Text>
-          <Text style={styles.statLabel}>Stars</Text>
-        </View>
-        <View style={styles.statItem}>
-          <Text style={styles.statNumber}>{formatCount(repository.forksCount)}</Text>
-          <Text style={styles.statLabel}>Forks</Text>
-        </View>
-        <View style={styles.statItem}>
-          <Text style={styles.statNumber}>{repository.reviewCount}</Text>
-          <Text style={styles.statLabel}>Reviews</Text>
-        </View>
-        <View style={styles.statItem}>
-          <Text style={styles.statNumber}>{repository.ratingAverage}</Text>
-          <Text style={styles.statLabel}>Rating</Text>
-        </View>
-      </View>
+      <Header repository={repository} />
+      <Stats repository={repository} />
     </View>
   );
 };
