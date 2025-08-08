@@ -406,8 +406,14 @@ npm install formik
 		It's especially helpful for complex forms with lots of inputs, validation rules, and conditional logic.
 npm install yup // a validation schema used 
 
+//scripts for React Native backend
+"build": "npm run migrate:latest" // this will setup the SQLite database and run the migrations
+"seed:run": "knex seed:run" // this will populate the database with some seed data. NOTE: running this command will remove all existing data
+"start": "node -r esm ./src/index.js" // after running the top two scripts, run this script
 
-
+npm install @apollo/client graphql
+npm install @expo/metro-config@0.17.4 //Before we can start using Apollo Client, we will need to slightly configure the Metro bundler so that it 	handles the .cjs file extensions used by the Apollo Client
+	// you must then add a metro.config.js file in the root directory and then restart the the Expo development tools
 
 
 
