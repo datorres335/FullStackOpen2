@@ -1,0 +1,6 @@
+{
+  "eslint.workingDirectories": [
+    "rate-repository-app",
+    "rate-repository-api"
+  ]
+}

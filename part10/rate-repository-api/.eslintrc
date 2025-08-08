@@ -1,0 +1,17 @@
+{
+  "extends": "eslint:recommended",
+  "parser": "@babel/eslint-parser",
+  "env": {
+    "node": true,
+    "es6": true,
+    "jest": true
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "requireConfigFile": false,
+    "babelOptions": {
+      "presets": [["@babel/preset-env", { "targets": { "node": "current" } }]]
+    }
+  },
+  "plugins": ["jest"]
+}
