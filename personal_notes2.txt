@@ -415,6 +415,11 @@ npm install @apollo/client graphql
 npm install @expo/metro-config@0.17.4 //Before we can start using Apollo Client, we will need to slightly configure the Metro bundler so that it 	handles the .cjs file extensions used by the Apollo Client
 	// you must then add a metro.config.js file in the root directory and then restart the the Expo development tools
 
+npm install expo-constants // provides system and app-level constants about the device and the running app environment. Useful since React Native 	doesn't have direct support for environment variables
+
+npx expo start --clear // If you make changes in configuration, the restart may not be enough. You may need to start the application with cache cleared
+
+npm install dotenv 
 
 
 

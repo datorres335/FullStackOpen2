@@ -29,6 +29,8 @@ const useRepositories = () => {
   const { data, loading, refetch } = useQuery(GET_REPOSITORIES, {
     fetchPolicy: 'cache-and-network',
   });
+  // console.log('Fetching repositories...');
+  // console.log(data);
 
   const repositories = data?.repositories;
 
