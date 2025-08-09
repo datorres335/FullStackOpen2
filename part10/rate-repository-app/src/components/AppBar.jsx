@@ -1,5 +1,8 @@
 import { View, StyleSheet, Pressable, Text, ScrollView } from 'react-native';
 import { Link } from 'react-router-native';
+import { useQuery } from '@apollo/client';
+import { ME } from '../graphql/queries';
+import useSignOut from '../hooks/useSignOut';
 import Constants from 'expo-constants';
 import theme from '../theme';
 
@@ -27,20 +30,39 @@ const styles = StyleSheet.create({
   },
 });
 
-const AppBarTab = ({ text, to }) => {
-  return (
-      <Link to={to} component={Pressable} style={styles.tab}>
+const AppBarTab = ({ text, to, onPress }) => {
+  if (onPress) {
+    return (
+      <Pressable style={styles.tab} onPress={onPress}>
         <Text style={styles.tabText}>{text}</Text>
-      </Link>
-  )
+      </Pressable>
+    );
+  }
+
+  return (
+    <Link to={to} component={Pressable} style={styles.tab}>
+      <Text style={styles.tabText}>{text}</Text>
+    </Link>
+  );
 };
 
 const AppBar = () => {
+  const { data } = useQuery(ME);
+  const signOut = useSignOut();
+
+  const handleSignOut = () => {
+    signOut();
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView horizontal>
         <AppBarTab text="Repositories" to="/" />
-        <AppBarTab text="Sign In" to="/signin" />
+        {data?.me ? (
+          <AppBarTab text="Sign Out" onPress={handleSignOut} />
+        ) : (
+          <AppBarTab text="Sign In" to="/signin" />
+        )}
       </ScrollView>
     </View>
   );
