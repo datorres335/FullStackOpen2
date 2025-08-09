@@ -5,28 +5,25 @@ import Constants from 'expo-constants';
 
 import Main from './src/components/Main';
 import createApolloClient from './src/utils/apolloClient';
+import AuthStorage from './src/utils/authStorage';
+import AuthStorageContext from './src/contexts/AuthStorageContext';
 
-const apolloClient = createApolloClient();
+const authStorage = new AuthStorage();
+const apolloClient = createApolloClient(authStorage);
 
 const App = () => {
   console.log("Expo config:", Constants.expoConfig);
 
   return (
     <>
-      <NativeRouter
-        future={{
-          v7_startTransition: true,
-          v7_relativeSplatPath: true,
-        }}
-      >
+      <NativeRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true, }} >
         <ApolloProvider client={apolloClient}>
-          <Main />
+            <AuthStorageContext.Provider value={authStorage}>
+              <Main />
+            </AuthStorageContext.Provider>
         </ApolloProvider>
       </NativeRouter>
       <StatusBar style="auto" />
-      {/* The StatusBar component is used to control the appearance of the status bar on iOS and Android devices. 
-          Here, it is set to 'auto', which means it will adapt to the current theme of the app. */}
-      {/* This is useful for ensuring that the status bar text color contrasts well with the background color of the app. */}
     </>
   );
 };
