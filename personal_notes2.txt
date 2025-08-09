@@ -421,7 +421,9 @@ npx expo start --clear // If you make changes in configuration, the restart may 
 
 npm install dotenv 
 
+npx expo install @react-native-async-storage/async-storage // a React Native library for persistent local storage — it lets you store simple key–value 	pairs on the device, even after the app is closed or restarted
 
+npx expo install expo-secure-store // SecureStore is similar persisted storage as the AsyncStorage but it encrypts the stored data. This makes it more 	suitable for storing more sensitive data such as the user's credit card number.
 
 
 
