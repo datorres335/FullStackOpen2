@@ -436,7 +436,7 @@ npm install --save-dev --legacy-peer-deps react-test-renderer@18.2.0 @testing-li
 npm install expo-linking // provides utilities for your app to interact with other installed apps using deep links. It also provides helper methods for 	constructing and parsing deep links into your app.
 	// if the peer depencendy issues prevent installing the library, try -> npm install expo-linking --legacy-peer-deps
 
-
+npm install date-fns // date-fns provides the most comprehensive, yet simple and consistent toolset for manipulating JavaScript dates in a browser & 	Node.js
 
 
 

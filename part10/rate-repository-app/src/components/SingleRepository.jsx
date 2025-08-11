@@ -1,7 +1,8 @@
 import { useParams } from 'react-router-native';
 import { useQuery } from '@apollo/client';
-import { View, StyleSheet } from 'react-native';
-import RepositoryItem from './RepositoryItem';
+import { View, StyleSheet, FlatList } from 'react-native';
+import RepositoryInfo from './RepositoryInfo';
+import ReviewItem from './ReviewItem';
 import Text from './Text';
 import { GET_REPOSITORY } from '../graphql/queries';
 import theme from '../theme';
@@ -25,7 +26,13 @@ const styles = StyleSheet.create({
     color: theme.colors.errorState,
     fontSize: theme.fontSizes.subheading,
   },
+  separator: {
+    height: 10,
+    backgroundColor: theme.colors.backgroundColor,
+  },
 });
+
+const ItemSeparator = () => <View style={styles.separator} />;
 
 const SingleRepository = () => {
   const { repositoryId } = useParams();
@@ -61,10 +68,17 @@ const SingleRepository = () => {
     );
   }
 
+  const reviews = repository.reviews.edges.map(edge => edge.node);
+
   return (
-    <View style={styles.container}>
-      <RepositoryItem repository={repository} showGitHubButton={true} />
-    </View>
+    <FlatList
+      style={styles.container}
+      data={reviews}
+      renderItem={({ item }) => <ReviewItem review={item} />}
+      keyExtractor={({ id }) => id}
+      ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
+      ItemSeparatorComponent={ItemSeparator}
+    />
   );
 };
 
