@@ -74,23 +74,7 @@ const validationSchema = yup.object().shape({
     .required('Password is required'),
 });
 
-const SignIn = () => {
-  const [signIn] = useSignIn();
-  const navigate = useNavigate();
-
-  const onSubmit = async (values) => {
-    const { username, password } = values;
-
-    try {
-      const { data } = await signIn({ username, password });
-      console.log('Sign In successful:', data);
-
-      navigate('/');
-    } catch (e) {
-      console.log('Sign In failed:', e);
-    }
-  };
-
+export const SignInContainer = ({ onSubmit }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign In</Text>
@@ -114,6 +98,7 @@ const SignIn = () => {
               autoCapitalize="none"
               autoCorrect={false}
               error={touched.username && errors.username}
+              testID='usernameField'
             />
             {touched.username && errors.username && (
               <Text style={styles.errorText}>{errors.username}</Text>
@@ -132,18 +117,41 @@ const SignIn = () => {
               autoCapitalize="none"
               autoCorrect={false}
               error={touched.password && errors.password}
+              testID='passwordField'
             />
             {touched.password && errors.password && (
               <Text style={styles.errorText}>{errors.password}</Text>
             )}
             
-            <Pressable style={styles.button} onPress={handleSubmit}>
+            <Pressable style={styles.button} onPress={handleSubmit} testID='submitButton'>
               <Text style={styles.buttonText}>Sign In</Text>
             </Pressable>
           </View>
         )}
       </Formik>
     </View>
+  )
+};
+
+const SignIn = () => {
+  const [signIn] = useSignIn();
+  const navigate = useNavigate();
+
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+
+    try {
+      const { data } = await signIn({ username, password });
+      console.log('Sign In successful:', data);
+
+      navigate('/');
+    } catch (e) {
+      console.log('Sign In failed:', e);
+    }
+  };
+
+  return (
+    <SignInContainer onSubmit={onSubmit} />
   );
 };
 

@@ -53,7 +53,6 @@ describe('RepositoryList', () => {
       const repositoryItems = screen.getAllByTestId('repositoryItem');
       const [firstRepositoryItem, secondRepositoryItem] = repositoryItems;
 
-      // Test first repository (jaredpalmer/formik)
       expect(firstRepositoryItem).toHaveTextContent(/jaredpalmer\/formik/);
       expect(firstRepositoryItem).toHaveTextContent(/Build forms in React, without the tears/);
       expect(firstRepositoryItem).toHaveTextContent(/TypeScript/);
@@ -62,7 +61,6 @@ describe('RepositoryList', () => {
       expect(firstRepositoryItem).toHaveTextContent(/88/);
       expect(firstRepositoryItem).toHaveTextContent(/3/);
 
-      // Test second repository (async-library/react-async)
       expect(secondRepositoryItem).toHaveTextContent(/async-library\/react-async/);
       expect(secondRepositoryItem).toHaveTextContent(/Flexible promise-based React data loader/);
       expect(secondRepositoryItem).toHaveTextContent(/JavaScript/);
