@@ -433,6 +433,9 @@ npm install --save-dev --legacy-peer-deps react-test-renderer@18.2.0 @testing-li
 	// If you face peer dependency issues, make sure that the react-test-renderer version matches the project's React version in the npm install 		command above. You can check the React version by running npm list react --depth=0.
 	// If the installation fails due to peer dependency issues, try again using the --legacy-peer-deps flag with the npm install command.
 
+npm install expo-linking // provides utilities for your app to interact with other installed apps using deep links. It also provides helper methods for 	constructing and parsing deep links into your app.
+	// if the peer depencendy issues prevent installing the library, try -> npm install expo-linking --legacy-peer-deps
+
 
 
 

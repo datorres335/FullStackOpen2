@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable, Linking } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -67,6 +67,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#586069',
   },
+  githubButton: {
+    backgroundColor: '#0366d6',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 15,
+  },
+  githubButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
 
 const formatCount = (count) => {
@@ -90,8 +103,8 @@ const Header = ({ repository }) => {
         </View>
       </View>
     </View>
-  )
-}
+  );
+};
 
 const Stats = ({ repository }) => {
   return (
@@ -113,14 +126,27 @@ const Stats = ({ repository }) => {
         <Text style={styles.statLabel}>Rating</Text>
       </View>
     </View>
-  )
-}
+  );
+};
 
-const RepositoryItem = ({ repository }) => {
+const GitHubButton = ({ repository }) => {
+  const handlePress = () => {
+    Linking.openURL(repository.url);
+  };
+
+  return (
+    <Pressable style={styles.githubButton} onPress={handlePress}>
+      <Text style={styles.githubButtonText}>Open in GitHub</Text>
+    </Pressable>
+  );
+};
+
+const RepositoryItem = ({ repository, showGitHubButton = false }) => {
   return (
     <View testID="repositoryItem" style={styles.container}>
       <Header repository={repository} />
       <Stats repository={repository} />
+      {showGitHubButton && <GitHubButton repository={repository} />}
     </View>
   );
 };

@@ -1,6 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import { Route, Routes, Navigate } from 'react-router-native';
 import RepositoryList from './RepositoryList';
+import SingleRepository from './SingleRepository';
 import SignIn from './SignIn';
 import AppBar from './AppBar';
 import theme from '../theme';
@@ -20,6 +21,7 @@ const Main = () => {
       <Routes>
         <Route path='/' element={<RepositoryList />} />
         <Route path='/signin' element={<SignIn />} />
+        <Route path="/repositories/:repositoryId" element={<SingleRepository />} />
         <Route path="*" element={<Navigate to="/" replace />} /> {/* This last Route is for catching paths that don't match any previously defined path */}
       </Routes>
     </View>

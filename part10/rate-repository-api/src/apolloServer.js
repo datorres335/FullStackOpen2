@@ -47,6 +47,9 @@ const createApolloServer = () => {
         dataLoaders,
       };
     },
+    // Enable GraphQL Playground/Studio
+    introspection: true,
+    playground: true, // For older versions
   });
 };
 

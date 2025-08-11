@@ -14,5 +14,6 @@ export const REPOSITORY_FIELDS = gql`
     description
     language
     ownerAvatarUrl
+    url
   }
 `;
