@@ -89,13 +89,6 @@ const Header = ({ repository }) => {
           <Text style={styles.languageText}>{repository.language}</Text>
         </View>
       </View>
-      <View style={styles.contentContainer}>
-        <Text style={styles.nameText}>{repository.fullName}</Text>
-        <Text style={styles.descriptionText}>{repository.description}</Text>
-        <View style={styles.languageContainer}>
-          <Text style={styles.languageText}>{repository.language}</Text>
-        </View>
-      </View>
     </View>
   )
 }
@@ -125,7 +118,7 @@ const Stats = ({ repository }) => {
 
 const RepositoryItem = ({ repository }) => {
   return (
-    <View style={styles.container}>
+    <View testID="repositoryItem" style={styles.container}>
       <Header repository={repository} />
       <Stats repository={repository} />
     </View>

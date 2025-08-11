@@ -425,7 +425,13 @@ npx expo install @react-native-async-storage/async-storage // a React Native lib
 
 npx expo install expo-secure-store // SecureStore is similar persisted storage as the AsyncStorage but it encrypts the stored data. This makes it more 	suitable for storing more sensitive data such as the user's credit card number.
 
+npm install --save-dev jest jest-expo eslint-plugin-jest // Testing React Native applications
+	// must configure frontend's package.json to use jest
+		// please refer to https://fullstackopen.com/en/part10/testing_and_extending_our_application  for configuration details
 
+npm install --save-dev --legacy-peer-deps react-test-renderer@18.2.0 @testing-library/react-native @testing-library/jest-native
+	// If you face peer dependency issues, make sure that the react-test-renderer version matches the project's React version in the npm install 		command above. You can check the React version by running npm list react --depth=0.
+	// If the installation fails due to peer dependency issues, try again using the --legacy-peer-deps flag with the npm install command.
 
 
 

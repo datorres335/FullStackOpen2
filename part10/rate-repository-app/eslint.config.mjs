@@ -1,5 +1,6 @@
 import globals from "globals";
 import pluginReact from "eslint-plugin-react";
+import pluginJest from "eslint-plugin-jest";
 
 export default [
   { files: ["**/*.js"], languageOptions: { sourceType: "commonjs" } },
@@ -32,6 +33,15 @@ export default [
       "react/react-in-jsx-scope": "off",
       "react/jsx-uses-react": "off",
       "react/prop-types": "off"
+    }
+  },
+  {
+    files: ["**/*.test.{js,jsx}", "**/*.spec.{js,jsx}", "**/__tests__/**/*.{js,jsx}"],
+    ...pluginJest.configs['flat/recommended'],
+    languageOptions: {
+      globals: {
+        ...globals.jest
+      }
     }
   }
 ];
