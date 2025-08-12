@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import theme from '../theme';
 
@@ -7,6 +7,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 15,
     paddingVertical: 10,
+  },
+  searchInput: {
+    backgroundColor: '#f6f8fa',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#d1d5da',
+    padding: 12,
+    fontSize: 16,
+    marginBottom: 10,
   },
   picker: {
     backgroundColor: '#f6f8fa',
@@ -20,9 +29,23 @@ const styles = StyleSheet.create({
   },
 });
 
-const RepositoryListHeader = ({ selectedOrder, onOrderChange }) => {
+const RepositoryListHeader = ({ 
+  selectedOrder, 
+  onOrderChange, 
+  searchKeyword, 
+  onSearchKeywordChange 
+}) => {
   return (
     <View style={styles.container}>
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Search repositories..."
+        placeholderTextColor="#999999"
+        value={searchKeyword}
+        onChangeText={onSearchKeywordChange}
+        autoCapitalize="none"
+        autoCorrect={false}
+      />
       <Picker
         selectedValue={selectedOrder}
         onValueChange={onOrderChange}

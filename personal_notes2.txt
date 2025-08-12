@@ -440,7 +440,7 @@ npm install date-fns // date-fns provides the most comprehensive, yet simple and
 
 npm install @react-native-picker/picker // a React Native library that provides a cross-platform dropdown (picker/select) UI component, similar to the 	<select> element in HTML.
 
-
+npm install use-debounce // To avoid a multitude of unnecessary requests while the user types the keyword fast, only pick the latest input after a 	short delay. This technique is often referred to as debouncing
 
 
 
