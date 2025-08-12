@@ -438,6 +438,11 @@ npm install expo-linking // provides utilities for your app to interact with oth
 
 npm install date-fns // date-fns provides the most comprehensive, yet simple and consistent toolset for manipulating JavaScript dates in a browser & 	Node.js
 
+npm install @react-native-picker/picker // a React Native library that provides a cross-platform dropdown (picker/select) UI component, similar to the 	<select> element in HTML.
+
+
+
+
 
 
 
