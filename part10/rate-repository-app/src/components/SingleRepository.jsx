@@ -5,6 +5,7 @@ import RepositoryInfo from './RepositoryInfo';
 import ReviewItem from './ReviewItem';
 import Text from './Text';
 import { GET_REPOSITORY } from '../graphql/queries';
+import useRepository from '../hooks/useRepository';
 import theme from '../theme';
 
 const styles = StyleSheet.create({
@@ -36,11 +37,12 @@ const ItemSeparator = () => <View style={styles.separator} />;
 
 const SingleRepository = () => {
   const { repositoryId } = useParams();
+  const { repository, loading, fetchMore } = useRepository(repositoryId, 3);
   
-  const { data, loading, error } = useQuery(GET_REPOSITORY, {
-    variables: { repositoryId },
-    fetchPolicy: 'cache-and-network',
-  });
+  // const { data, loading, error } = useQuery(GET_REPOSITORY, {
+  //   variables: { repositoryId },
+  //   fetchPolicy: 'cache-and-network',
+  // });
 
   if (loading) {
     return (
@@ -50,15 +52,15 @@ const SingleRepository = () => {
     );
   }
 
-  if (error) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text style={styles.errorText}>Error loading repository</Text>
-      </View>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <View style={styles.loadingContainer}>
+  //       <Text style={styles.errorText}>Error loading repository</Text>
+  //     </View>
+  //   );
+  // }
 
-  const repository = data?.repository;
+  // const repository = data?.repository;
 
   if (!repository) {
     return (
@@ -68,7 +70,16 @@ const SingleRepository = () => {
     );
   }
 
-  const reviews = repository.reviews.edges.map(edge => edge.node);
+  // const reviews = repository.reviews.edges.map(edge => edge.node);
+
+    const reviews = repository.reviews
+    ? repository.reviews.edges.map(edge => edge.node)
+    : [];
+
+  const onEndReach = () => {
+    console.log('🏁 onEndReach called!');
+    fetchMore();
+  };
 
   return (
     <FlatList
@@ -78,6 +89,8 @@ const SingleRepository = () => {
       keyExtractor={({ id }) => id}
       ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
       ItemSeparatorComponent={ItemSeparator}
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
     />
   );
 };

@@ -67,7 +67,7 @@ export class RepositoryListContainer extends React.Component {
 
 const RepositoryList = () => {
   const [selectedOrder, setSelectedOrder] = useState('latest');
-    const [searchKeyword, setSearchKeyword] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState('');
   const navigate = useNavigate();
 
   // Debounce the search keyword with 300ms delay
@@ -92,7 +92,14 @@ const RepositoryList = () => {
     searchKeyword: debouncedSearchKeyword || undefined,
   };
 
-  const { repositories, loading } = useRepositories(variables);
+  const { repositories, fetchMore } = useRepositories({
+    first: 8,
+    ...variables,
+  });
+
+  const onEndReach = () => {
+    fetchMore();
+  };
 
   const onOrderChange = (order) => {
     setSelectedOrder(order);
@@ -110,6 +117,7 @@ const RepositoryList = () => {
       searchKeyword={searchKeyword}
       onSearchKeywordChange={onSearchKeywordChange}
       navigate={navigate}
+      onEndReach={onEndReach}
     />
   );
 };
