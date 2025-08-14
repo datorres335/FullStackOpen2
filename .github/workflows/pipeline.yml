@@ -26,3 +26,9 @@ jobs:
       - name: Check style
         working-directory: ./part11/full-stack-open-pokedex
         run: npm run eslint
+      - name: Build
+        working-directory: ./part11/full-stack-open-pokedex
+        run: npm run build
+      - name: Test
+        working-directory: ./part11/full-stack-open-pokedex
+        run: npm test
