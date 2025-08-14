@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'part11/full-stack-open-pokedex/**'
+      - '.github/workflows/**' 
     branches:
       - main
 
