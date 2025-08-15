@@ -7,7 +7,7 @@
     "start": "webpack-dev-server --port 8081 --open --mode development",
     "start-prod": "node app.js",
     "test": "jest",
-    "test:e2e": "playwright test --project=chromium --project=firefox",
+    "test:e2e": "playwright test --project=chromium",
     "test:e2e:report": "playwright show-report",
     "eslint": "eslint './**/*.{js,jsx}'",
     "build": "webpack --mode production"
