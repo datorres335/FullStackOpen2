@@ -16,10 +16,13 @@ jobs:
       with:
         node-version: '20'
     - name: Install dependencies
+      working-directory: ./part11/full-stack-open-pokedex
       run: npm install
     - name: Install Playwright Browsers
+      working-directory: ./part11/full-stack-open-pokedex
       run: npx playwright install --with-deps
     - name: Run Playwright tests
+      working-directory: ./part11/full-stack-open-pokedex
       run: npm run test:e2e
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
