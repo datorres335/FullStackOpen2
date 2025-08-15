@@ -29,6 +29,6 @@ jobs:
       - name: Build
         working-directory: ./part11/full-stack-open-pokedex
         run: npm run build
-      - name: Test
+      - name: Unit Test
         working-directory: ./part11/full-stack-open-pokedex
         run: npm test
