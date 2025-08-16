@@ -1,4 +1,5 @@
 name: CI/CD Pipeline
+
 on:
   push:
     paths:
@@ -9,6 +10,10 @@ on:
   pull_request:
     branches: [main]
     types: [opened, synchronize]
+
+
+env:
+  SKIP_DEPLOYMENT: ${{ github.event_name == 'push' && contains(join(github.event.commits.*.message, ' '), '#skip') }}
 
 jobs:
   # Build, lint, and unit test
@@ -74,11 +79,11 @@ jobs:
           path: ./part11/full-stack-open-pokedex/playwright-report/
           retention-days: 30
 
-  # Version tagging (only on push to main, after tests pass)
+  # Version tagging (only on push to main, after tests pass, and if not skipped)
   tag_release:
     needs: [build_and_test, e2e_tests]
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' && github.env.SKIP_DEPLOYMENT == 'false' }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -91,11 +96,11 @@ jobs:
           DEFAULT_BUMP: patch
           DRY_RUN: false
 
-  # Deploy to Render (only on push to main, after tests pass)
+  # Deploy to Render (only on push to main, after tests pass, and if not skipped)
   deploy:
     needs: [build_and_test, e2e_tests]
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' && github.env.SKIP_DEPLOYMENT == 'false' }}
     steps:
       - name: Trigger deployment
         uses: sws2apps/render-deployment@main
