@@ -7,6 +7,9 @@ on:
       - '.github/workflows/**' 
     branches:
       - main
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
 
 jobs:
   simple_deployment_pipeline:
