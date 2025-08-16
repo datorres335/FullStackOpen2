@@ -183,7 +183,7 @@ npx vitest run TestFile.test.jsx
 npx vitest run TestFile.test.jsx --reporter=verbose
 
 npm init playwright@latest // for E2E (end to end) testing
-	//install this project in its own directory separated from the frontend/backend directories
+	//install this project in its own directory separated from the frontend/backend directories??
 	//when installing package answer the questions with the following answers:
 		//Do you want to use TypeScript or JavaScript? Javascript
 		//Where to put your end-to-end tests? tests
@@ -443,17 +443,13 @@ npm install @react-native-picker/picker // a React Native library that provides 
 npm install use-debounce // To avoid a multitude of unnecessary requests while the user types the keyword fast, only pick the latest input after a 	short delay. This technique is often referred to as debouncing
 
 
+Part 11 - CI/CD --------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
+git pull --rebase origin main // The --rebase option tells Git to move all of the developer's commits to the tip of the main branch after synchronising 	it with	the changes from the central repository
 
-
-
-
-
-
-
-
-
-
-
+git commit -m "Fix typo #skip" // Skips deployment (any commit with #skip triggers skip)
+	// please refer to exercise 11.16 on how to set up this #skip trigger
+	// https://fullstackopen.com/en/part11/keeping_green
 
 
 
