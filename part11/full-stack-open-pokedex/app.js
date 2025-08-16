@@ -11,6 +11,8 @@ app.get('/version', (req, res) => {
 })
 
 app.get('/health', (req, res) => {
+  // eslint-disable-next-line no-constant-condition
+  if (true) throw('error...  ') // temp health check to simulate a broken deployment, FIX WHEN DONE!!!
   res.send('ok') // health check endpoint
 })
 
