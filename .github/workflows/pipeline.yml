@@ -89,7 +89,7 @@ jobs:
       #     path: ./part11/full-stack-open-pokedex/playwright-report/
       #     retention-days: 30
 
-  # Version tagging (only on push to main, after tests pass, and if not skipped)
+  # Version tagging (only on push to main, after tests pass, and if not skipped) 
   tag_release:
     needs: [build_and_test, e2e_tests]
     runs-on: ubuntu-latest
