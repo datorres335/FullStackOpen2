@@ -14,8 +14,8 @@ on:
       - 'part11/full-stack-open-pokedex/**'
       - '.github/workflows/**'
 
-env:
-  SKIP_DEPLOYMENT: ${{ github.event_name == 'push' && github.event.commits != null && contains(join(github.event.commits.*.message, ' '), '#skip') }}
+# env:
+#   SKIP_DEPLOYMENT: ${{ github.event_name == 'push' && github.event.commits != null && contains(join(github.event.commits.*.message, ' '), '#skip') }}
 
 jobs:
   # Build, lint, and unit test
@@ -93,7 +93,7 @@ jobs:
   tag_release:
     needs: [build_and_test, e2e_tests]
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' && github.env.SKIP_DEPLOYMENT == 'false' }}
+    if: ${{ github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -110,7 +110,7 @@ jobs:
   deploy:
     needs: [build_and_test, e2e_tests]
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' && github.env.SKIP_DEPLOYMENT == 'false' }}
+    if: ${{ github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
     steps:
       - name: Trigger deployment
         uses: sws2apps/render-deployment@main
@@ -123,7 +123,7 @@ jobs:
   notify_success:
     needs: [build_and_test, e2e_tests, tag_release, deploy]
     runs-on: ubuntu-latest
-    if: ${{ always() && github.event_name == 'push' && github.env.SKIP_DEPLOYMENT == 'false' && needs.build_and_test.result == 'success' && needs.e2e_tests.result == 'success' && needs.tag_release.result == 'success' && needs.deploy.result == 'success' }}
+    if: ${{ always() && github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') && needs.build_and_test.result == 'success' && needs.e2e_tests.result == 'success' && needs.tag_release.result == 'success' && needs.deploy.result == 'success' }}
     steps:
       - name: Success Notification
         uses: rjstone/discord-webhook-notify@v2
