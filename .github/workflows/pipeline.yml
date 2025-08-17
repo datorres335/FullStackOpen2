@@ -45,7 +45,7 @@ jobs:
         working-directory: ./part11/full-stack-open-pokedex
         run: npm test
 
-  # E2E tests (runs in parallel with build_and_test)
+  # E2E tests (runs in parallel with build_and_test)  
   e2e_tests:
     runs-on: ubuntu-latest
     timeout-minutes: 60
