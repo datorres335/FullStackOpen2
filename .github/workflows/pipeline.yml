@@ -119,7 +119,7 @@ jobs:
           apiKey: ${{ secrets.RENDER_API_KEY }}
           multipleDeployment: false
 
-  # Discord notifications
+  # Discord notifications  
   notify_success:
     needs: [build_and_test, e2e_tests, tag_release, deploy]
     runs-on: ubuntu-latest
