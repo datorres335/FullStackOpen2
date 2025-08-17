@@ -5,8 +5,8 @@ on:
     paths:
       - 'part11/full-stack-open-pokedex/**'
       - '.github/workflows/**' 
-    branches:
-      - main
+    # branches:
+    #   - main
   pull_request:
     branches: [main]
     types: [opened, synchronize]
