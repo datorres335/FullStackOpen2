@@ -108,3 +108,63 @@ jobs:
           serviceId: ${{ secrets.RENDER_SERVICE_ID }}
           apiKey: ${{ secrets.RENDER_API_KEY }}
           multipleDeployment: false
+
+  # Discord notifications
+  notify_success:
+    needs: [build_and_test, e2e_tests, tag_release, deploy]
+    runs-on: ubuntu-latest
+    if: ${{ always() && github.event_name == 'push' && github.env.SKIP_DEPLOYMENT == 'false' && needs.build_and_test.result == 'success' && needs.e2e_tests.result == 'success' && needs.tag_release.result == 'success' && needs.deploy.result == 'success' }}
+    steps:
+      - name: Success Notification
+        uses: rjstone/discord-webhook-notify@v2
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          username: "🚀 Deploy Bot"
+          avatarUrl: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+          text: "✅ **Deployment Successful!**"
+          severity: info
+          color: '#00ff00'
+          title: "New Version Deployed"
+          description: |
+            **Repository:** ${{ github.repository }}
+            **Branch:** ${{ github.ref_name }}
+            **Commit:** [`${{ github.sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+            **Author:** ${{ github.actor }}
+            **Message:** ${{ github.event.head_commit.message }}
+            
+            🎉 Application successfully deployed to production!
+          footer: "Deployed at ${{ github.run_number }} • ${{ github.workflow }}"
+
+  notify_failure:
+    needs: [build_and_test, e2e_tests, tag_release, deploy]
+    runs-on: ubuntu-latest
+    if: ${{ always() && github.event_name == 'push' && (needs.build_and_test.result == 'failure' || needs.e2e_tests.result == 'failure' || needs.tag_release.result == 'failure' || needs.deploy.result == 'failure') }}
+    steps:
+      - name: Failure Notification
+        uses: rjstone/discord-webhook-notify@v2
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          username: "💥 Build Bot"
+          avatarUrl: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+          text: "❌ **Build/Deployment Failed!**"
+          severity: error
+          color: '#ff0000'
+          title: "Pipeline Failure"
+          description: |
+            **Repository:** ${{ github.repository }}
+            **Branch:** ${{ github.ref_name }}
+            **Failed Commit:** [`${{ github.sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+            **Author:** ${{ github.actor }}
+            **Commit Message:** ${{ github.event.head_commit.message }}
+            **Workflow:** [${{ github.workflow }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            
+            **Job Status:**
+            🔍 Build & Test: ${{ needs.build_and_test.result }}
+            🎭 E2E Tests: ${{ needs.e2e_tests.result }}
+            🏷️ Tag Release: ${{ needs.tag_release.result }}
+            🚀 Deploy: ${{ needs.deploy.result }}
+            
+            **Quick Debug Links:**
+            • [View Logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            • [Compare Changes](${{ github.server_url }}/${{ github.repository }}/compare/${{ github.event.before }}...${{ github.sha }})
+          footer: "Failed at run #${{ github.run_number }} • Check logs immediately!"
