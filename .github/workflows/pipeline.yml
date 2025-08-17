@@ -5,12 +5,14 @@ on:
     paths:
       - 'part11/full-stack-open-pokedex/**'
       - '.github/workflows/**' 
-    # branches:
-    #   - main
+    branches:
+      - main
   pull_request:
     branches: [main]
     types: [opened, synchronize]
-
+    paths:
+      - 'part11/full-stack-open-pokedex/**'
+      - '.github/workflows/**'
 
 env:
   SKIP_DEPLOYMENT: ${{ github.event_name == 'push' && github.event.commits != null && contains(join(github.event.commits.*.message, ' '), '#skip') }}
