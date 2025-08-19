@@ -1,0 +1,149 @@
+name: Phonebook Pipeline
+
+on:
+  push:
+    paths:
+      - 'part3/**'
+      - '.github/workflows/phonebook-pipeline.yml'
+    branches:
+      - main
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
+    paths:
+      - 'part3/**'
+      - '.github/workflows/phonebook-pipeline.yml'
+
+jobs:
+  # Lint and build the backend
+  backend_check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            part3
+            .github/workflows
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './part3/package-lock.json'
+
+      - name: Install dependencies
+        working-directory: ./part3
+        run: npm ci
+
+      - name: Check code style with ESLint
+        working-directory: ./part3
+        run: npm run lint
+
+      - name: Validate application startup
+        working-directory: ./part3
+        run: |
+          echo "Validating application can start..."
+          # Start the app in background and check if it responds
+          timeout 10s npm start &
+          sleep 5
+          # Check if the process is still running (basic validation)
+          if pgrep -f "node index.js" > /dev/null; then
+            echo "✅ Application started successfully"
+            pkill -f "node index.js"
+          else
+            echo "❌ Application failed to start"
+            exit 1
+          fi
+        env:
+          NODE_ENV: production
+          PORT: 3001
+
+      - name: Check dependencies for vulnerabilities
+        working-directory: ./part3
+        run: npm audit --audit-level high
+
+  # Deploy backend (only on push to main, after checks pass)
+  deploy_backend:
+    needs: [backend_check]
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') }}
+    
+    steps:
+      - name: Deploy to production
+        run: |
+          echo "🚀 Deploying backend to production..."
+          echo "Repository: ${{ github.repository }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Author: ${{ github.actor }}"
+          echo "Message: ${{ github.event.head_commit.message }}"
+          # Add your actual deployment commands here
+          # For example, if using Render, Railway, or Heroku:
+          # - Trigger deployment webhook
+          # - Deploy via CLI
+          echo "✅ Backend deployment completed"
+
+  # Notify on success
+  notify_backend_success:
+    needs: [backend_check, deploy_backend]
+    runs-on: ubuntu-latest
+    if: ${{ always() && github.event_name == 'push' && !contains(github.event.head_commit.message, '#skip') && needs.backend_check.result == 'success' && needs.deploy_backend.result == 'success' }}
+    
+    steps:
+      - name: Backend Success Notification
+        uses: rjstone/discord-webhook-notify@v2
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          username: "🚀 Backend Deploy Bot"
+          avatarUrl: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+          text: "✅ **Backend Deployment Successful!**"
+          severity: info
+          color: '#00ff00'
+          title: "Phonebook Backend Deployed"
+          description: |
+            **Repository:** ${{ github.repository }}
+            **Project:** Part 3 Phonebook API
+            **Branch:** ${{ github.ref_name }}
+            **Commit:** [`${{ github.sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+            **Author:** ${{ github.actor }}
+            **Message:** ${{ github.event.head_commit.message }}
+            
+            🎉 Phonebook API successfully deployed!
+            ✅ ESLint checks passed
+            🔍 Security audit passed
+            🚀 Application startup validated
+          footer: "Backend deployed at run #${{ github.run_number }}"
+
+  # Notify on failure
+  notify_backend_failure:
+    needs: [backend_check, deploy_backend]
+    runs-on: ubuntu-latest
+    if: ${{ always() && github.event_name == 'push' && (needs.backend_check.result == 'failure' || needs.deploy_backend.result == 'failure') }}
+    
+    steps:
+      - name: Backend Failure Notification
+        uses: rjstone/discord-webhook-notify@v2
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          username: "💥 Backend Build Bot"
+          avatarUrl: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+          text: "❌ **Backend Build/Deployment Failed!**"
+          severity: error
+          color: '#ff0000'
+          title: "Phonebook Backend Pipeline Failure"
+          description: |
+            **Repository:** ${{ github.repository }}
+            **Project:** Part 3 Phonebook API
+            **Branch:** ${{ github.ref_name }}
+            **Failed Commit:** [`${{ github.sha }}`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+            **Author:** ${{ github.actor }}
+            **Commit Message:** ${{ github.event.head_commit.message }}
+            
+            **Job Status:**
+            🔍 Backend Check: ${{ needs.backend_check.result }}
+            🚀 Deploy: ${{ needs.deploy_backend.result }}
+            
+            **Quick Debug Links:**
+            • [View Logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            • [Compare Changes](${{ github.server_url }}/${{ github.repository }}/compare/${{ github.event.before }}...${{ github.sha }})
+          footer: "Backend failed at run #${{ github.run_number }} • Check logs!"
