@@ -6,7 +6,7 @@ on:
     paths: ['.github/workflows/urlHealthCheck.yml']
   
   # Schedule for periodic checks (currently commented out for testing)
-  # schedule:
+  # schedule: 
   #   # Run every 24 hours at 2 AM UTC
   #   - cron: '0 2 * * *'
   
