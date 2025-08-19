@@ -1,0 +1,76 @@
+name: Url Health Check
+
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/urlHealthCheck.yml']
+  
+  # Schedule for periodic checks (currently commented out for testing)
+  # schedule:
+  #   # Run every 24 hours at 2 AM UTC
+  #   - cron: '0 2 * * *'
+  
+  # Allow manual triggering for testing
+  workflow_dispatch:
+
+jobs:
+  health_check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check deployed application health
+        uses: jtalk/url-health-check-action@v4
+        with:
+          url: https://fullstackopenpokedex-4lx8.onrender.com
+          follow-redirect: true
+          max-attempts: 3
+          retry-delay: 10s
+          retry-all: false
+      
+      - name: Notify on health check failure
+        if: failure()
+        uses: rjstone/discord-webhook-notify@v2
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          username: "🚨 Health Check Bot"
+          avatarUrl: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+          text: "🔥 **APPLICATION DOWN!**"
+          severity: error
+          color: '#ff0000'
+          title: "Health Check Failed"
+          description: |
+            **🚨 CRITICAL ALERT 🚨**
+            
+            **Application:** ${{ github.repository }}
+            **Status:** UNHEALTHY ❌
+            **Time:** ${{ github.run_number }} • $(date)
+            **Workflow:** [${{ github.workflow }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            
+            **Action Required:**
+            - Check application logs immediately
+            - Verify deployment status
+            - Review recent commits for issues
+            
+            **Quick Links:**
+            • [View Logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            • [Render Dashboard](https://dashboard.render.com)
+          footer: "Health check failed at run #${{ github.run_number }}"
+
+      - name: Notify on health check success
+        if: success()
+        uses: rjstone/discord-webhook-notify@v2
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          username: "✅ Health Check Bot"
+          avatarUrl: "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+          text: "✅ **Application Healthy**"
+          severity: info
+          color: '#00ff00'
+          title: "Health Check Passed"
+          description: |
+            **Application:** ${{ github.repository }}
+            **Status:** HEALTHY ✅
+            **Response Time:** Good
+            **Time:** ${{ github.run_number }}
+            
+            All systems operational! 🚀
+          footer: "Health check passed at run #${{ github.run_number }}"
