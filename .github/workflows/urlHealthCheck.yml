@@ -7,7 +7,7 @@ on:
   
   # Schedule for periodic checks (currently commented out for testing)
   # schedule: 
-  #   # Run every 24 hours at 2 AM UTC
+  #   # Run every 24 hours at 2 AM UTC 
   #   - cron: '0 2 * * *'
   
   # Allow manual triggering for testing
