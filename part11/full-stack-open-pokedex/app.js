@@ -14,6 +14,10 @@ app.get('/health', (req, res) => {
   res.send('ok') // health check endpoint
 })
 
+app.get('/break', (req, res) => {
+  res.status(500).send('Application intentionally broken for testing')
+})
+
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
   console.log(`server started on port ${PORT}`)
