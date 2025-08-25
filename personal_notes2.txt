@@ -460,35 +460,140 @@ Please suggest a short list of metrics observability platforms with pros/ cons. 
 
 Part 12 - Containers ---------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
+// FOR THIS SECTION DOWNLOADED "Docker Desktop" and "WSL" DESKTOP APPLICATIONS
+
+// There are 2 rules of thumb you should follow when creating images:
+	- Try to create as secure of an image as possible
+	- Try to create as small of an image as possible
+// The order of Dockerfile commands also affects its optimization. Make sure the ordering of the commands take advantage of "Docker's layer caching"
+
+docker run --help // to see all the available commands for docker
+
 docker container run IMAGE-NAME // Tells Docker to create a container from an image. A particularly nice feature of the command is that it can run a 	container even if the image to run is not downloaded on our device yet.
+
+docker container run -it ubuntu bash // creates a new docker container
 
 wsl // use this command without any arguments to drop into a WSL shell
 
-// use the following commands in order:
-wsl script <can-specifily-which-file-to-save-commands-in> // can omit "wsl" if your already in a WSL shell
+// To record the commands you use, use the following commands in order:
+script <can-specifily-which-file-to-save-commands-in> // need to include "wsl" before "script" if not in an active WSL shell or a Docker container
 <commands to be recorded>
 exit
-	//output will be saved in a file named "taypescript" (no relation to the programming language) if no file is specified in the script command
+	//output will be saved in a file named "typescript" (no relation to the programming language) if no file is specified in the script command
 
+// alternative workflow to what is shown above:
+# Start transcript recording in PowerShell
+Start-Transcript -Path "script-answers/exercise12_2.txt"
+# Run the Docker command
+docker run -it ubuntu bash
+# Inside the container, run:
+mkdir -p /usr/src/app
+echo 'console.log("Hello from Docker container!");' > /usr/src/app/index.js
+ls -la /usr/src/app/
+exit
+# Stop recording
+Stop-Transcript
 
+docker container ls // command without -a lists running containers 
+docker ps // short version of "docker container ls", lists running containers
+docker container ls -a //  list all of the containers, the -a (or --all) will list containers that have already been exited
 
+docker start -i CONTAINER-ID-OR-CONTAINER-NAME // if a container has already exited, we can start it agian with this start command that will accept the 	id or name of the container as a parameter. 
+	// -i is shorthand for --interactive
 
+docker kill CONTAINER-ID-OR-CONTAINER-NAME // sends a signal SIGKILL to the process forcing it to exit, and that causes the container to stop.
 
+// Installing Nano text editor inside of a docker container (once you run the command "docker start -i CONTAINER-ID-OR-CONTAINER-NAME")
+root@b8548b9faec3:/# apt-get update
+root@b8548b9faec3:/# apt-get -y install nano
+root@b8548b9faec3:/# nano /usr/src/app/index.js
 
+// Installing Node in a container
+docker start -i angry_mccarthy // replace angry_mccarthy with desired container name
+apt update
+apt install -y curl
+curl -sL https://deb.nodesource.com/setup_20.x | bash
+apt install -y nodejs
+node --version
+npm --version
+exit // exists container
 
+docker commit CONTAINER-ID-OR-CONTAINER-NAME NEW-IMAGE-NAME // creates a new image from an existing container
+	// Why/When You’d Do This
+		- Preserve changes made inside a running container
+		- Create a custom base image
+		- Checkpoint or backup a container state
+		- NOTE: IT'S USUALY NOT BEST PRACTICE TO USE "docker commit". USE A dockerfile INSTEAD
 
+docker container diff // to check for the changes between the original image and container
 
+docker image ls // to list your current images
 
+docker container run -it --name hello-node node:20 bash
+	// "--name hello-node" this gives your newly created container a custom name
+	// "node:20" The image to use: the official Node.js 20 image from Docker Hub (If you don’t have it locally, Docker pulls it)
+	// "bash" The command to run inside the container (Instead of running node directly, this drops you into a bash shell inside the Node.js 20 		environment.)
 
+docker container cp ./index.js hello-node:/usr/src/app/index.js
+	// "docker container cp" Copy files between your host machine and a Docker container
+	// "./index.js" The source file on your host
+	// "hello-node:/usr/src/app/index.js" The destination:
+		// hello-node = the name (or ID) of your running/stopped container.
+		// /usr/src/app/index.js = where inside the container you want the file to go.
+	// once you run this command, you can now run "node /usr/src/app/index.js" in the container
 
+docker run node:20 ls // replace "node:20" with desired image. This will list all of the existing directories in the image at the root level
 
+docker build // builds an image based on the Dockerfile
+docker build -t fs-hello-world . // replace "fs-hello-world" with desired name
+	// "-t" assigns a name (an optionally a version) to the image you're building. "fs-hello-world" is the given name in this example
+	// "." (dot) Docker looks in the current directory (.) for a Dockerfile.
+		// It uploads that directory (minus .dockerignore exclusions) as the build context.
 
+npx express-generator // creates a basic Express application skeleton
 
+//NOTE: THE COMMAND BELOW IS POWERSHELL SYNTAX! DON'T USE THIS SYNTAX IN DOCKERFILES! MUST USE UNIX SYNTAX
+$env:DEBUG="part12-containers-applications:*"; npm start // replace "part12-containers-applications" with actual application directory name
+	// "$env:DEBUG="part12-containers-applications:*" sets an environment variable for the current shell session (or for the command after the 		semicolon).
+	// "npm start" Node.js will see the environment variable DEBUG and pass it into the app when you run it
+//UNIX SYNTAX FOR THE COMMAND ABOVE FOR DOCKERFILES TO BE USED IN THE "CMD" LINE
+DEBUG=part12-containers-applications:* npm start
 
+docker run -p 3123:3000 express-server // replace "express-server" with image name
+	// The -p flag in the run command will inform Docker that a port from the host machine should be opened and directed to a port in the 			container. 
+	// The format is -p host-port:application-port.
 
+npm install // NOTE: use this command during the build process INSIDE a container rather than doing those prior to building.
+	// The easy rule of thumb is to only copy files that you would push to GitHub. 
+	// Build artifacts or dependencies should not be copied since those can be installed during the build process.
+	// this is where ".dockerignore" comes into play
 
+npm ci // Differences between ci and install:
+	- install may update the package-lock.json
+	- install may install a different version of a dependency if you have ^ or ~ in the version of the dependency.
+	- ci will delete the node_modules folder before installing anything
+	- ci will follow the package-lock.json and does not alter any files
+		// So in short: "ci" creates reliable builds, while "install" is the one to use when you want to install new dependencies.
 
+npm ci --omit=dev // Even better, we can use npm ci --omit=dev to not waste time installing development dependencies.
 
+// Unix syntax of the command below
+docker build -t express-server . && docker run -p 3123:3000 express-server
+	// Note that we are here chaining two bash commands with &&. We could get (nearly) the same effect by running both commands separately. When 		chaining commands with && if one command fails, the next ones in the chain will not be executed.
+// Powershell syntax of the same command above
+docker build -t express-server . ; docker run -p 3123:3000 express-server
+
+docker kill <first 2 digits of a container id> // you can kill a running container by using the first 2 digits of its id
+
+// need a docker-compose.yml file in order to use the commands below
+// Docker compose lets you define, configure, and run multiple Docker containers as a single application.
+docker compose up // build and run the application
+docker compose up --build // If we want to rebuild the images
+docker compose up -d // (-d for detached) run the application in the background (you can safely close the terminal if needed without stopping 	container)
+docker compose down // close the application
+docker compose -f docker-compose.dev.yml up // this specifies which Docker Compose file to run
+docker compose -f docker-compose.dev.yml up -d // run that file in the background
+docker compose -f docker-compose.dev.yml logs -f // to view the output logs. The -f will ensure we follow the logs.
 
 
 
