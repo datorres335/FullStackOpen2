@@ -587,16 +587,55 @@ docker kill <first 2 digits of a container id> // you can kill a running contain
 
 // need a docker-compose.yml file in order to use the commands below
 // Docker compose lets you define, configure, and run multiple Docker containers as a single application.
+// IMPORTANT: When using "docker compose" commands, you don't need to use "docker build" and "docker run" commands
 docker compose up // build and run the application
 docker compose up --build // If we want to rebuild the images
 docker compose up -d // (-d for detached) run the application in the background (you can safely close the terminal if needed without stopping 	container)
-docker compose down // close the application
+docker compose down // close the application and remove containers
 docker compose -f docker-compose.dev.yml up // this specifies which Docker Compose file to run
 docker compose -f docker-compose.dev.yml up -d // run that file in the background
 docker compose -f docker-compose.dev.yml logs -f // to view the output logs. The -f will ensure we follow the logs.
 
+docker compose -f docker-compose.dev.yml down --volumes 
+docker compose -f docker-compose.dev.yml up
 
 
+
+
+
+// CHATGPT DOCKER COMPOSE COMMANDS CHEATSHEET
+COMMON WORKFLOW:
+docker compose build // initial stetup, does not start any containers. Equivalent to running docker build for each service.
+docker compose up -d // start development. Builds images (if necessary) and starts containers.
+docker compose up --build // make changes and restart
+docker compose logs app // debug issues
+docker compose exec app bash //debug issues
+docker compose down // clean stop
+
+BASIC OPERATIONS
+docker compose up // build and start all services
+docker compose up -d // build and start in background
+docker compose up app // build and start specific service ("app" is the service name from your docker-compose.yml (this is an arbitrary given name when 	defining your docker-compose.yml file))
+docker compose start // start without rebuilding
+docker compose stop // stop all services
+docker compose down // stop and remove containers
+
+BUILDING WITH COMPOSE
+docker compose build // build all services (but does not run containers)
+docker compose build app // build a specific service
+docker compose up --build // force rebuild and start
+docker compose restart app // restart a specific service
+
+DEVELOPMENT WORKFLOW
+docker compose -f docker-compose.dev.yml up // use specific compose file
+docker compose logs // view logs
+docker compose logs app // view logs for specific service
+docker compose log -f app // follow logs in real-time
+docker compose exec app bash // execute command in service. Runs a command inside a running container for a given service defined in your docker-	compose.yml.
+	// In this case, you’re asking for an interactive Bash shell inside the app container.
+
+CLEAN UP
+docker compose down -v // stop and remove everything (containers, networks, volumes)
 
 
 
