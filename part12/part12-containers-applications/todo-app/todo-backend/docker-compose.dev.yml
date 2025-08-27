@@ -9,11 +9,15 @@ services:
       MONGO_INITDB_DATABASE: the_database
     volumes:
       - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
-      - ./mongo_data:/data/db
+      - ./mongo_data:/data/db # add mongo_data/ to .gitignore
   redis:
     image: redis
     ports:
       - 6378:6379
+    command: ['redis-server', '--appendonly', 'yes'] # Overwrite the CMD
+    volumes: # Declare the volume
+      - ./redis_data:/data # add redis_data/ to .gitignore
 
 volumes:
   mongo_data:
+  redis_data:
