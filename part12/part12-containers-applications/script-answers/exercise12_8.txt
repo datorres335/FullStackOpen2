@@ -1,0 +1,34 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20250826183500
+Username: WORKSTATIONPC\David
+RunAs User: WORKSTATIONPC\David
+Configuration Name: 
+Machine: WORKSTATIONPC (Microsoft Windows NT 10.0.26100.0)
+Host Application: C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe -noexit -command try { . "c:\Users\David\AppData\Local\Programs\Microsoft VS Code\resources\app\out\vs\workbench\contrib\terminal\common\scripts\shellIntegration.ps1" } catch {}
+Process ID: 455932
+PSVersion: 5.1.26100.4768
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.4768
+BuildVersion: 10.0.26100.4768
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Transcript started, output file is script-answers/exercise12_8.txt
+(base)
+]633;D;0]633;A]633;P;Cwd=C:\x5cUsers\x5cDavid\x5cOneDrive\x5cDesktop\x5cTutorials\x5cFullStackOpen2\x5cpart12\x5cpart12-containers-applications\x5ctodo-app\x5ctodo-backendPS C:\Users\David\OneDrive\Desktop\Tutorials\FullStackOpen2\part12\part12-containers-applications\todo-app\todo-backend> ]633;B
+PS>docker compose -f docker-compose.dev.yml up -d
+
+(base)
+]633;D;0]633;A]633;P;Cwd=C:\x5cUsers\x5cDavid\x5cOneDrive\x5cDesktop\x5cTutorials\x5cFullStackOpen2\x5cpart12\x5cpart12-containers-applications\x5ctodo-app\x5ctodo-backendPS C:\Users\David\OneDrive\Desktop\Tutorials\FullStackOpen2\part12\part12-containers-applications\todo-app\todo-backend> ]633;B
+PS>docker exec -it todo-backend-mongo-1 bash
+
+(base)
+]633;D;0]633;A]633;P;Cwd=C:\x5cUsers\x5cDavid\x5cOneDrive\x5cDesktop\x5cTutorials\x5cFullStackOpen2\x5cpart12\x5cpart12-containers-applications\x5ctodo-app\x5ctodo-backendPS C:\Users\David\OneDrive\Desktop\Tutorials\FullStackOpen2\part12\part12-containers-applications\todo-app\todo-backend> ]633;B
+PS>Stop-Transcript
+**********************
+Windows PowerShell transcript end
+End time: 20250826184505
+**********************

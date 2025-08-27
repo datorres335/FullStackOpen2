@@ -603,7 +603,13 @@ docker volume ls // to list the existing volumes
 docker volume inspect // inspect of them 
 docker volume rm // delete a volume
 
+docker container run -d -p <host_port>:<container_port> <image_name> // -p will publish container’s port to a port of your choosing on your host 	machine. You can find container's port number by running the command "docker container ls"
 
+docker exec -it <container_name_or_id> bash
+	//docker exec = Run a command inside an already running container.
+	// -it (-i = interactive → keep STDIN open.)(-t = allocate a pseudo-TTY → gives you a terminal interface.)
+		Together → makes it feel like you’re “inside” the container.
+	// bash = The command to run inside the container. Here → start a Bash shell inside the container.
 
 // CHATGPT DOCKER COMPOSE COMMANDS CHEATSHEET
 COMMON WORKFLOW:
