@@ -1,0 +1,85 @@
+### Base URL
+@baseUrl = http://localhost:3000
+
+### Get all todos
+GET {{baseUrl}}/todos
+
+###
+
+### Get statistics (should start at 0)
+GET {{baseUrl}}/todos/statistics
+
+###
+
+### Create first todo
+POST {{baseUrl}}/todos
+Content-Type: application/json
+
+{
+  "text": "Learn Redis"
+}
+
+###
+
+### Create second todo
+POST {{baseUrl}}/todos
+Content-Type: application/json
+
+{
+  "text": "Master Docker"
+}
+
+###
+
+### Create third todo
+POST {{baseUrl}}/todos
+Content-Type: application/json
+
+{
+  "text": "Build awesome apps"
+}
+
+###
+
+### Check statistics again (should show 3)
+GET {{baseUrl}}/todos/statistics
+
+###
+
+### Get all todos to see created items
+GET {{baseUrl}}/todos
+
+###
+
+### Get specific todo (replace with actual ID from previous response)
+GET {{baseUrl}}/todos/REPLACE_WITH_ACTUAL_TODO_ID
+
+###
+
+### Update a todo (replace with actual ID)
+PUT {{baseUrl}}/todos/REPLACE_WITH_ACTUAL_TODO_ID
+Content-Type: application/json
+
+{
+  "text": "Updated todo text",
+  "done": true
+}
+
+###
+
+### Delete a todo (replace with actual ID)
+DELETE {{baseUrl}}/todos/REPLACE_WITH_ACTUAL_TODO_ID
+
+###
+
+### Final statistics check
+GET {{baseUrl}}/todos/statistics
+
+###
+
+POST http://localhost:3000/todos
+Content-Type: application/json
+
+{
+  "text": "Test increment from 9001"
+}
