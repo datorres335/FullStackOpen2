@@ -596,10 +596,12 @@ docker compose -f docker-compose.dev.yml up // this specifies which Docker Compo
 docker compose -f docker-compose.dev.yml up -d // run that file in the background
 docker compose -f docker-compose.dev.yml logs -f // to view the output logs. The -f will ensure we follow the logs.
 
-docker compose -f docker-compose.dev.yml down --volumes 
+docker compose -f docker-compose.dev.yml down --volumes // --volumes = remove named and anonymous volumes created by that Compose file. (Useful for a 	clean reset, but destructive if you want to keep data.) (-v is shorthand for --volumes)
 docker compose -f docker-compose.dev.yml up
 
-
+docker volume ls // to list the existing volumes
+docker volume inspect // inspect of them 
+docker volume rm // delete a volume
 
 
 
@@ -635,7 +637,7 @@ docker compose exec app bash // execute command in service. Runs a command insid
 	// In this case, you’re asking for an interactive Bash shell inside the app container.
 
 CLEAN UP
-docker compose down -v // stop and remove everything (containers, networks, volumes)
+docker compose down -v // stop and remove everything (containers, networks, volumes) (-v is shorthand for --volumes)
 
 
 
