@@ -545,7 +545,7 @@ docker container cp ./index.js hello-node:/usr/src/app/index.js
 docker run node:20 ls // replace "node:20" with desired image. This will list all of the existing directories in the image at the root level
 
 docker build // builds an image based on the Dockerfile
-docker build -t fs-hello-world . // replace "fs-hello-world" with desired name
+docker build -t fs-hello-world . // replace "fs-hello-world" with any desired name to give to your image
 	// "-t" assigns a name (an optionally a version) to the image you're building. "fs-hello-world" is the given name in this example
 	// "." (dot) Docker looks in the current directory (.) for a Dockerfile.
 		// It uploads that directory (minus .dockerignore exclusions) as the build context.

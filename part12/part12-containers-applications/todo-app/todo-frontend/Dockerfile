@@ -1,15 +1,16 @@
-FROM node:20.9.0-bullseye-slim AS build
+FROM node:20  AS build-stage
+
 WORKDIR /usr/src/app
-COPY package*.json ./
-RUN npm ci --only=production
+
 COPY . .
+
+RUN npm ci
+
 RUN npm run build
 
+# This is a new stage, everything before this is gone, except for the files that we want to COPY
 FROM nginx:1.25-alpine
-COPY --from=build /usr/src/app/dist /usr/share/nginx/html
 
-# Copy custom nginx config (optional - see below)
-# COPY nginx.conf /etc/nginx/nginx.conf
-
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# COPY the directory dist from the build-stage to /usr/share/nginx/html
+# The target location here was found from the Docker hub page
+COPY --from=build-stage /usr/src/app/dist /usr/share/nginx/html
