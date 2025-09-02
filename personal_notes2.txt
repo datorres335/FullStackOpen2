@@ -611,6 +611,27 @@ docker exec -it <container_name_or_id> bash
 		Together → makes it feel like you’re “inside” the container.
 	// bash = The command to run inside the container. Here → start a Bash shell inside the container.
 
+docker build -f ./dev.Dockerfile -t hello-front-dev . // when you have multiple Dockerfile's in a directory, you need to specify which Dockerfile
+	// to build with the '-f' flag
+
+// IMPORTANT: need to run this command below inside of Git Bash for it to work
+	// Actually you can replace "pwd" with "PWD" to run the command in Powershell 
+docker run -p 5173:5173 -v "$(pwd):/usr/src/app/" hello-front-dev 
+	// -v "$(pwd):/usr/src/app/"
+	// Mounts a bind volume from your host to the container.
+	// $(pwd) → the directory you’re currently in on your machine (in Bash).
+	// It’s mounted at /usr/src/app/ inside the container.
+	// This means changes to files on your host (e.g., editing code) instantly appear in the container, without rebuilding the image.
+docker run -p <host_port>:<container_port> -v <host_path>:<container_path> <image_name> 
+	// general form of the command above
+	// <host_path> = $(pwd) → the directory you’re currently in on your machine.
+
+
+
+
+
+
+
 // CHATGPT DOCKER COMPOSE COMMANDS CHEATSHEET
 COMMON WORKFLOW:
 docker compose build // initial stetup, does not start any containers. Equivalent to running docker build for each service.
