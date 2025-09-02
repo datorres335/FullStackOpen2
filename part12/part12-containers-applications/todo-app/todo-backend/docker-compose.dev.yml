@@ -18,6 +18,24 @@ services:
     volumes: # Declare the volume
       - ./redis_data:/data # add redis_data/ to .gitignore
 
+  server:
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/usr/src/app              # Mount source code for live reload
+      - /usr/src/app/node_modules    # Protect node_modules
+    environment:
+      # Use service names for container-to-container communication
+      - MONGO_URL=mongodb://root:example@mongo:27017/the_database?authSource=admin
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - mongo
+      - redis
+    container_name: todo-backend-dev
+
 volumes:
   mongo_data:
   redis_data:
