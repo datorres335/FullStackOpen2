@@ -626,7 +626,20 @@ docker run -p <host_port>:<container_port> -v <host_path>:<container_path> <imag
 	// general form of the command above
 	// <host_path> = $(pwd) → the directory you’re currently in on your machine.
 
-
+docker compose -f docker-compose.dev.yml run debug-helper wget -O - http://app:5173
+	// in order to run the command above the Docker compose container must already be running
+	// "run debug-helper"
+		→ Start a one-off container from the service called debug-helper (defined in that Compose file).
+		Unlike up, run is for ad-hoc commands and doesn’t keep the container around unless you specify --rm or -d.
+		It runs the container, executes the command you pass, and then exits.
+	// "wget -O - http://app:5173"
+		→ The command that will be executed inside the debug-helper container:
+		wget → fetch a URL (wget is a tool included in the Busybox image to send a request)
+		-O - → output to STDOUT instead of saving to a file.
+		http://app:5173 → target URL (we are connecting the specified service defined as "app" in the Docker compose file, to port 5173)
+		Here "app" is the service name in your Compose file. Docker Compose creates an internal network where services can reach each other by 			service name.
+		The port used is the port from which the application is available in that container, also specified in the docker-compose.dev.yml
+docker compose -f <compose-file> run <service-name> <command> [args...] // generic version of the command above
 
 
 
