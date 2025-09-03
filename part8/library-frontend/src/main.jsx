@@ -17,11 +17,11 @@ const authLink = setContext((_, { headers }) => {
 })
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000'
+  uri: import.meta.env.VITE_GRAPHQL_URI || 'http://localhost:4000'
 })
 
 const wsLink = new GraphQLWsLink(createClient({ 
-  url: 'ws://localhost:4000',
+  url: import.meta.env.VITE_GRAPHQL_WS_URI || 'ws://localhost:4000',
   connectionParams: () => {
     const token = localStorage.getItem('library-user-token')
     return {
