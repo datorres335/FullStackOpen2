@@ -19,6 +19,7 @@ services:
       - ./redis_data:/data # add redis_data/ to .gitignore
 
   server:
+    image: todo-backend-server
     build:
       context: .
       dockerfile: dev.Dockerfile
