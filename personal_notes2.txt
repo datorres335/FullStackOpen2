@@ -1,5 +1,6 @@
 PART 1 -----------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
 //IMPORTANT!! When cloning an external project inside of an existing project, make sure to go inside of the newly cloned repo and delete the 	existing .git file with the commands:
 		git clone <new project>
 		cd <new project>
@@ -10,7 +11,9 @@ PART 1 -------------------------------------------------------------------------
 npm create vite@latest folder-name -- --template react
 
 
+
 PART 2 - Communicating with server -------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 npx json-server --port 3001 db.json //need to create "db.json" in root dir before running this command
 		//NOTE: it is a "NPX" command not "NPM"
@@ -21,7 +24,9 @@ npm install json-server --save-dev //must make a small addition to the scripts p
 npm run server //starts the json server. Note: all custom scripts must include "run" (exceptions are the start and test scripts)
 
 
+
 PART 3 - Programming a server with NodeJS and Express ------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 npm init //initializes a new Node.js project by creating a package.json file. No other files are created
 npm index.js or npm start // create a .js file in the root of the project and add this code to the "script" section in the package.json file as 		//"start": "node index.js". You can replace "start" and "index" with what ever words you like. This is to start the Node server
@@ -93,7 +98,9 @@ npx eslint index.js // inspects and validates a file like index.js
 npm run lint // custom script, refer to part3/package.json for implementation details
 
 
+
 PART 4 - Testing Express servers, user administration ------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 npm test // Custom script to test your code (don't need to include "run" as in "npm run test" for this custom script)
 		//Custom script is: "test": "node --test" //NOTE: script is updated on Part4b, see code below
@@ -139,7 +146,9 @@ npm install jsonwebtoken //used to implement user login functionality
 	// If the application has multiple interfaces requiring identification, JWT's validation should be separated into its own middleware. An 		existing library like express-jwt could also be used.
 
 
+
 PART 5 - Testing React apps --------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 npm install prop-types // enforces props to have a required value
 
@@ -235,7 +244,9 @@ npx playwright codegen http://localhost:5173/  //Playwright also includes a test
 	//the section about assertions demonstrates the different expectations Playwright offers for testing
 
 
+
 PART 6 - Advanced state management -------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 npm install redux // install this inside of a Vite application
 
@@ -263,7 +274,9 @@ npm install @reduxjs/toolkit // This library for example greatly simplifies the 
 npm install @tanstack/react-query // library to store and manage data retrieved from the server
 
 
+
 PART 7 - React router, custom hooks, styling app with CSS and webpack --------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 npm install react-router-dom // library for managing navigation in a React application
 
@@ -294,7 +307,9 @@ npm audit signatures
 npm install --save-dev eslint-plugin-security // helps identify potential security hotspots, but finds a lot of false positives which need triage by a 	human 
 
 
+
 PART 8 - GraphQL -------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 /* Apollo Client and the applications state:
 "In our example, management of the applications state has mostly become the responsibility of Apollo Client. This is quite a typical solution for GraphQL applications. Our example uses the state of the React components only to manage the state of a form and to show error notifications. As a result, it could be that there are no justifiable reasons to use Redux to manage application state when using GraphQL."
@@ -317,7 +332,9 @@ npm install graphql-subscriptions // a core utility for enabling real-time Graph
 npm install graphql-ws  // install this in the frontend in order to make subscriptions work on the client side
 
 
+
 PART 9 - TypeScript ----------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 npm install --save-dev ts-node typescript //ts-node compiles and executes the specified TypeScript file immediately so that there is no need for a 	separate compilation step
 	// NOTE: it is actually advisable not to use ts-node for official projects
@@ -363,7 +380,9 @@ npm install zod // Zod is a TypeScript-first validation library. Using Zod, you 
 npm create vite@latest my-app-name -- --template react-ts // Creates a new React project with typescript?
 
 
+
 PART 10 - React Native -------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 //NOTE: you might have to switch to Node version 20 is order to get your scripts in this project to work
 npx create-expo-app rate-repository-app --template expo-template-blank@sdk-50 // Uses Expo to create a React Native app
@@ -443,7 +462,9 @@ npm install @react-native-picker/picker // a React Native library that provides 
 npm install use-debounce // To avoid a multitude of unnecessary requests while the user types the keyword fast, only pick the latest input after a 	short delay. This technique is often referred to as debouncing
 
 
+
 Part 11 - CI/CD --------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 git pull --rebase origin main // The --rebase option tells Git to move all of the developer's commits to the tip of the main branch after synchronising 	it with	the changes from the central repository
 
@@ -458,7 +479,9 @@ Nx, typescript, expo, Jenkins, docker, GraphQL (Apollo Server/ Client), redux to
 Please suggest a short list of metrics observability platforms with pros/ cons. Not sure what the data volume is going to be but i'm going to be making a social media platform where users can upload lots of pictures, short clips, make comments, send DMs, video/ audio calling, and will contain a google maps feature. Budget will be very low as i'm going to build this project myself."
 
 
+
 Part 12 - Containers ---------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 // FOR THIS SECTION DOWNLOADED "Docker Desktop" and "WSL" DESKTOP APPLICATIONS
 
@@ -641,10 +664,6 @@ docker compose -f docker-compose.dev.yml run debug-helper wget -O - http://app:5
 		The port used is the port from which the application is available in that container, also specified in the docker-compose.dev.yml
 docker compose -f <compose-file> run <service-name> <command> [args...] // generic version of the command above
 
-
-
-
-
 // CHATGPT DOCKER COMPOSE COMMANDS CHEATSHEET
 COMMON WORKFLOW:
 docker compose build // initial stetup, does not start any containers. Equivalent to running docker build for each service.
@@ -678,6 +697,63 @@ docker compose exec app bash // execute command in service. Runs a command insid
 
 CLEAN UP
 docker compose down -v // stop and remove everything (containers, networks, volumes) (-v is shorthand for --volumes)
+
+
+
+Part 13 - Using relational databases -----------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+docker run -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 postgres // to run a Postgres database on a docker container locally
+
+// https://www.postgresql.org/docs/current/app-psql.html
+	// commands used to access postgres database directly
+
+// "PgAdmin 4" - UI interface for postgres databases
+
+psql -U david -d postgres // connects to postgress database
+	// "david" is the user
+	// "postgres" is the (default) database
+
+// once you have the postgres docker container running, you can open up its psql console to use commands directly into the docker db
+docker exec -it ff3f49eadf27 psql -U postgres postgres
+	// replace ff3f49eadf27 with your container ID
+docker ps // to find the correct contianer ID
+
+// once connected to the database with the command "docker exec -it ff3f49eadf27 psql -U postgres postgres" you can create a table by pasting something 	like this into the terminal:
+CREATE TABLE notes (
+    id SERIAL PRIMARY KEY,
+    content text NOT NULL,
+    important boolean,
+    date time
+);
+
+// once you have a table created you can view a "list of relations" with this command:
+\d
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
