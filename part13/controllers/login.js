@@ -1,11 +1,13 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const loginRouter = require('express').Router()
-const User = require('../models/user')
+const { User } = require('../models')
 
 loginRouter.post('/', async (request, response) => {
   const { username, password } = request.body
-  const user = await User.findOne({ username })
+  const user = await User.scope('withPasswordHash').findOne({ 
+    where: { username } 
+  })
   const passwordCorrect = user === null
     ? false
     : await bcrypt.compare(password, user.passwordHash)
@@ -18,7 +20,7 @@ loginRouter.post('/', async (request, response) => {
 
   const userForToken = {
     username: user.username,
-    id: user._id
+    id: user.id
   }
 
   const token = jwt.sign( // once you run the login.rest file, you will see the token 'Bearer' in the response body.
@@ -30,7 +32,7 @@ loginRouter.post('/', async (request, response) => {
   ) 
   response
     .status(200) // 200 OK status code indicates that the request has succeeded
-    .send({ token, username: user.username, name: user.name, id: user._id }) //CHANGED THIS LINE TO INCLUDE ID!!! HAVE NOT TESTED BACKEND
+    .send({ token, username: user.username, name: user.name, id: user.id }) //CHANGED THIS LINE TO INCLUDE ID!!! HAVE NOT TESTED BACKEND
     //.send({ token, username: user.username, name: user.name }) !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 })
 
