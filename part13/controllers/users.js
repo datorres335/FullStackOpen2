@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
-const User = require('../models/user')
+const { User, Blog } = require('../models')
 
 usersRouter.post('/', async (request, response) => {  
   const { username, name, password } = request.body
@@ -20,24 +20,27 @@ usersRouter.post('/', async (request, response) => {
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)
 
-  const user = new User({
+  const user = await User.create({
     username,
     name,
     passwordHash,
   })
 
-  const savedUser = await user.save()
-  response.status(201).json(savedUser)
+  response.status(201).json(user)
 })
 
 usersRouter.get('/', async (request, response) => {
-  const users = await User
-    .find({})
-    .populate('blogs', { title: 1, author: 1, url: 1 }) // populate the blogs field with the title, author, and url of each blog
-    // this is similar to joining two tables in SQL
-    // The argument given to the populate method defines that the ids referencing note objects in the notes field of the user document will be replaced by the referenced note documents. 
-  
-    response.json(users)
+  const users = await User.findAll({
+    include: [
+      {
+        model: Blog,
+        as: 'blogs',
+        attributes: ['title', 'author', 'url']
+      }
+    ]
+  })
+    
+  response.json(users)
 })
    
 module.exports = usersRouter
