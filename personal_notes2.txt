@@ -728,8 +728,18 @@ CREATE TABLE notes (
     date time
 );
 
-// once you have a table created you can view a "list of relations" with this command:
-\d
+\d // once you have a table created you can view a "list of relations" with this command:
+\d <table name> // to see how the table is defined
+
+insert into notes (content, important) values ('Relational databases rule the world', true);
+insert into notes (content, important) values ('MongoDB is webscale', false);
+	// examples of data into a table
+
+select * from notes; // view the content of a table
+
+npm install express dotenv pg sequelize 
+	// pg = the official postgres client for Node.js. Lets your node.js app connect to a postgres db, run queries, and get results
+	// sequelize = a popular ORM (object relation mapper) for node.js. Provides a higher level, javascript friendly way to work with sql db
 
 
 
