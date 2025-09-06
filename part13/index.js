@@ -4,6 +4,7 @@ const express = require('express')
 const app = express()
 app.use(express.json())
 
+// create database connection
 const sequelize = new Sequelize(process.env.DATABASE_URL)
 
 class Note extends Model {}
