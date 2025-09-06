@@ -745,6 +745,7 @@ select * from notes; // view the content of a table
 npm install express dotenv pg sequelize 
 	// pg = the official postgres client for Node.js. Lets your node.js app connect to a postgres db, run queries, and get results
 	// sequelize = a popular ORM (object relation mapper) for node.js. Provides a higher level, javascript friendly way to work with sql db
+		// sequelize is similar to Mongoose for MongoDB
 
 
 
