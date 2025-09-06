@@ -703,12 +703,6 @@ docker compose down -v // stop and remove everything (containers, networks, volu
 Part 13 - Using relational databases -----------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------------------------------------------------------------------------
-NOTE!!!!!!!!!!!!!!!!!!
-DID NOT COMPLETE PART 13!!!!!!!!!!!!
-LEFT OFF AT: part 13 > a > Node application using a relational database
-READ THE REMAINDER OF IT ONLY!!!!!!!!!!!!!!!!
-DID NOT GET CERTIFICATE!!!!!!!!!!!!!!!!!!!!!!!!!
-
 docker run -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 postgres // to run a Postgres database on a docker container locally
 
 // https://www.postgresql.org/docs/current/app-psql.html
