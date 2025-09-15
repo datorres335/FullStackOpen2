@@ -741,6 +741,8 @@ npm install express dotenv pg sequelize
 	// sequelize = a popular ORM (object relation mapper) for node.js. Provides a higher level, javascript friendly way to work with sql db
 		// sequelize is similar to Mongoose for MongoDB
 
+drop table notes;
+
 
 
 
