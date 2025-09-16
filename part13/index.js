@@ -4,8 +4,6 @@ const express = require('express')
 const app = express()
 app.use(express.json())
 
-console.log('DATABASE_URL:', process.env.DATABASE_URL)
-
 // create database connection
 const sequelize = new Sequelize(process.env.DATABASE_URL)
 
@@ -23,7 +21,7 @@ Note.init({
   important: {
     type: DataTypes.BOOLEAN
   },
-  data: {
+  date: {
     type: DataTypes.DATE
   }
 }, {
@@ -54,18 +52,15 @@ initializeDatabase()
 
 app.get('/api/notes', async (req, res) => {
   const notes = await Note.findAll()
+  console.log(notes.map(n => n.toJSON()));
+  
   res.json(notes)
 })
 
 app.get('/api/notes/:id', async (req, res) => {
   const note = await Note.findByPk(req.params.id)
   if (note) {
-    console.log("Note before editingao:", note);
-    
-    note.important = req.body.important
-    await note.save()
-
-    console.log("Note after editing:", note);
+    console.log(note.toJSON());
     res.json(note)
   } else {
     res.status(404).end()
